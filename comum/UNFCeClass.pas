@@ -29,14 +29,16 @@ type
     FItens: TObjectList<TNFCeItem>;
     Fcpf: string;
     FNome: string;
-    FNumero: integer; public
+    FNumero: integer;
+    procedure Setcpf(const Value: string);
+  public
     constructor Create;
     destructor Destroy; override;
-  public
+
     function AsJsonString: String;
 
     property Numero: integer read FNumero write FNumero;
-    property cpf: string read Fcpf write Fcpf;
+    property cpf: string read Fcpf write Setcpf;
     property Nome: string read FNome write FNome;
 
     [MapperListOf(TNFCeItem)]
@@ -46,6 +48,7 @@ type
 implementation
 
 uses
+  ACBrValidador,
   MVCFramework.DataSet.Utils,
   MVCFramework.Serializer.JsonDataObjects,
   JsonDataObjects;
@@ -78,6 +81,19 @@ destructor TNFCe.Destroy;
 begin
   FItens.Free;
   inherited;
+end;
+
+procedure TNFCe.Setcpf(const Value: string);
+var
+  SMsgErro: string;
+begin
+  Fcpf := Value;
+  if not Fcpf.Trim.IsEmpty then
+  begin
+    SMsgErro := ACBrValidador.ValidarCNPJouCPF(Value);
+    if not SMsgErro.Trim.IsEmpty then
+      raise Exception.Create(SMsgErro);
+  end;
 end;
 
 end.

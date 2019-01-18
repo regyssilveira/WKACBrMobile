@@ -3,16 +3,17 @@ unit UNFCeController;
 interface
 
 uses
-  UNFCeWebModulle,
+  System.Classes,
   MVCFramework,
-  MVCFramework.Commons;
+  MVCFramework.Commons,
+  UBaseController;
 
 type
-
   [MVCPath('/nfce')]
-  TNFCeController = class(TMVCController)
+  TNFCeController = class(TBaseController)
   private
-    FWebModule: TNFCEWebModule;
+    procedure GetNFCePDF(ANumero: integer; ASerie: integer); overload;
+    procedure GetNFCeArquivo(ANumero: integer; ASerie: integer); overload;
   protected
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
@@ -38,21 +39,28 @@ type
     procedure GetCliente(Aid: Integer);
 
     [MVCPath('/nfce')]
-    [MVCHTTPMethod([httpGET])]
-    procedure GetNFCe;
-
-    [MVCPath('/nfce')]
     [MVCHTTPMethod([httpPOST])]
     procedure CreateNFCe(Context: TWebContext);
+
+    [MVCPath('/nfce/($ANumero)/($ASerie)/($ATipo)')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GetNFCePDF(ANumero: integer; ASerie: integer; ATipo: string); overload;
   end;
 
 implementation
 
 uses
+  Data.DB,
+  System.NetEncoding,
+  ACBrValidador,
   System.SysUtils,
   System.StrUtils,
-  Data.DB,
-  MVCFramework.Logger, UConfigClass, UNFCeClass;
+  MVCFramework.Logger,
+  UConfigClass,
+  UNFCeClass,
+  DNFCe;
+
+{ TNFCeController }
 
 procedure TNFCeController.Index;
 begin
@@ -62,26 +70,21 @@ end;
 
 procedure TNFCeController.OnAfterAction(Context: TWebContext; const AActionName: string);
 begin
-
-
   inherited;
+
 end;
 
 procedure TNFCeController.OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean);
 begin
-  if not Assigned(FWebModule) then
-    FWebModule := GetCurrentWebModule as TNFCEWebModule;
-
   inherited;
+
 end;
-
-
 
 procedure TNFCeController.GetClientes;
 var
   TmpDataset: TDataSet;
 begin
-  FWebModule.FDConnection1.ExecSQL(
+  FDConexao.ExecSQL(
     'select * from clientes',
     TmpDataset
   );
@@ -96,7 +99,7 @@ procedure TNFCeController.GetCliente(Aid: Integer);
 var
   TmpDataset: TDataSet;
 begin
-  FWebModule.FDConnection1.ExecSQL(
+  FDConexao.ExecSQL(
     'select * from clientes where id=' + AId.ToString,
     TmpDataset
   );
@@ -111,7 +114,7 @@ procedure TNFCeController.GetProdutos;
 var
   TmpDataset: TDataSet;
 begin
-  FWebModule.FDConnection1.ExecSQL(
+  FDConexao.ExecSQL(
     'select * from produtos',
     TmpDataset
   );
@@ -126,7 +129,7 @@ procedure TNFCeController.GetProduto(AId: Integer);
 var
   TmpDataset: TDataSet;
 begin
-  FWebModule.FDConnection1.ExecSQL(
+  FDConexao.ExecSQL(
     'select * from produtos where id=' + AId.ToString,
     TmpDataset
   );
@@ -137,47 +140,71 @@ begin
     Render(TmpDataset, True);
 end;
 
-procedure TNFCeController.GetNFCe;
+procedure TNFCeController.GetNFCeArquivo(ANumero, ASerie: integer);
 var
-  oNFCe: TNFCe;
-  oNFCeItem: TNFCeItem;
-  I: Integer;
+  Lista: TStringList;
+  //MyStream: TStringStream;
 begin
-  oNFCe := TNFCe.Create;
+  //MyStream := TStringStream.Create;
 
-  oNFCe.cpf  := '11111111111';
-  oNFCe.Nome := 'joao da silva';
+  Lista := TStringList.Create;
+  try
+    Lista.LoadFromFile('C:\impressao\impressao_203547947.txt');
+    //Lista.Text := TNetEncoding.Base64.Encode((Lista.Text));
 
-  for I := 1 to 5 do
-  begin
-    oNFCeItem := TNFCeItem.Create;
-    oNFCeItem.Id         := I;
-    oNFCeItem.Descricao  := 'produto ' + I.ToString;
-    oNFCeItem.Valor      := 1.01 * I;
-    oNFCeItem.Quantidade := 1 * I;
-    oNFCe.Itens.Add(oNFCeItem);
+    Render(TNetEncoding.Base64.Encode(Lista.Text));
+
+    //Lista.SaveToStream(MyStream);
+  finally
+    Lista.Free;
   end;
 
-  Render(oNFCe, True);
+  //Render(MyStream, True);
+end;
+
+procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer; ATipo: string);
+begin
+  if ATipo.ToUpper = 'ESCPOS' then
+    Self.GetNFCeArquivo(Anumero, ASerie)
+  else
+  if ATipo.ToUpper = 'PDF' then
+    Self.GetNFCePDF(Anumero, ASerie)
+  else
+    raise Exception.Create('tipo de saida desconhecida');
+end;
+
+procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer);
+begin
+  Render(201, 'retorno do arquivo por meio de pdf');
 end;
 
 procedure TNFCeController.CreateNFCe(Context: TWebContext);
 var
   oNFCe: TNFCe;
+  DmNFCe: TdtmNFCe;
+  StrRetorno: string;
 begin
-  oNFCe := Context.Request.BodyAs<TNFCe>;
   try
-    if oNFCe.Itens.Count <= 0 then
-      raise Exception.Create('Nenhum item foi informado!');
+    oNFCe := Context.Request.BodyAs<TNFCe>;
+    try
+      if oNFCe.Itens.Count <= 0 then
+        raise Exception.Create('Nenhum item foi informado!');
 
-    oNFCe.Numero := 9999999;
-    oNFCe.Nome   := 'meu objeto alterado';
+      DmNFCe := TdtmNFCe.Create(nil);
+      try
+        DmNFCe.PreencherNFCe(oNFCe);
+        StrRetorno := DmNFCe.Enviar;
 
-    Render(oNFCe, True);
+        Render(201, StrRetorno);
+      finally
+        DmNFCe.Free;
+      end;
+    finally
+      oNFCe.Free;
+    end;
   except
     on E: Exception do
     begin
-      oNFCe.Free;
       Render(500, E.Message);
     end;
   end;

@@ -14,7 +14,9 @@ uses
   UNFCeController in 'UNFCeController.pas',
   UNFCeWebModulle in 'UNFCeWebModulle.pas' {NFCEWebModule: TWebModule},
   UConfigClass in 'UConfigClass.pas',
-  UNFCeClass in '..\comum\UNFCeClass.pas';
+  UNFCeClass in '..\comum\UNFCeClass.pas',
+  DNFCe in 'DNFCe.pas' {DtmNFCe: TDataModule},
+  UBaseController in 'UBaseController.pas';
 
 {$R *.res}
 

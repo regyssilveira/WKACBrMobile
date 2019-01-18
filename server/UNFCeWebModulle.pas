@@ -15,11 +15,9 @@ uses
 
 type
   TNFCEWebModule = class(TWebModule)
-    FDConnection1: TFDConnection;
     FDPhysFBDriverLink1: TFDPhysFBDriverLink;
     procedure WebModuleCreate(Sender: TObject);
     procedure WebModuleDestroy(Sender: TObject);
-    procedure FDConnection1BeforeConnect(Sender: TObject);
   private
     FMVC: TMVCEngine;
   public
@@ -29,23 +27,44 @@ type
 var
   WebModuleClass: TComponentClass = TNFCEWebModule;
 
+const
+  NOME_CONEXAO_FB = 'CONEXAO_SERVIDOR_DMC';
+
 implementation
 
 {$R *.dfm}
 
 uses
-  UNFCeController, System.IOUtils,
-  MVCFramework.Commons, MVCFramework.Middleware.Compression, UConfigClass;
+  UNFCeController,
+  UConfigClass,
+  System.IOUtils,
 
-procedure TNFCEWebModule.FDConnection1BeforeConnect(Sender: TObject);
-begin
-  FDConnection1.Params.Values['Server']   := ConfigServer.IP;
-  FDConnection1.Params.Values['Port']     := ConfigServer.Porta.ToString;
-  FDConnection1.Params.Values['Database'] := ConfigServer.Path;
-end;
+  MVCFramework.Commons,
+  MVCFramework.Middleware.Compression;
 
 procedure TNFCEWebModule.WebModuleCreate(Sender: TObject);
+var
+  oParametros: TStringList;
 begin
+  FDManager.Close;
+  try
+    oParametros := TStringList.Create;
+    oParametros.Clear;
+    oParametros.Add('DriverID=FB');
+    oParametros.Add('User_Name=sysdba');
+    oParametros.Add('Password=masterkey');
+    oParametros.Add('Protocol=TCPIP');
+    oParametros.Add('CharacterSet=WIN1252');
+    oParametros.Add('Server='   + ConfigServer.IP);
+    oParametros.Add('Port='     + ConfigServer.Porta.ToString);
+    oParametros.Add('Database=' + ConfigServer.Path);
+
+    FDManager.AddConnectionDef(NOME_CONEXAO_FB, 'FB', oParametros);
+    FDManager.Open;
+  finally
+    oParametros.Free;
+  end;
+
   FMVC := TMVCEngine.Create(Self,
     procedure(Config: TMVCConfig)
     begin
@@ -85,3 +104,4 @@ begin
 end;
 
 end.
+base'] :=
