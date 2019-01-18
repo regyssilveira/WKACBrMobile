@@ -1,0 +1,251 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 707
+  ClientWidth = 621
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 621.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    object Button2: TButton
+      Align = Right
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 463.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 153.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Clientes'
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      Align = Left
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 5.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Produtos'
+      OnClick = Button1Click
+    end
+  end
+  object Layout2: TLayout
+    Align = Top
+    Position.Y = 50.000000000000000000
+    Size.Width = 621.000000000000000000
+    Size.Height = 119.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    object Memo1: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Align = Client
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 601.000000000000000000
+      Size.Height = 99.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Viewport.Width = 597.000000000000000000
+      Viewport.Height = 95.000000000000000000
+    end
+  end
+  object Layout3: TLayout
+    Align = Client
+    Size.Width = 621.000000000000000000
+    Size.Height = 372.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    object ListView2: TListView
+      ItemAppearanceClassName = 'TDynamicAppearance'
+      ItemEditAppearanceClassName = 'TDynamicAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      Align = Client
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 601.000000000000000000
+      Size.Height = 352.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+        item
+          AppearanceObjectName = 'Descricao'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Leading
+          Appearance.Width = 233.000000000000000000
+          Appearance.Height = 20.000000000000000000
+          Appearance.PlaceOffset.X = -1.000000000000000000
+          Appearance.PlaceOffset.Y = 24.000000000000000000
+        end
+        item
+          AppearanceObjectName = 'ID'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Leading
+          Appearance.Width = 79.000000000000000000
+          Appearance.Height = 25.000000000000000000
+        end
+        item
+          AppearanceObjectName = 'VlVenda'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Trailing
+          Appearance.Width = 153.000000000000000000
+          Appearance.Height = 25.000000000000000000
+          Appearance.PlaceOffset.X = 78.000000000000000000
+        end>
+      ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
+        item
+          AppearanceObjectName = 'Text1'
+          AppearanceClassName = 'TTextObjectAppearance'
+        end>
+    end
+  end
+  object Layout4: TLayout
+    Align = Bottom
+    Position.Y = 541.000000000000000000
+    Size.Width = 621.000000000000000000
+    Size.Height = 166.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    object ListView1: TListView
+      ItemAppearanceClassName = 'TListItemAppearance'
+      ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      Align = Client
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 601.000000000000000000
+      Size.Height = 146.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+    end
+  end
+  object tbProdutos: TFDMemTable
+    AfterOpen = tbProdutosAfterOpen
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 304
+    Top = 320
+    object tbProdutosid: TIntegerField
+      FieldName = 'id'
+    end
+    object tbProdutosgtin: TStringField
+      FieldName = 'gtin'
+      Size = 14
+    end
+    object tbProdutosdescricao: TStringField
+      FieldName = 'descricao'
+      Size = 50
+    end
+    object tbProdutosvl_venda: TFloatField
+      FieldName = 'vl_venda'
+    end
+    object tbProdutosdt_criacao: TDateField
+      FieldName = 'dt_criacao'
+    end
+    object tbProdutosun: TStringField
+      FieldName = 'un'
+      Size = 3
+    end
+  end
+  object tbClientes: TFDMemTable
+    AfterOpen = tbClientesAfterOpen
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 304
+    Top = 400
+    object tbClientesid: TIntegerField
+      FieldName = 'id'
+    end
+    object tbClientesnome: TStringField
+      FieldName = 'nome'
+      Size = 50
+    end
+    object tbClientescpf: TStringField
+      FieldName = 'cpf'
+      Size = 11
+    end
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = tbProdutos
+    ScopeMappings = <>
+    Left = 176
+    Top = 320
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 172
+    Top = 269
+    object LinkListControlToField3: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB2
+      FieldName = 'nome'
+      Control = ListView1
+      FillExpressions = <>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+    object LinkListControlToField4: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      Control = ListView2
+      FillExpressions = <
+        item
+          SourceMemberName = 'descricao'
+          ControlMemberName = 'Descricao'
+        end
+        item
+          SourceMemberName = 'id'
+          ControlMemberName = 'ID'
+        end
+        item
+          SourceMemberName = 'vl_venda'
+          ControlMemberName = 'VlVenda'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+  object BindSourceDB2: TBindSourceDB
+    DataSet = tbClientes
+    ScopeMappings = <>
+    Left = 176
+    Top = 368
+  end
+end
