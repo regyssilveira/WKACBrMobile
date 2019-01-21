@@ -1,0 +1,29 @@
+object FrameAtualizar: TFrameAtualizar
+  Size.Width = 433.000000000000000000
+  Size.Height = 732.000000000000000000
+  Size.PlatformDefault = False
+  object Layout1: TLayout
+    Align = Center
+    Size.Width = 253.000000000000000000
+    Size.Height = 146.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object btnAtualizar: TButton
+      Align = Bottom
+      Position.Y = 105.000000000000000000
+      Size.Width = 253.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Atualizar'
+      OnClick = btnAtualizarClick
+    end
+    object ProgressBar1: TProgressBar
+      Align = Center
+      Orientation = Horizontal
+      Size.Width = 223.000000000000000000
+      Size.Height = 20.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+end

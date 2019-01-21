@@ -1,0 +1,5 @@
+object FramePedido: TFramePedido
+  Size.Width = 473.000000000000000000
+  Size.Height = 659.000000000000000000
+  Size.PlatformDefault = False
+end

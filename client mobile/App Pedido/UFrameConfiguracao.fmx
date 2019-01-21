@@ -1,0 +1,63 @@
+object FrameConfiguracao: TFrameConfiguracao
+  Size.Width = 471.000000000000000000
+  Size.Height = 644.000000000000000000
+  Size.PlatformDefault = False
+  object Layout1: TLayout
+    Align = Center
+    Size.Width = 327.000000000000000000
+    Size.Height = 318.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Layout2: TLayout
+      Align = Top
+      Size.Width = 327.000000000000000000
+      Size.Height = 73.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Label1: TLabel
+        Align = Top
+        Size.Width = 327.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'IP do Servidor'
+        TabOrder = 0
+      end
+      object EdtIP: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 1
+        Text = '192.168.0.1'
+        Position.Y = 17.000000000000000000
+        Size.Width = 327.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object Layout3: TLayout
+      Align = Top
+      Position.Y = 73.000000000000000000
+      Size.Width = 327.000000000000000000
+      Size.Height = 72.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Label2: TLabel
+        Align = Top
+        Size.Width = 327.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Porta'
+        TabOrder = 0
+      end
+      object EdtPorta: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 1
+        Text = '8080'
+        Position.Y = 17.000000000000000000
+        Size.Width = 327.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+end
