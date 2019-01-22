@@ -174,8 +174,29 @@ begin
 end;
 
 procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer);
+var
+  DmNFCe: TdtmNFCe;
+  PathPDF: string;
+  StreamPDF: TFileStream;
 begin
-  Render(201, 'retorno do arquivo por meio de pdf');
+  DmNFCe := TdtmNFCe.Create(nil);
+  try
+    PathPDF := DmNFCe.GerarPDF(ANumero, ASerie);
+
+    StreamPDF := TFileStream.Create(PathPDF, fmOpenRead);
+    StreamPDF.Position := 0;
+    try
+      Render(StreamPDF, True);
+    except
+      on E: Exception do
+      begin
+        if Assigned(StreamPDF) then
+          StreamPDF.Free;
+      end;
+    end;
+  finally
+    DmNFCe.Free;
+  end;
 end;
 
 procedure TNFCeController.CreateNFCe(Context: TWebContext);

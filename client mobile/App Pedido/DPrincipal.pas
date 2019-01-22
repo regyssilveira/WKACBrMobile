@@ -42,12 +42,15 @@ type
     procedure tmpProdutosAfterOpen(DataSet: TDataSet);
     procedure tmpClientesAfterOpen(DataSet: TDataSet);
   private
-    FResponse: IRESTResponse;
     FCli: TRESTClient;
+    FResp: IRESTResponse;
   public
     procedure InicializarRESTClient;
 
+    procedure GetPDFFromNFCe(const ANumero, ASerie: integer);
+
     property Cli: TRESTClient read FCli write FCli;
+    property Resp: IRESTResponse read FResp write FResp;
   end;
 
 var
@@ -70,6 +73,8 @@ begin
   FCli := TRESTClient.Create(
     ConfigFile.IpServidor, ConfigFile.Porta
   );
+  FCli.Username := 'admin';
+  FCli.Password := 'adminpass';
 end;
 
 procedure TDtmPrincipal.tmpClientesAfterOpen(DataSet: TDataSet);
@@ -82,11 +87,11 @@ begin
   FutResponse := TTask.Future<string>(
     function: string
     begin
-      FResponse := Cli.doGET('/nfce/clientes', []);
-      if FResponse.HasError then
-        raise Exception.Create(FResponse.ResponseText);
+      FResp := Cli.doGET('/nfce/clientes', []);
+      if FResp.HasError then
+        raise Exception.Create(FResp.ResponseText);
 
-      Result := FResponse.BodyAsString;
+      Result := FResp.BodyAsString;
     end);
 
   DataSet.DisableControls;
@@ -103,13 +108,13 @@ begin
   // comsumo sincrono
   InicializarRESTClient;
 
-  FResponse := Cli.doGET('/nfce/produtos', []);
-  if FResponse.HasError then
-    raise Exception.Create(FResponse.ResponseText);
+  FResp := Cli.doGET('/nfce/produtos', []);
+  if FResp.HasError then
+    raise Exception.Create(FResp.ResponseText);
 
   DataSet.DisableControls;
   try
-    tmpProdutos.LoadFromJSONArrayString(FResponse.BodyAsString);
+    tmpProdutos.LoadFromJSONArrayString(FResp.BodyAsString);
     tmpProdutos.First;
   finally
     DataSet.EnableControls;
@@ -120,5 +125,28 @@ procedure TDtmPrincipal.FDConnection1BeforeConnect(Sender: TObject);
 begin
   FDConnection1.Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite')
 end;
+
+
+procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);
+var
+  PDFStream: TMemoryStream;
+begin
+  FResp := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
+  if Resp.HasError then
+    raise Exception.Create(FResp.ResponseText);
+
+
+  PDFStream := TMemoryStream.Create;
+  try
+    PDFStream.LoadFromStream(FResp.Body);
+    PDFStream.Position := 0;
+
+
+  finally
+    PDFStream.DisposeOf;
+  end;
+
+end;
+
 
 end.

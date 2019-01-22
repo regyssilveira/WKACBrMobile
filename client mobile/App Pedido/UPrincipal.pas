@@ -8,7 +8,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.TabControl, FMX.Controls.Presentation, FMX.Objects,
-  UFrameConfiguracao, UFrameAtualizar;
+  UFrameConfiguracao, UFrameAtualizar, UFramePedido;
 
 type
   TForm1 = class(TForm)
@@ -39,6 +39,7 @@ type
     FrameConfiguracao1: TFrameConfiguracao;
     TabAtualizacao: TTabItem;
     FrameAtualizar1: TFrameAtualizar;
+    FramePedido1: TFramePedido;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);
@@ -61,6 +62,8 @@ implementation
 
 {$R *.fmx}
 
+uses DPrincipal;
+
 procedure TForm1.TbcPrincipalChange(Sender: TObject);
 begin
   BtnVoltar.Visible    := TbcPrincipal.ActiveTab <> TabMenu;
@@ -73,7 +76,7 @@ begin
   case TbcPrincipal.TabIndex of
     1:
       begin
-
+        FramePedido1.EnviarPedido;
       end;
 
     2:
@@ -103,8 +106,12 @@ procedure TForm1.FormShow(Sender: TObject);
 begin
   TbcPrincipal.ActiveTab := TabMenu;
 
+  DtmPrincipal.qryProdutos.Open;
+  DtmPrincipal.qryClientes.Open;
+
   TbcPrincipalChange(TbcPrincipal);
   FrameConfiguracao1.CarregarConfiguracoes;
+  FramePedido1.Inicilizar;
 end;
 
 procedure TForm1.rectAtualizarClick(Sender: TObject);

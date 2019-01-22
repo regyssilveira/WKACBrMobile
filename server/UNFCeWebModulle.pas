@@ -8,6 +8,8 @@ uses
   Web.HTTPApp,
   FireDAC.DApt,
 
+  AuthHandlerU,
+
   MVCFramework, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error,
   FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB,
@@ -40,7 +42,8 @@ uses
   System.IOUtils,
 
   MVCFramework.Commons,
-  MVCFramework.Middleware.Compression;
+  MVCFramework.Middleware.Compression,
+  MVCFramework.Middleware.Authentication;
 
 procedure TNFCEWebModule.WebModuleCreate(Sender: TObject);
 var
@@ -58,6 +61,10 @@ begin
     oParametros.Add('Server='   + ConfigServer.IP);
     oParametros.Add('Port='     + ConfigServer.Porta.ToString);
     oParametros.Add('Database=' + ConfigServer.Path);
+
+    //oParametros.Add('POOL_MaximumItems=50');
+    //oParametros.Add('POOL_ExpireTimeout=9000');
+    //oParametros.Add('POOL_CleanupTimeout=900000');
 
     FDManager.AddConnectionDef(NOME_CONEXAO_FB, 'FB', oParametros);
     FDManager.Open;
@@ -96,6 +103,11 @@ begin
 
   // To enable compression (deflate, gzip) just add this middleware as the last one
   FMVC.AddMiddleware(TMVCCompressionMiddleware.Create);
+  FMVC.AddMiddleware(
+    TMVCCustomAuthenticationMiddleware.Create(
+      TCustomAuth.Create, '/system/users/logged'
+    )
+  );
 end;
 
 procedure TNFCEWebModule.WebModuleDestroy(Sender: TObject);
@@ -104,4 +116,4 @@ begin
 end;
 
 end.
-base'] :=
+

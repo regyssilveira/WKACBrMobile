@@ -18,10 +18,11 @@ type
   public
     procedure PreencherNFCe(ANFCe: TNFCe);
     function Enviar: string;
+    function GerarPDF(numero, serie: integer): string;
   end;
 
-var
-  dtmNFCe: TdtmNFCe;
+//var
+//  dtmNFCe: TdtmNFCe;
 
 implementation
 
@@ -364,6 +365,25 @@ begin
 
   // transporte (frete), no caso de NFC-e não pode ter frete
   ONFe.Transp.modFrete := mfSemFrete;
+end;
+
+function TdtmNFCe.GerarPDF(numero, serie: integer): string;
+begin
+  Self.ConfigurarNFe;
+
+  ACBrNFe1.NotasFiscais.Clear;
+  ACBrNFe1.NotasFiscais.LoadFromFile('');
+
+  ACBrNFe1.DANFE := ACBrNFeDANFCeFortes1;
+  try
+    ACBrNFe1.NotasFiscais.ImprimirPDF;
+    Result := ACBrNFe1.DANFE.PathPDF + 'chave';
+
+    if not FileExists(Result) then
+      raise Exception.Create('Arquivo PDF não encontrado no servidor!');
+  finally
+    ACBrNFe1.DANFE := ACBrNFeDANFeESCPOS1;
+  end;
 end;
 
 end.

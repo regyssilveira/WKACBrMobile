@@ -34,8 +34,8 @@ object DtmNFCe: TDtmNFCe
     ImprimeCodigoEan = True
     ImprimeQRCodeLateral = True
     ImprimeLogoLateral = True
-    Left = 480
-    Top = 48
+    Left = 80
+    Top = 232
   end
   object ACBrNFeDANFeESCPOS1: TACBrNFeDANFeESCPOS
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'

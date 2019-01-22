@@ -16,7 +16,8 @@ uses
   UConfigClass in 'UConfigClass.pas',
   UNFCeClass in '..\comum\UNFCeClass.pas',
   DNFCe in 'DNFCe.pas' {DtmNFCe: TDataModule},
-  UBaseController in 'UBaseController.pas';
+  UBaseController in 'UBaseController.pas',
+  AuthHandlerU in 'AuthHandlerU.pas';
 
 {$R *.res}
 
