@@ -30,6 +30,7 @@ type
     Fcpf: string;
     FNome: string;
     FNumero: integer;
+    FSerie: Integer;
     procedure Setcpf(const Value: string);
   public
     constructor Create;
@@ -38,6 +39,7 @@ type
     function AsJsonString: String;
 
     property Numero: integer read FNumero write FNumero;
+    property Serie: Integer read FSerie write FSerie;
     property cpf: string read Fcpf write Setcpf;
     property Nome: string read FNome write FNome;
 

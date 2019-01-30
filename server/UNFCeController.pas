@@ -44,7 +44,7 @@ type
 
     [MVCPath('/nfce/($ANumero)/($ASerie)/($ATipo)')]
     [MVCHTTPMethod([httpGET])]
-    procedure GetNFCePDF(ANumero: integer; ASerie: integer; ATipo: string); overload;
+    procedure GetNFCe(ANumero: integer; ASerie: integer; ATipo: string);
   end;
 
 implementation
@@ -143,49 +143,29 @@ end;
 procedure TNFCeController.GetNFCeArquivo(ANumero, ASerie: integer);
 var
   Lista: TStringList;
-  //MyStream: TStringStream;
+  DmNFCe: TdtmNFCe;
 begin
-  //MyStream := TStringStream.Create;
-
-  Lista := TStringList.Create;
+  DmNFCe := TdtmNFCe.Create(nil);
   try
-    Lista.LoadFromFile('C:\impressao\impressao_203547947.txt');
-    //Lista.Text := TNetEncoding.Base64.Encode((Lista.Text));
-
-    Render(TNetEncoding.Base64.Encode(Lista.Text));
-
-    //Lista.SaveToStream(MyStream);
+    Render(DmNFCe.GerarXML(ANumero, ASerie));
   finally
-    Lista.Free;
+    DmNFCe.Free;
   end;
-
-  //Render(MyStream, True);
-end;
-
-procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer; ATipo: string);
-begin
-  if ATipo.ToUpper = 'ESCPOS' then
-    Self.GetNFCeArquivo(Anumero, ASerie)
-  else
-  if ATipo.ToUpper = 'PDF' then
-    Self.GetNFCePDF(Anumero, ASerie)
-  else
-    raise Exception.Create('tipo de saida desconhecida');
 end;
 
 procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer);
 var
   DmNFCe: TdtmNFCe;
   PathPDF: string;
-  StreamPDF: TFileStream;
+  StreamPDF: TMemoryStream;
 begin
   DmNFCe := TdtmNFCe.Create(nil);
   try
     PathPDF := DmNFCe.GerarPDF(ANumero, ASerie);
 
-    StreamPDF := TFileStream.Create(PathPDF, fmOpenRead);
-    StreamPDF.Position := 0;
+    StreamPDF := TMemoryStream.Create;;
     try
+      StreamPDF.LoadFromFile(PathPDF);
       Render(StreamPDF, True);
     except
       on E: Exception do
@@ -197,6 +177,17 @@ begin
   finally
     DmNFCe.Free;
   end;
+end;
+
+procedure TNFCeController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
+begin
+  if ATipo.ToUpper = 'XML' then
+    Self.GetNFCeArquivo(Anumero, ASerie)
+  else
+  if ATipo.ToUpper = 'PDF' then
+    Self.GetNFCePDF(Anumero, ASerie)
+  else
+    raise Exception.Create('tipo de saida desconhecida');
 end;
 
 procedure TNFCeController.CreateNFCe(Context: TWebContext);

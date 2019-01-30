@@ -15,10 +15,13 @@ type
     ACBrPosPrinter1: TACBrPosPrinter;
   private
     procedure ConfigurarNFe;
+    function PathNotaFiscalExemplo: string;
   public
     procedure PreencherNFCe(ANFCe: TNFCe);
     function Enviar: string;
+
     function GerarPDF(numero, serie: integer): string;
+    function GerarXML(numero, serie: integer): string;
   end;
 
 //var
@@ -28,7 +31,7 @@ implementation
 
 uses
   pcnConversaoNFe, pcnConversao, ACBrDFeSSL, blcksock, pcnAuxiliar, pcnNFe,
-  System.StrUtils;
+  System.StrUtils, ACBrUtil;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
@@ -47,6 +50,12 @@ begin
       Exit;
     end;
   end;
+end;
+
+function TdtmNFCe.PathNotaFiscalExemplo: string;
+begin
+  // gerar uma nota sempre com mesmo nome para efeitos de exemplo
+  Result := ExtractFilePath(ParamStr(0)) + 'notafiscal.xml';
 end;
 
 procedure TdtmNFCe.ConfigurarNFe;
@@ -140,17 +149,17 @@ begin
 end;
 
 function TdtmNFCe.Enviar: string;
-var
-  StatusNFCe: Integer;
-  StrErros: string;
-  NumeroLote: string;
+//var
+  //StatusNFCe: Integer;
+  //StrErros: string;
+  //NumeroLote: string;
 begin
   if ACBrNFe1.NotasFiscais.Count <= 0 then
     raise Exception.Create('nenhuma nota fiscal informada');
 
   Self.ConfigurarNFe;
 
-//  // assinar
+//  // assinar omitido para facilitar o uso no curso
 //  ACBrNFe1.NotasFiscais.Assinar;
 //
 //  // validar
@@ -177,8 +186,14 @@ begin
 
   ACBrPosPrinter1.Porta := 'C:\impressao\impressao_' + FormatDateTime('hhmmsszzz', NOW) + '.txt';
 
-  ACBrNFe1.NotasFiscais[0].GravarXML;
-  ACBrNFe1.NotasFiscais.Imprimir;
+  // salvar a nota em um arquivo conhecido somente para efeitos de exemplo
+  // na vida real o XML deverá ser gravado no banco de dados ou em pasta de
+  // arquivamento e mantido por 5 anos
+  ACBrNFe1.NotasFiscais[0].GravarXML(PathNotaFiscalExemplo);
+
+  // opcional imprimir diretamente do servidor, para isso é preciso ter
+  // confiurado o impressor
+  //ACBrNFe1.NotasFiscais.Imprimir;
 
   Result :=
     '{ ' +
@@ -186,6 +201,7 @@ begin
     '  "Serie:": '  + ACBrNFe1.NotasFiscais[0].NFe.Ide.serie.ToString +
     '}' ;
 
+//  omitido para evitar o uso de certificado durante o curso
 //  NumeroLote := FormatDateTime('yymmddhhmm', NOW);
 //  if ACBrNFe1.Enviar(NumeroLote, True, True) then
 //  begin
@@ -225,6 +241,10 @@ begin
 
   ONFe := ACBrNFe1.NotasFiscais.Add.NFe;
 
+  // numeração da nota, cada software deve fazer conforme seu controle
+  ANFCe.Numero := 1;
+  ANFCe.Serie  := 1;
+
   // Ambiente
   ONFe.Ide.tpAmb     := ACBrNFe1.Configuracoes.WebServices.Ambiente;
   ONFe.Ide.verProc   := '1.0.0.0';
@@ -237,13 +257,15 @@ begin
   ONFe.Ide.finNFe    := fnNormal;
   ONFe.Ide.indFinal  := cfConsumidorFinal;
   ONFe.Ide.nNF       := ANFCe.Numero;
-  ONFe.Ide.cNF       := ANFCe.Numero;
-  ONFe.Ide.serie     := 1;
+  ONFe.Ide.serie     := ANFCe.Serie;
   ONFe.Ide.natOp     := 'VENDA';
   ONFe.Ide.dEmi      := NOW;
   ONFe.Ide.dSaiEnt   := ONFe.Ide.dEmi;
   ONFe.Ide.cUF       := UFtoCUF('AM');
   ONFe.Ide.cMunFG    := 1302603;
+
+  // deixar o acbr gerar um numero randomico conforme manual da nfe
+  ONFe.Ide.cNF := 0;
 
   // entrar em contingência quando configurado
   ONFe.Ide.tpEmis := teOffLine;
@@ -368,22 +390,39 @@ begin
 end;
 
 function TdtmNFCe.GerarPDF(numero, serie: integer): string;
+var
+  OldCfgDANFE: TACBrDFeDANFeReport;
 begin
-  Self.ConfigurarNFe;
-
-  ACBrNFe1.NotasFiscais.Clear;
-  ACBrNFe1.NotasFiscais.LoadFromFile('');
-
-  ACBrNFe1.DANFE := ACBrNFeDANFCeFortes1;
+  OldCfgDANFE := ACBrNFe1.DANFE;
   try
+    ACBrNFe1.DANFE := ACBrNFeDANFCeFortes1;
+    Self.ConfigurarNFe;
+
+    ACBrNFe1.NotasFiscais.Clear;
+    ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);
     ACBrNFe1.NotasFiscais.ImprimirPDF;
-    Result := ACBrNFe1.DANFE.PathPDF + 'chave';
+
+    Result :=
+      ACBrNFe1.DANFE.PathPDF +
+      ACBrUtil.OnlyNumber(ACBrNFe1.NotasFiscais[0].NFe.infNFe.ID) +
+      '-nfe.pdf';
 
     if not FileExists(Result) then
       raise Exception.Create('Arquivo PDF não encontrado no servidor!');
   finally
-    ACBrNFe1.DANFE := ACBrNFeDANFeESCPOS1;
+    ACBrNFe1.DANFE := OldCfgDANFE;
   end;
+end;
+
+function TdtmNFCe.GerarXML(numero, serie: integer): string;
+begin
+  if not FilesExists(PathNotaFiscalExemplo) then
+    raise Exception.Create('Arquivo XML de nota fiscal não encontrado');
+
+  ACBrNFe1.NotasFiscais.Clear;
+  ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);
+
+  Result := ACBrNFe1.NotasFiscais[0].XML;
 end;
 
 end.
