@@ -8,7 +8,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.TabControl, FMX.Controls.Presentation, FMX.Objects,
-  UFrameConfiguracao, UFrameAtualizar, UFramePedido;
+  UFrameConfiguracao, UFrameAtualizar, UFramePedido, System.Actions,
+  FMX.ActnList;
 
 type
   TForm1 = class(TForm)
@@ -40,6 +41,8 @@ type
     TabAtualizacao: TTabItem;
     FrameAtualizar1: TFrameAtualizar;
     FramePedido1: TFramePedido;
+    ActionList1: TActionList;
+    ChangeTabAction1: TChangeTabAction;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);

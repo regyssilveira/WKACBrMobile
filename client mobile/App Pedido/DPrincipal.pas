@@ -131,7 +131,7 @@ procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);
 var
   PDFStream: TMemoryStream;
 begin
-  FResp := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
+  FResp := Cli.doGET('/nfce/nfce/', [ANumero.ToString, ASerie.ToString, 'PDF'], );
   if Resp.HasError then
     raise Exception.Create(FResp.ResponseText);
 
