@@ -62,6 +62,7 @@ begin
     oParametros.Add('Port='     + ConfigServer.Porta.ToString);
     oParametros.Add('Database=' + ConfigServer.Path);
 
+    // parametros para o controle do pool se necessário e quiser alterar
     //oParametros.Add('POOL_MaximumItems=50');
     //oParametros.Add('POOL_ExpireTimeout=9000');
     //oParametros.Add('POOL_CleanupTimeout=900000');
