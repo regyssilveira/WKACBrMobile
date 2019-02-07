@@ -104,7 +104,7 @@ begin
   ACBrNFe1.Configuracoes.Geral.IdCSC        := '1';
   ACBrNFe1.Configuracoes.Geral.CSC          := '0123456789';
   ACBrNFe1.Configuracoes.Geral.Salvar       := True;
-  ACBrNFe1.Configuracoes.Geral.VersaoDF     := ve400;
+  ACBrNFe1.Configuracoes.Geral.VersaoDF     := TpcnVersaoDF.ve400;
   ACBrNFe1.Configuracoes.Geral.VersaoQRCode := TpcnVersaoQrCode.veqr200;
   ACBrNFe1.Configuracoes.Geral.FormaEmissao := teNormal;
 
@@ -193,7 +193,7 @@ begin
 
   // opcional imprimir diretamente do servidor, para isso é preciso ter
   // confiurado o impressor
-  //ACBrNFe1.NotasFiscais.Imprimir;
+  ACBrNFe1.NotasFiscais.Imprimir;
 
   Result :=
     '{ ' +
@@ -221,9 +221,9 @@ begin
 //  end
 //  else
 //  begin
-//    raise Exception.CreateFmt('Erro ao cancelar NFC-e: %d - %s', [
-//      ACBrNFe1.WebServices.EnvEvento.EventoRetorno.cStat,
-//      ACBrNFe1.WebServices.EnvEvento.EventoRetorno.xMotivo
+//    raise Exception.CreateFmt('Erro ao enviar: %d - %s', [
+//      ACBrNFe1.WebServices.Enviar.cStat,
+//      ACBrNFe1.WebServices.Enviar.xMotivo
 //    ]);
 //  end;
 end;

@@ -9,7 +9,7 @@ uses
   MVCFramework.Serializer.Commons;
 
 type
-  [MapperJSONNaming(JSONNameLowerCase)]
+  [MVCNameCaseAttribute(ncLowerCase)]
   TNFCeItem = class
   private
     FValor: double;
@@ -23,7 +23,7 @@ type
     property Quantidade: integer read FQuantidade write FQuantidade;
   end;
 
-  [MapperJSONNaming(JSONNameLowerCase)]
+  [MVCNameCaseAttribute(ncLowerCase)]
   TNFCe = class
   private
     FItens: TObjectList<TNFCeItem>;
@@ -43,7 +43,7 @@ type
     property cpf: string read Fcpf write Setcpf;
     property Nome: string read FNome write FNome;
 
-    [MapperListOf(TNFCeItem)]
+    [MVCListOfAttribute(TNFCeItem)]
     property Itens: TObjectList<TNFCeItem> read FItens write FItens;
   end;
 
@@ -99,3 +99,4 @@ begin
 end;
 
 end.
+

@@ -1,24 +1,24 @@
 object DtmNFCe: TDtmNFCe
   OldCreateOrder = False
-  Height = 486
-  Width = 694
+  Height = 264
+  Width = 422
   object ACBrNFe1: TACBrNFe
-    Configuracoes.Geral.SSLLib = libNone
-    Configuracoes.Geral.SSLCryptLib = cryNone
-    Configuracoes.Geral.SSLHttpLib = httpNone
-    Configuracoes.Geral.SSLXmlSignLib = xsNone
+    Configuracoes.Geral.SSLLib = libWinCrypt
+    Configuracoes.Geral.SSLCryptLib = cryWinCrypt
+    Configuracoes.Geral.SSLHttpLib = httpWinHttp
+    Configuracoes.Geral.SSLXmlSignLib = xsLibXml2
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.VersaoQRCode = veqr000
     Configuracoes.Arquivos.OrdenacaoPath = <>
     Configuracoes.WebServices.UF = 'SP'
     Configuracoes.WebServices.AguardarConsultaRet = 0
     Configuracoes.WebServices.QuebradeLinha = '|'
+    Configuracoes.RespTec.IdCSRT = 0
     DANFE = ACBrNFeDANFeESCPOS1
-    Left = 80
+    Left = 96
     Top = 48
   end
   object ACBrNFeDANFCeFortes1: TACBrNFeDANFCeFortes
-    MostraPreview = False
     MostraStatus = False
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
     MargemInferior = 0.800000000000000000
@@ -34,8 +34,13 @@ object DtmNFCe: TDtmNFCe
     ImprimeCodigoEan = True
     ImprimeQRCodeLateral = True
     ImprimeLogoLateral = True
-    Left = 80
-    Top = 232
+    FonteLinhaItem.Charset = DEFAULT_CHARSET
+    FonteLinhaItem.Color = clWindowText
+    FonteLinhaItem.Height = -9
+    FonteLinhaItem.Name = 'Lucida Console'
+    FonteLinhaItem.Style = []
+    Left = 280
+    Top = 120
   end
   object ACBrNFeDANFeESCPOS1: TACBrNFeDANFeESCPOS
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
@@ -53,8 +58,8 @@ object DtmNFCe: TDtmNFCe
     ImprimeEmUmaLinha = True
     ImprimeQRCodeLateral = True
     PosPrinter = ACBrPosPrinter1
-    Left = 80
-    Top = 96
+    Left = 96
+    Top = 120
   end
   object ACBrPosPrinter1: TACBrPosPrinter
     Modelo = ppEscPosEpson
@@ -67,7 +72,7 @@ object DtmNFCe: TDtmNFCe
     ConfigQRCode.LarguraModulo = 4
     ConfigQRCode.ErrorLevel = 0
     LinhasEntreCupons = 0
-    Left = 80
-    Top = 144
+    Left = 96
+    Top = 168
   end
 end

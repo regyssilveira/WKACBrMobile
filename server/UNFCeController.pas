@@ -40,11 +40,15 @@ type
 
     [MVCPath('/nfce')]
     [MVCHTTPMethod([httpPOST])]
-    procedure CreateNFCe(Context: TWebContext);
+    procedure CreateNFCe;
 
     [MVCPath('/nfce/($ANumero)/($ASerie)/($ATipo)')]
     [MVCHTTPMethod([httpGET])]
     procedure GetNFCe(ANumero: integer; ASerie: integer; ATipo: string);
+
+    [MVCPath('/nfce')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GerarNFCeExemplo;
   end;
 
 implementation
@@ -142,7 +146,6 @@ end;
 
 procedure TNFCeController.GetNFCeArquivo(ANumero, ASerie: integer);
 var
-  Lista: TStringList;
   DmNFCe: TdtmNFCe;
 begin
   DmNFCe := TdtmNFCe.Create(nil);
@@ -163,7 +166,7 @@ begin
   try
     PathPDF := DmNFCe.GerarPDF(ANumero, ASerie);
 
-    StreamPDF := TMemoryStream.Create;;
+    StreamPDF := TMemoryStream.Create;
     try
       StreamPDF.LoadFromFile(PathPDF);
       Render(StreamPDF, True);
@@ -190,7 +193,7 @@ begin
     raise Exception.Create('tipo de saida desconhecida');
 end;
 
-procedure TNFCeController.CreateNFCe(Context: TWebContext);
+procedure TNFCeController.CreateNFCe;
 var
   oNFCe: TNFCe;
   DmNFCe: TdtmNFCe;
@@ -221,5 +224,34 @@ begin
     end;
   end;
 end;
+
+procedure TNFCeController.GerarNFCeExemplo;
+var
+  I: Integer;
+  oNFCe: TNFCe;
+  oNFCeItem: TNFCeItem;
+begin
+  oNFCe := TNFCe.Create;
+  try
+    oNFCe.cpf  := '';
+    oNFCe.Nome := '';
+
+    for I := 1 to 5 do
+    begin
+      oNFCeItem := TNFCeItem.Create;
+      oNFCeItem.Id         := I;
+      oNFCeItem.Descricao  := 'Descricao teste ' + I.ToString;
+      oNFCeItem.Valor      := I * 10;
+      oNFCeItem.Quantidade := I;
+
+      oNFCe.Itens.Add(oNFCeItem);
+
+      Render(oNFCe.AsJsonString);
+    end;
+  finally
+    oNFCe.Free;
+  end;
+end;
+
 
 end.

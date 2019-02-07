@@ -1,0 +1,8 @@
+2019-02-06 19:38:53:566  [TID       4048][INFO    ] Default Logger initialized [dmvcframework]
+2019-02-06 19:38:53:566  [TID       4048][INFO    ] ENTER: Config default values [dmvcframework]
+2019-02-06 19:38:53:582  [TID       4048][INFO    ] EXIT: Config default values [dmvcframework]
+2019-02-06 19:38:53:582  [TID       4048][INFO    ] >> Custom configuration method [dmvcframework]
+2019-02-06 19:38:53:582  [TID       4048][INFO    ] << Custom configuration method [dmvcframework]
+2019-02-06 19:38:53:582  [TID       4048][INFO    ] ENTER: LoadSystemControllers [dmvcframework]
+2019-02-06 19:38:53:582  [TID       4048][INFO    ] EXIT: LoadSystemControllers [dmvcframework]
+2019-02-06 19:38:53:613  [TID       4048][INFO    ] GET:/nfce/produtos -> Unit1.TMinhaController - 200 OK [dmvcframework]

@@ -50,8 +50,9 @@ var
   oParametros: TStringList;
 begin
   FDManager.Close;
+
+  oParametros := TStringList.Create;
   try
-    oParametros := TStringList.Create;
     oParametros.Clear;
     oParametros.Add('DriverID=FB');
     oParametros.Add('User_Name=sysdba');

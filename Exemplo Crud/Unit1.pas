@@ -56,7 +56,7 @@ type
 
     [MVCPath('/produtos')]
     [MVCHTTPMethod([httpPOST])]
-    procedure CreateProduto(Ctx: TWebContext);
+    procedure CreateProduto;
 
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpPUT])]
@@ -65,13 +65,11 @@ type
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpDELETE])]
     procedure DeleteProduto(id: Integer);
-
   end;
 
 implementation
 
 uses
-  Dialogs,
   Data.DB, System.SysUtils, MVCFramework.Logger, System.StrUtils;
 
 procedure TMinhaController.Index;
@@ -132,13 +130,13 @@ begin
     //Render(500, 'Nenhum produto encontrado para o codigo: ' + Id.ToString);
 end;
 
-procedure TMinhaController.CreateProduto(Ctx: TWebContext);
+procedure TMinhaController.CreateProduto;
 var
   Ret: Integer;
   OProduto: TProduto;
 begin
   try
-    OProduto := Ctx.Request.BodyAs<TProduto>;
+    OProduto := Context.Request.BodyAs<TProduto>;
     try
       if OProduto.ID <= 0 then
         raise Exception.Create('Código do produto não foi informado');

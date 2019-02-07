@@ -15,11 +15,11 @@ object MinhaWebModule: TMinhaWebModule
       'CharacterSet=WIN1252'
       'DriverID=FB')
     LoginPrompt = False
-    Left = 96
+    Left = 80
     Top = 64
   end
   object FDPhysFBDriverLink1: TFDPhysFBDriverLink
-    Left = 320
-    Top = 208
+    Left = 80
+    Top = 112
   end
 end

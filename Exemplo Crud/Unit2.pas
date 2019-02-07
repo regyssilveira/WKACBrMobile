@@ -30,7 +30,8 @@ implementation
 
 {$R *.dfm}
 
-uses Unit1, System.IOUtils, MVCFramework.Commons, MVCFramework.Middleware.Compression;
+uses
+  Unit1, System.IOUtils, MVCFramework.Commons, MVCFramework.Middleware.Compression;
 
 procedure TMinhaWebModule.WebModuleCreate(Sender: TObject);
 begin
