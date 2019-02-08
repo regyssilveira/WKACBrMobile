@@ -38,6 +38,8 @@ begin
     DtmPrincipal.tmpProdutos.Open;
     DtmPrincipal.tmpClientes.Open;
 
+    ShowMessage('Começarei a atualizar agora...');
+
     ProgressBar1.Value := 0;
     ProgressBar1.Max :=
       DtmPrincipal.tmpProdutos.RecordCount +
@@ -47,7 +49,7 @@ begin
 
     // produtos
     QryExecute.SQL.Text :=
-      'INSERT INTO PRODUTOS                                   ' + sLineBreak +
+      'INSERT OR REPLACE INTO PRODUTOS                        ' + sLineBreak +
       '  (ID, GTIN, DESCRICAO, VL_VENDA, DT_CRIACAO, UN)      ' + sLineBreak +
       'VALUES                                                 ' + sLineBreak +
       '  (:ID, :GTIN, :DESCRICAO, :VL_VENDA, :DT_CRIACAO, :UN)';
@@ -78,7 +80,7 @@ begin
 
     // clientes
     QryExecute.SQL.Text :=
-      'INSERT INTO CLIENTES (ID, NOME, CPF) VALUES (:ID, :NOME, :CPF)';
+      'INSERT OR REPLACE INTO CLIENTES (ID, NOME, CPF) VALUES (:ID, :NOME, :CPF)';
 
     I := 0;
     QryExecute.Params.ArraySize := DtmPrincipal.tmpClientes.RecordCount;
@@ -100,7 +102,6 @@ begin
     finally
       DtmPrincipal.tmpClientes.Close;
     end;
-
 
     ShowMessage('pronto!');
   finally
