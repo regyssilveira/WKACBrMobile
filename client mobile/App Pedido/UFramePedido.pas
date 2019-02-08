@@ -34,11 +34,13 @@ type
     BindingsList1: TBindingsList;
     LinkListControlToField1: TLinkListControlToField;
     EdtProduto: TComboBox;
-    EdtQuantidade: TEdit;
-    Label5: TLabel;
     BindSourceDB2: TBindSourceDB;
     LinkListControlToField2: TLinkListControlToField;
+    Layout4: TLayout;
+    Layout5: TLayout;
     BtnAdicionarProduto: TButton;
+    Label5: TLabel;
+    EdtQuantidade: TEdit;
     procedure BtnAdicionarProdutoClick(Sender: TObject);
   private
 

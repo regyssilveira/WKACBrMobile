@@ -31,7 +31,6 @@ type
     FNome: string;
     FNumero: integer;
     FSerie: Integer;
-    procedure Setcpf(const Value: string);
   public
     constructor Create;
     destructor Destroy; override;
@@ -40,7 +39,7 @@ type
 
     property Numero: integer read FNumero write FNumero;
     property Serie: Integer read FSerie write FSerie;
-    property cpf: string read Fcpf write Setcpf;
+    property cpf: string read Fcpf write Fcpf;
     property Nome: string read FNome write FNome;
 
     [MVCListOfAttribute(TNFCeItem)]
@@ -50,7 +49,6 @@ type
 implementation
 
 uses
-  ACBrValidador,
   MVCFramework.DataSet.Utils,
   MVCFramework.Serializer.JsonDataObjects,
   JsonDataObjects;
@@ -83,19 +81,6 @@ destructor TNFCe.Destroy;
 begin
   FItens.Free;
   inherited;
-end;
-
-procedure TNFCe.Setcpf(const Value: string);
-var
-  SMsgErro: string;
-begin
-  Fcpf := Value;
-  if not Fcpf.Trim.IsEmpty then
-  begin
-    SMsgErro := ACBrValidador.ValidarCNPJouCPF(Value);
-    if not SMsgErro.Trim.IsEmpty then
-      raise Exception.Create(SMsgErro);
-  end;
 end;
 
 end.
