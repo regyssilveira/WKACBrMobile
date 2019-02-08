@@ -130,6 +130,8 @@ begin
 
     ShowMessage('Pedido Enviado!');
     Self.Limpar;
+
+    DtmPrincipal.GetPDFFromNFCe(1, 1);
   finally
     oPedido.DisposeOf;
   end;
