@@ -6,8 +6,9 @@ object DtmPrincipal: TDtmPrincipal
     Params.Strings = (
       'Database=C:\Users\Personal\Documents\AppPedidos.sqlite'
       'DriverID=SQLite')
-    Connected = True
+    ConnectedStoredUsage = []
     LoginPrompt = False
+    AfterConnect = FDConnection1AfterConnect
     BeforeConnect = FDConnection1BeforeConnect
     Left = 72
     Top = 64

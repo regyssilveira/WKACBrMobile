@@ -41,6 +41,7 @@ type
     procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure tmpProdutosAfterOpen(DataSet: TDataSet);
     procedure tmpClientesAfterOpen(DataSet: TDataSet);
+    procedure FDConnection1AfterConnect(Sender: TObject);
   private
     FCli: TRESTClient;
     FResp: IRESTResponse;
@@ -118,6 +119,50 @@ begin
     tmpProdutos.First;
   finally
     DataSet.EnableControls;
+  end;
+end;
+
+procedure TDtmPrincipal.FDConnection1AfterConnect(Sender: TObject);
+var
+  Tabelas: TStringList;
+begin
+  Tabelas := TStringList.Create;
+  try
+    FDConnection1.GetTableNames('', '', '', Tabelas);
+
+    Tabelas.CaseSensitive := False;
+
+    if Tabelas.IndexOf('produtos') < 0 then
+    begin
+      FDConnection1.ExecSQL(
+        'create table produtos (   ' + sLineBreak +
+        '  ID integer not null,    ' + sLineBreak +
+        '  GTIN varchar(13),       ' + sLineBreak +
+        '  DESCRICAO varchar(50),  ' + sLineBreak +
+        '  VL_VENDA numeric(15,2), ' + sLineBreak +
+        '  DT_CRIACAO DATE,        ' + sLineBreak +
+        '  DT_ALTERACAO DATE,      ' + sLineBreak +
+        '  UN varchar(3),          ' + sLineBreak +
+        '                          ' + sLineBreak +
+        '  primary key (id)        ' + sLineBreak +
+        ')                         '
+      );
+    end;
+
+    if Tabelas.IndexOf('clientes') < 0 then
+    begin
+      FDConnection1.ExecSQL(
+        'create table clientes ( ' + sLineBreak +
+        '  id integer not null,  ' + sLineBreak +
+        '  nome varchar(100),    ' + sLineBreak +
+        '  cpf varchar(15),      ' + sLineBreak +
+        '                        ' + sLineBreak +
+        '  primary key (id)      ' + sLineBreak +
+        ')                       '
+      );
+    end;
+  finally
+    Tabelas.DisposeOf;
   end;
 end;
 
