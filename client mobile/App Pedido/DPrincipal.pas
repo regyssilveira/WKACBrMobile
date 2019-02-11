@@ -64,11 +64,13 @@ implementation
 {$R *.dfm}
 
 uses
+  {$IFDEF ANDROID}
   Androidapi.JNI.GraphicsContentViewText,
   Androidapi.Helpers,
   Androidapi.JNI.JavaTypes,
   Androidapi.JNI.Net,
   Androidapi.JNI.Os,
+  {$ENDIF}
 
   System.IOUtils, MVCFramework.DataSet.Utils, UConfigClass,
   FMX.DialogService.Async;
@@ -183,8 +185,10 @@ procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);
 var
   PDFStream: TMemoryStream;
   PathFilePDF: string;
+  {$IFDEF ANDROID}
   Intent: JIntent;
   URIArquivo: JParcelable;
+  {$ENDIF}
 begin
   FResp := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
   if Resp.HasError then
@@ -205,14 +209,10 @@ begin
     PDFStream.Position := 0;
     PDFStream.SaveToFile(PathFilePDF);
 
-//    TDialogServiceAsync.ShowMessage(
-//      'Arquivo pdf salvo em:' + sLineBreak +
-//      PathFilePDF
-//    );
-
     // abrir pdf no editor padrão
     if FileExists(PathFilePDF) then
     begin
+      {$IFDEF ANDROID}
       URIArquivo := JParcelable(
         TJNet_Uri.JavaClass.fromFile(
           TJFile.JavaClass.init(StringToJString(PathFilePDF))
@@ -227,6 +227,11 @@ begin
         TAndroidHelper.Activity.startActivity(Intent);
       except
       end;
+      {$ELSE}
+      TDialogServiceAsync.ShowMessage(
+        'Arquivo salvo em:' + sLineBreak + PathFilePDF
+      );
+      {$ENDIF}
     end
     else
       raise Exception.Create('Arquivo PDF não encontrado!');
