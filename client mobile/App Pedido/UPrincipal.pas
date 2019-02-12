@@ -9,7 +9,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.TabControl, FMX.Controls.Presentation, FMX.Objects,
   UFrameConfiguracao, UFrameAtualizar, UFramePedido, System.Actions,
-  FMX.ActnList;
+  FMX.ActnList, FMX.MultiView;
 
 type
   TForm1 = class(TForm)
@@ -43,6 +43,11 @@ type
     FramePedido1: TFramePedido;
     ActionList1: TActionList;
     ChangeTabAction1: TChangeTabAction;
+    ActionList2: TActionList;
+    ChangeTabAction2: TChangeTabAction;
+    MultiView1: TMultiView;
+    Label3: TLabel;
+    FrameAtualizar2: TFrameAtualizar;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);
@@ -91,8 +96,10 @@ end;
 
 procedure TForm1.BtnVoltarClick(Sender: TObject);
 begin
-  // botão de voltar
-  TbcPrincipal.ActiveTab := TabMenu;
+  ChangeTabAction1.Tab := TabMenu;
+  ChangeTabAction1.Execute;
+
+  //TbcPrincipal.ActiveTab := TabMenu;
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
@@ -107,6 +114,7 @@ end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
+  MultiView1.Visible := False;
   TbcPrincipal.ActiveTab := TabMenu;
 
   DtmPrincipal.qryProdutos.Open;
@@ -114,22 +122,31 @@ begin
 
   TbcPrincipalChange(TbcPrincipal);
   FrameConfiguracao1.CarregarConfiguracoes;
-  FramePedido1.Inicilizar;
 end;
 
 procedure TForm1.rectAtualizarClick(Sender: TObject);
 begin
-  TbcPrincipal.ActiveTab := TabAtualizacao;
+  ChangeTabAction1.Tab := TabAtualizacao;
+  ChangeTabAction1.Execute;
+
+  //TbcPrincipal.ActiveTab := TabAtualizacao;
 end;
 
 procedure TForm1.RectConfigurarClick(Sender: TObject);
 begin
-  TbcPrincipal.ActiveTab := TabConfiguracao;
+  ChangeTabAction1.Tab := TabConfiguracao;
+  ChangeTabAction1.Execute;
+
+  //TbcPrincipal.ActiveTab := TabConfiguracao;
 end;
 
 procedure TForm1.rectPedidoClick(Sender: TObject);
 begin
-  TbcPrincipal.ActiveTab := TabVenda;
+  FramePedido1.Inicilizar;
+  ChangeTabAction1.Tab := TabVenda;
+  ChangeTabAction1.Execute;
+
+  //TbcPrincipal.ActiveTab := TabVenda;
 end;
 
 end.

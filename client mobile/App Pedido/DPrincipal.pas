@@ -70,9 +70,14 @@ uses
   Androidapi.JNI.JavaTypes,
   Androidapi.JNI.Net,
   Androidapi.JNI.Os,
+  {$ELSE}
+  WinApi.Windows,
+  Winapi.ShellApi,
   {$ENDIF}
 
-  System.IOUtils, MVCFramework.DataSet.Utils, UConfigClass,
+  System.IOUtils,
+  MVCFramework.DataSet.Utils,
+  UConfigClass,
   FMX.DialogService.Async;
 
 procedure TDtmPrincipal.InicializarRESTClient;
@@ -180,7 +185,6 @@ begin
   FDConnection1.Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite');
 end;
 
-
 procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);
 var
   PDFStream: TMemoryStream;
@@ -199,8 +203,8 @@ begin
     TPath.GetSharedDocumentsPath,
     Format('nf%9.9d%3.3d.pdf', [ANumero, ASerie])
   );
-  if FileExists(PathFilePDF) then
-    DeleteFile(PathFilePDF);
+  if System.SysUtils.FileExists(PathFilePDF) then
+    System.SysUtils.DeleteFile(PathFilePDF);
 
   // salvar arquivo pdf local
   PDFStream := TMemoryStream.Create;
@@ -228,8 +232,13 @@ begin
       except
       end;
       {$ELSE}
-      TDialogServiceAsync.ShowMessage(
-        'Arquivo salvo em:' + sLineBreak + PathFilePDF
+      ShellExecute(
+        0,
+        nil,
+        PChar(PathFilePDF),
+        nil,
+        nil,
+        SW_SHOWNOACTIVATE
       );
       {$ENDIF}
     end

@@ -160,27 +160,38 @@ object FramePedido: TFramePedido
         item
           AppearanceObjectName = 'Id'
           AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.Font.StyleExt = {00070000000000000004000000}
+          Appearance.TextColor = claNavy
           Appearance.Width = 47.000000000000000000
           Appearance.Height = 44.000000000000000000
         end
         item
           AppearanceObjectName = 'Descricao'
           AppearanceClassName = 'TTextObjectAppearance'
-          Appearance.Width = 277.000000000000000000
+          Appearance.Font.StyleExt = {00070000000200000004000000}
+          Appearance.TextAlign = Leading
+          Appearance.TextColor = claSlateblue
+          Appearance.Width = 279.000000000000000000
           Appearance.Height = 22.000000000000000000
-          Appearance.PlaceOffset.X = 48.000000000000000000
+          Appearance.PlaceOffset.X = 46.000000000000000000
         end
         item
           AppearanceObjectName = 'ValorVenda'
           AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.Font.StyleExt = {00070000000000000004000000}
+          Appearance.TextAlign = Trailing
+          Appearance.TextColor = claMaroon
           Appearance.Width = 124.000000000000000000
           Appearance.Height = 23.000000000000000000
-          Appearance.PlaceOffset.X = 200.000000000000000000
+          Appearance.PlaceOffset.X = 201.000000000000000000
           Appearance.PlaceOffset.Y = 21.000000000000000000
         end
         item
           AppearanceObjectName = 'Quantidade'
           AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.Font.StyleExt = {00070000000000000004000000}
+          Appearance.TextAlign = Trailing
+          Appearance.TextColor = claTomato
           Appearance.Width = 110.000000000000000000
           Appearance.Height = 23.000000000000000000
           Appearance.PlaceOffset.X = 46.000000000000000000
@@ -266,6 +277,6 @@ object FramePedido: TFramePedido
     DataSet = DtmPrincipal.qryProdutos
     ScopeMappings = <>
     Left = 224
-    Top = 360
+    Top = 385
   end
 end

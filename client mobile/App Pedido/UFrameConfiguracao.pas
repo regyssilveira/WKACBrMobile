@@ -34,7 +34,7 @@ procedure TFrameConfiguracao.SalvarConfiguracoes;
 begin
   TDialogServiceAsync.MessageDialog(
     'Deseja gravar e utilizar as configurações feitas?',
-    System.UITypes.TMsgDlgType.mtInformation,
+    System.UITypes.TMsgDlgType.mtConfirmation,
     [System.UITypes.TMsgDlgBtn.mbYes, System.UITypes.TMsgDlgBtn.mbNo],
     System.UITypes.TMsgDlgBtn.mbNo,
     0,

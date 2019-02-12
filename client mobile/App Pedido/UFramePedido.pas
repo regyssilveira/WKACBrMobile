@@ -62,6 +62,11 @@ procedure TFramePedido.Inicilizar;
 begin
   Self.Limpar;
 
+  DtmPrincipal.qryProdutos.Close;
+  DtmPrincipal.qryProdutos.Open;
+
+  DtmPrincipal.qryClientes.Close;
+  DtmPrincipal.qryClientes.Open;
 end;
 
 procedure TFramePedido.Limpar;
@@ -107,8 +112,8 @@ begin
 
   oPedido := TNFCe.Create;
   try
-    oPedido.cpf  := EdtClienteCPF.Text;
-    oPedido.Nome := EdtClienteNome.Text;
+    oPedido.cpf  := EdtClienteCPF.Text.Trim;
+    oPedido.Nome := EdtClienteNome.Text.Trim;
 
     TmpItensPedido.First;
     while not TmpItensPedido.Eof do

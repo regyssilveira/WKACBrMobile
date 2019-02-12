@@ -23,7 +23,7 @@ object DtmPrincipal: TDtmPrincipal
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
     Left = 72
-    Top = 160
+    Top = 110
     object tmpProdutosid: TIntegerField
       FieldName = 'id'
     end
@@ -56,7 +56,7 @@ object DtmPrincipal: TDtmPrincipal
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
     Left = 72
-    Top = 216
+    Top = 156
     object tmpClientesid: TIntegerField
       FieldName = 'id'
     end
@@ -73,7 +73,7 @@ object DtmPrincipal: TDtmPrincipal
     Connection = FDConnection1
     SQL.Strings = (
       'select * from produtos')
-    Left = 208
+    Left = 178
     Top = 64
     object qryProdutosID: TIntegerField
       FieldName = 'ID'
@@ -110,8 +110,8 @@ object DtmPrincipal: TDtmPrincipal
     Connection = FDConnection1
     SQL.Strings = (
       'select * from clientes')
-    Left = 208
-    Top = 120
+    Left = 178
+    Top = 110
     object qryClientesid: TIntegerField
       FieldName = 'id'
       Origin = 'id'
