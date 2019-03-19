@@ -149,6 +149,8 @@ begin
 end;
 
 function TdtmNFCe.Enviar: string;
+var
+  PathTempImpressao: string;
 //var
   //StatusNFCe: Integer;
   //StrErros: string;
@@ -184,7 +186,10 @@ begin
 //    raise EFilerError.Create('ERRO REGRAS DE NEGOCIO: ' + StrErros);
 
 
-  ACBrPosPrinter1.Porta := 'C:\impressao\impressao_' + FormatDateTime('hhmmsszzz', NOW) + '.txt';
+  PathTempImpressao := ExtractFilePath(ParamStr(0)) + '\impressao\';
+  ForceDirectories(PathTempImpressao);
+
+  ACBrPosPrinter1.Porta := PathTempImpressao +'\impressao_' + FormatDateTime('hhmmsszzz', NOW) + '.txt';
 
   // salvar a nota em um arquivo conhecido somente para efeitos de exemplo
   // na vida real o XML deverá ser gravado no banco de dados ou em pasta de

@@ -34,11 +34,13 @@ type
     BindingsList1: TBindingsList;
     LinkListControlToField1: TLinkListControlToField;
     EdtProduto: TComboBox;
-    EdtQuantidade: TEdit;
-    Label5: TLabel;
     BindSourceDB2: TBindSourceDB;
     LinkListControlToField2: TLinkListControlToField;
+    Layout4: TLayout;
+    Layout5: TLayout;
     BtnAdicionarProduto: TButton;
+    Label5: TLabel;
+    EdtQuantidade: TEdit;
     procedure BtnAdicionarProdutoClick(Sender: TObject);
   private
 
@@ -60,6 +62,11 @@ procedure TFramePedido.Inicilizar;
 begin
   Self.Limpar;
 
+  DtmPrincipal.qryProdutos.Close;
+  DtmPrincipal.qryProdutos.Open;
+
+  DtmPrincipal.qryClientes.Close;
+  DtmPrincipal.qryClientes.Open;
 end;
 
 procedure TFramePedido.Limpar;
@@ -105,8 +112,8 @@ begin
 
   oPedido := TNFCe.Create;
   try
-    oPedido.cpf  := EdtClienteCPF.Text;
-    oPedido.Nome := EdtClienteNome.Text;
+    oPedido.cpf  := EdtClienteCPF.Text.Trim;
+    oPedido.Nome := EdtClienteNome.Text.Trim;
 
     TmpItensPedido.First;
     while not TmpItensPedido.Eof do
@@ -128,6 +135,8 @@ begin
 
     ShowMessage('Pedido Enviado!');
     Self.Limpar;
+
+    DtmPrincipal.GetPDFFromNFCe(1, 1);
   finally
     oPedido.DisposeOf;
   end;

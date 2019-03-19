@@ -1,106 +1,146 @@
 object FramePedido: TFramePedido
-  Size.Width = 481.000000000000000000
+  Size.Width = 366.000000000000000000
   Size.Height = 748.000000000000000000
   Size.PlatformDefault = False
   object Layout1: TLayout
     Align = Top
-    Size.Width = 481.000000000000000000
-    Size.Height = 121.000000000000000000
+    Margins.Left = 5.000000000000000000
+    Margins.Top = 5.000000000000000000
+    Margins.Right = 5.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Position.X = 5.000000000000000000
+    Position.Y = 5.000000000000000000
+    Size.Width = 356.000000000000000000
+    Size.Height = 86.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     object Label1: TLabel
-      Position.X = 16.000000000000000000
-      Position.Y = 16.000000000000000000
+      Align = Top
+      Size.Width = 356.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
       Text = 'Nome do Cliente'
       TabOrder = 1
     end
     object EdtClienteNome: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
       TabOrder = 3
-      Position.X = 16.000000000000000000
-      Position.Y = 32.000000000000000000
-      Size.Width = 385.000000000000000000
+      Position.Y = 17.000000000000000000
+      Size.Width = 356.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
     object Edit2: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
       TabOrder = 2
-      Position.X = 16.000000000000000000
-      Position.Y = 80.000000000000000000
-      Size.Width = 193.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 356.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
     object EdtClienteCPF: TLabel
-      Position.X = 16.000000000000000000
-      Position.Y = 64.000000000000000000
+      Align = Top
+      Position.Y = 39.000000000000000000
+      Size.Width = 356.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
       Text = 'CPF'
       TabOrder = 0
     end
   end
   object Layout2: TLayout
     Align = Top
-    Position.Y = 121.000000000000000000
-    Size.Width = 481.000000000000000000
-    Size.Height = 120.000000000000000000
+    Margins.Left = 5.000000000000000000
+    Margins.Top = 5.000000000000000000
+    Margins.Right = 5.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Position.X = 5.000000000000000000
+    Position.Y = 101.000000000000000000
+    Size.Width = 356.000000000000000000
+    Size.Height = 85.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object Label3: TLabel
-      Position.X = 16.000000000000000000
-      Position.Y = 16.000000000000000000
+      Align = Top
+      Size.Width = 356.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
       Text = 'Produto'
-      TabOrder = 2
-    end
-    object EdtProduto: TComboBox
-      Position.X = 16.000000000000000000
-      Position.Y = 32.000000000000000000
-      Size.Width = 385.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 3
-    end
-    object EdtQuantidade: TEdit
-      Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 4
-      KeyboardType = NumberPad
-      Position.X = 16.000000000000000000
-      Position.Y = 80.000000000000000000
-      Size.Width = 185.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-    end
-    object Label5: TLabel
-      Position.X = 16.000000000000000000
-      Position.Y = 64.000000000000000000
-      Text = 'Quantidade'
       TabOrder = 1
     end
-    object BtnAdicionarProduto: TButton
-      Position.X = 264.000000000000000000
-      Position.Y = 80.000000000000000000
-      Size.Width = 136.000000000000000000
+    object EdtProduto: TComboBox
+      Align = Top
+      Position.Y = 17.000000000000000000
+      Size.Width = 356.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 5
-      Text = 'Adic. Mercadoria'
-      OnClick = BtnAdicionarProdutoClick
+      TabOrder = 2
+    end
+    object Layout4: TLayout
+      Align = Top
+      Position.Y = 39.000000000000000000
+      Size.Width = 356.000000000000000000
+      Size.Height = 43.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object Layout5: TLayout
+        Align = MostRight
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 205.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 146.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object BtnAdicionarProduto: TButton
+          Align = Client
+          Size.Width = 146.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Text = 'Adic. Mercadoria'
+          OnClick = BtnAdicionarProdutoClick
+        end
+      end
+      object Label5: TLabel
+        Align = Top
+        Size.Width = 200.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Quantidade'
+        TabOrder = 1
+      end
+      object EdtQuantidade: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 4
+        KeyboardType = NumberPad
+        Text = '1'
+        Position.Y = 17.000000000000000000
+        Size.Width = 200.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
     end
   end
   object Layout3: TLayout
     Align = Client
-    Size.Width = 481.000000000000000000
-    Size.Height = 507.000000000000000000
+    Margins.Left = 5.000000000000000000
+    Margins.Top = 5.000000000000000000
+    Margins.Right = 5.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Size.Width = 356.000000000000000000
+    Size.Height = 547.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 2
     object Label4: TLabel
       Align = Top
-      Margins.Left = 10.000000000000000000
-      Margins.Top = 10.000000000000000000
-      Margins.Right = 10.000000000000000000
-      Position.X = 10.000000000000000000
-      Position.Y = 10.000000000000000000
-      Size.Width = 461.000000000000000000
+      Size.Width = 356.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
       Text = 'Itens Vendidos'
@@ -112,41 +152,50 @@ object FramePedido: TFramePedido
       HeaderAppearanceClassName = 'TListHeaderObjects'
       FooterAppearanceClassName = 'TListHeaderObjects'
       Align = Client
-      Margins.Left = 10.000000000000000000
-      Margins.Top = 10.000000000000000000
-      Margins.Right = 10.000000000000000000
-      Margins.Bottom = 10.000000000000000000
-      Size.Width = 461.000000000000000000
-      Size.Height = 460.000000000000000000
+      Size.Width = 356.000000000000000000
+      Size.Height = 530.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
       ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
         item
           AppearanceObjectName = 'Id'
           AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.Font.StyleExt = {00070000000000000004000000}
+          Appearance.TextColor = claNavy
           Appearance.Width = 47.000000000000000000
           Appearance.Height = 44.000000000000000000
         end
         item
           AppearanceObjectName = 'Descricao'
           AppearanceClassName = 'TTextObjectAppearance'
-          Appearance.Width = 247.000000000000000000
-          Appearance.Height = 44.000000000000000000
-          Appearance.PlaceOffset.X = 48.000000000000000000
+          Appearance.Font.StyleExt = {00070000000200000004000000}
+          Appearance.TextAlign = Leading
+          Appearance.TextColor = claSlateblue
+          Appearance.Width = 279.000000000000000000
+          Appearance.Height = 22.000000000000000000
+          Appearance.PlaceOffset.X = 46.000000000000000000
         end
         item
           AppearanceObjectName = 'ValorVenda'
           AppearanceClassName = 'TTextObjectAppearance'
-          Appearance.Width = 71.000000000000000000
-          Appearance.Height = 44.000000000000000000
-          Appearance.PlaceOffset.X = 368.000000000000000000
+          Appearance.Font.StyleExt = {00070000000000000004000000}
+          Appearance.TextAlign = Trailing
+          Appearance.TextColor = claMaroon
+          Appearance.Width = 124.000000000000000000
+          Appearance.Height = 23.000000000000000000
+          Appearance.PlaceOffset.X = 201.000000000000000000
+          Appearance.PlaceOffset.Y = 21.000000000000000000
         end
         item
           AppearanceObjectName = 'Quantidade'
           AppearanceClassName = 'TTextObjectAppearance'
-          Appearance.Width = 71.000000000000000000
-          Appearance.Height = 44.000000000000000000
-          Appearance.PlaceOffset.X = 296.000000000000000000
+          Appearance.Font.StyleExt = {00070000000000000004000000}
+          Appearance.TextAlign = Trailing
+          Appearance.TextColor = claTomato
+          Appearance.Width = 110.000000000000000000
+          Appearance.Height = 23.000000000000000000
+          Appearance.PlaceOffset.X = 46.000000000000000000
+          Appearance.PlaceOffset.Y = 21.000000000000000000
         end>
       ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
         item
@@ -228,6 +277,6 @@ object FramePedido: TFramePedido
     DataSet = DtmPrincipal.qryProdutos
     ScopeMappings = <>
     Left = 224
-    Top = 360
+    Top = 385
   end
 end

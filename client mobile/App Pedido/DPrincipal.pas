@@ -64,7 +64,21 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IOUtils, MVCFramework.DataSet.Utils, UConfigClass;
+  {$IFDEF ANDROID}
+  Androidapi.JNI.GraphicsContentViewText,
+  Androidapi.Helpers,
+  Androidapi.JNI.JavaTypes,
+  Androidapi.JNI.Net,
+  Androidapi.JNI.Os,
+  {$ELSE}
+  WinApi.Windows,
+  Winapi.ShellApi,
+  {$ENDIF}
+
+  System.IOUtils,
+  MVCFramework.DataSet.Utils,
+  UConfigClass,
+  FMX.DialogService.Async;
 
 procedure TDtmPrincipal.InicializarRESTClient;
 begin
@@ -168,29 +182,71 @@ end;
 
 procedure TDtmPrincipal.FDConnection1BeforeConnect(Sender: TObject);
 begin
-  FDConnection1.Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite')
+  FDConnection1.Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite');
 end;
-
 
 procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);
 var
   PDFStream: TMemoryStream;
+  PathFilePDF: string;
+  {$IFDEF ANDROID}
+  Intent: JIntent;
+  URIArquivo: JParcelable;
+  {$ENDIF}
 begin
-  FResp := Cli.doGET('/nfce/nfce/', [ANumero.ToString, ASerie.ToString, 'PDF']);
+  FResp := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
   if Resp.HasError then
     raise Exception.Create(FResp.ResponseText);
 
+  //caminho do arquivo baixado
+  PathFilePDF := TPath.Combine(
+    TPath.GetSharedDocumentsPath,
+    Format('nf%9.9d%3.3d.pdf', [ANumero, ASerie])
+  );
+  if System.SysUtils.FileExists(PathFilePDF) then
+    System.SysUtils.DeleteFile(PathFilePDF);
 
+  // salvar arquivo pdf local
   PDFStream := TMemoryStream.Create;
   try
     PDFStream.LoadFromStream(FResp.Body);
     PDFStream.Position := 0;
+    PDFStream.SaveToFile(PathFilePDF);
 
+    // abrir pdf no editor padrão
+    if FileExists(PathFilePDF) then
+    begin
+      {$IFDEF ANDROID}
+      URIArquivo := JParcelable(
+        TJNet_Uri.JavaClass.fromFile(
+          TJFile.JavaClass.init(StringToJString(PathFilePDF))
+        )
+      );
 
+      Intent := TJIntent.Create;
+      Intent.setAction(TJIntent.JavaClass.ACTION_VIEW);
+      Intent.setType(StringToJString('application/pdf'));
+      Intent.putExtra(TJIntent.JavaClass.EXTRA_STREAM, URIArquivo);
+      try
+        TAndroidHelper.Activity.startActivity(Intent);
+      except
+      end;
+      {$ELSE}
+      ShellExecute(
+        0,
+        nil,
+        PChar(PathFilePDF),
+        nil,
+        nil,
+        SW_SHOWNOACTIVATE
+      );
+      {$ENDIF}
+    end
+    else
+      raise Exception.Create('Arquivo PDF não encontrado!');
   finally
     PDFStream.DisposeOf;
   end;
-
 end;
 
 

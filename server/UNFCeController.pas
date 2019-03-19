@@ -151,6 +151,7 @@ begin
   DmNFCe := TdtmNFCe.Create(nil);
   try
     Render(DmNFCe.GerarXML(ANumero, ASerie));
+    ContentType := 'application/xml';
   finally
     DmNFCe.Free;
   end;
@@ -169,7 +170,9 @@ begin
     StreamPDF := TMemoryStream.Create;
     try
       StreamPDF.LoadFromFile(PathPDF);
+
       Render(StreamPDF, True);
+      ContentType := 'application/pdf';
     except
       on E: Exception do
       begin
