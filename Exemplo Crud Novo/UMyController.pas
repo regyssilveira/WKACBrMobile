@@ -3,13 +3,18 @@ unit UMyController;
 interface
 
 uses
+  Redis.Commons,
+  Redis.NetLib.indy,
+
   MVCFramework,
-  MVCFramework.Commons;
+  MVCFramework.Logger,
+  MVCFramework.Commons,
+  MVCFramework.Controllers.CacheController;
 
 type
 
   [MVCPath('/api')]
-  TMyController = class(TMVCController)
+  TMyController = class(TMVCCacheController)
   protected
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
@@ -44,9 +49,8 @@ implementation
 uses
   System.SysUtils,
 
-  Dialogs,
-
-  MVCFramework.Logger, ProdutosService, ProdutosClass;
+  ProdutosService,
+  ProdutosClass;
 
 procedure TMyController.GetMyRootPage;
 begin
@@ -68,12 +72,25 @@ end;
 
 procedure TMyController.Getprodutos;
 begin
+  // seta a chave e verifica se existe cache
+  SetCacheKey('cache::produto');
+  if CacheAvailable then
+    Exit;
+
   Render<TProduto>(TProdutoService.GetProdutos);
+
+  // seta o tempo de vida do cache
+  SetCache(120);
 end;
 
 procedure TMyController.Getproduto(id: Integer);
 begin
+  SetCacheKey('cache::produto::' + Id.ToString);
+  if CacheAvailable then
+    Exit;
+
   Render(TProdutoService.GetProduto(Id));
+  SetCache(120);
 end;
 
 procedure TMyController.Createproduto;
