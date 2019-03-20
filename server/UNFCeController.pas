@@ -13,7 +13,8 @@ type
   TNFCeController = class(TBaseController)
   private
     procedure GetNFCePDF(ANumero: integer; ASerie: integer); overload;
-    procedure GetNFCeArquivo(ANumero: integer; ASerie: integer); overload;
+    procedure GetNFCeXML(ANumero: integer; ASerie: integer); overload;
+    procedure GetNFCeEscPOS(ANumero: integer; ASerie: integer); overload;
   protected
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
@@ -144,7 +145,7 @@ begin
     Render(TmpDataset, True);
 end;
 
-procedure TNFCeController.GetNFCeArquivo(ANumero, ASerie: integer);
+procedure TNFCeController.GetNFCeXML(ANumero, ASerie: integer);
 var
   DmNFCe: TdtmNFCe;
 begin
@@ -188,12 +189,20 @@ end;
 procedure TNFCeController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
 begin
   if ATipo.ToUpper = 'XML' then
-    Self.GetNFCeArquivo(Anumero, ASerie)
+    Self.GetNFCeXML(Anumero, ASerie)
   else
   if ATipo.ToUpper = 'PDF' then
     Self.GetNFCePDF(Anumero, ASerie)
   else
+  if ATipo.ToUpper = 'ESCPOS' then
+    Self.GetNFCeEscPOS(Anumero, ASerie)
+  else
     raise Exception.Create('tipo de saida desconhecida');
+end;
+
+procedure TNFCeController.GetNFCeEscPOS(ANumero, ASerie: integer);
+begin
+  {todo: implementar retorno string escpos}
 end;
 
 procedure TNFCeController.CreateNFCe;

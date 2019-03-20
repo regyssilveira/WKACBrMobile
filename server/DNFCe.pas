@@ -31,7 +31,7 @@ implementation
 
 uses
   pcnConversaoNFe, pcnConversao, ACBrDFeSSL, blcksock, pcnAuxiliar, pcnNFe,
-  System.StrUtils, ACBrUtil;
+  System.StrUtils, ACBrUtil,  ACBrValidador;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
@@ -71,7 +71,7 @@ begin
   PathApp := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
 
   // somente para NFC-e
-  PathSchemas  := IncludeTrailingPathDelimiter(PathApp + 'SCHEMAS');
+  PathSchemas := IncludeTrailingPathDelimiter(PathApp + 'SCHEMAS');
 
   // caminhos de pastas especificos por cnpj e comuns aos dois modos de funcionamento
   PathArqDFe      := IncludeTrailingPathDelimiter(PathApp + 'DOCUMENTOS');
@@ -128,6 +128,7 @@ begin
   ACBrNFe1.Configuracoes.Certificados.Senha := '1234566';
   ACBrNFe1.Configuracoes.Certificados.ArquivoPFX  := PathApp + 'certificado.pfx';
   //ACBrNFe1.Configuracoes.Certificados.NumeroSerie := '';
+  //ACBrNFe1.Configuracoes.Certificados.DadosPFX := '';
 
   // configurações do webservice
   ACBrNFe1.Configuracoes.WebServices.UF         := 'AM';
@@ -142,7 +143,7 @@ begin
   ACBrNFe1.Configuracoes.WebServices.ProxyPass := '';
 
   ACBrNFe1.DANFE.PathPDF := PathPDF;
-  ACBrNFe1.DANFE.Sistema := '';
+  ACBrNFe1.DANFE.Sistema := 'nome sistema';
   ACBrNFe1.DANFE.Logo    := '';
   ACBrNFe1.DANFE.Site    := 'https://regys.com.br';
   ACBrNFe1.DANFE.Email   := 'regys.silveira@gmail.com';
@@ -263,7 +264,7 @@ begin
   ONFe.Ide.indFinal  := cfConsumidorFinal;
   ONFe.Ide.nNF       := ANFCe.Numero;
   ONFe.Ide.serie     := ANFCe.Serie;
-  ONFe.Ide.natOp     := 'VENDA';
+  ONFe.Ide.natOp     := 'VENDA A CONSUMIDOR FINAL';
   ONFe.Ide.dEmi      := NOW;
   ONFe.Ide.dSaiEnt   := ONFe.Ide.dEmi;
   ONFe.Ide.cUF       := UFtoCUF('AM');
