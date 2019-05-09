@@ -39,13 +39,19 @@ implementation
 class procedure TProdutoService.Delete(const ACodProduto: Integer);
 var
   FDConexao: TFDConnection;
+  CountDelete: Integer;
 begin
   FDConexao := TFDConnection.Create(nil);
   try
     FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    FDConexao.ExecSQL(
-      'delete from produtos where ID=' + ACodProduto.ToString
+    CountDelete := FDConexao.ExecSQL(
+      'delete from produtos where ID=?',
+      [ACodProduto],
+      [ftInteger]
     );
+
+    if CountDelete = 0 then
+      raise EDatabaseError.Create('Nenhum produto foi excluido!');
   finally
     FDConexao.Free;
   end;

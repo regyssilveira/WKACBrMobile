@@ -22,6 +22,7 @@ type
 
     function GerarPDF(numero, serie: integer): string;
     function GerarXML(numero, serie: integer): string;
+    function GerarEscPOS(numero, serie: integer): string;
   end;
 
 //var
@@ -245,6 +246,8 @@ var
 begin
   ACBrNFe1.NotasFiscais.Clear;
 
+  ConfigurarNFe;
+
   ONFe := ACBrNFe1.NotasFiscais.Add.NFe;
 
   // numeração da nota, cada software deve fazer conforme seu controle
@@ -259,7 +262,6 @@ begin
   // Identificação da nota fiscal eletrônica
   ONFe.Ide.modelo    := 65;
   ONFe.Ide.tpNF      := tnSaida;
-  ONFe.Ide.tpEmis    := teNormal;
   ONFe.Ide.finNFe    := fnNormal;
   ONFe.Ide.indFinal  := cfConsumidorFinal;
   ONFe.Ide.nNF       := ANFCe.Numero;
@@ -350,7 +352,6 @@ begin
     OItemNota.Imposto.PIS.qBCProd   := 0;
     OItemNota.Imposto.PIS.vAliqProd := 0;
 
-
     // COFINS ******************************************************
     OItemNota.Imposto.COFINS.CST       := TpcnCstCofins.cof07;
     OItemNota.Imposto.COFINS.vBC       := 0;
@@ -395,6 +396,32 @@ begin
   ONFe.Transp.modFrete := mfSemFrete;
 end;
 
+function TdtmNFCe.GerarEscPOS(numero, serie: integer): string;
+var
+  OldCfgDANFE: TACBrDFeDANFeReport;
+  PathTempImpressao: string;
+begin
+  OldCfgDANFE := ACBrNFe1.DANFE;
+  try
+    ACBrNFe1.DANFE := ACBrNFeDANFeESCPOS1;
+    Self.ConfigurarNFe;
+
+    PathTempImpressao     := ExtractFilePath(ParamStr(0)) + 'arquivoescpos.txt';
+    ACBrPosPrinter1.Porta := PathTempImpressao;
+
+    ACBrNFe1.NotasFiscais.Clear;
+    ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);
+    ACBrNFe1.NotasFiscais.Imprimir;
+
+    if FileExists(PathTempImpressao) then
+      Result := PathTempImpressao
+    else
+      raise Exception.Create('Arquivo EscPOS não encontrado no servidor!');
+  finally
+    ACBrNFe1.DANFE := OldCfgDANFE;
+  end;
+end;
+
 function TdtmNFCe.GerarPDF(numero, serie: integer): string;
 var
   OldCfgDANFE: TACBrDFeDANFeReport;
@@ -408,10 +435,10 @@ begin
     ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);
     ACBrNFe1.NotasFiscais.ImprimirPDF;
 
-    Result :=
-      ACBrNFe1.DANFE.PathPDF +
-      ACBrUtil.OnlyNumber(ACBrNFe1.NotasFiscais[0].NFe.infNFe.ID) +
-      '-nfe.pdf';
+    Result := ACBrNFe1.DANFE.ArquivoPDF;
+      //ACBrNFe1.DANFE.PathPDF +
+      //ACBrUtil.OnlyNumber(ACBrNFe1.NotasFiscais[0].NFe.infNFe.ID) +
+      //'-nfe.pdf';
 
     if not FileExists(Result) then
       raise Exception.Create('Arquivo PDF não encontrado no servidor!');

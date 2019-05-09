@@ -80,7 +80,7 @@ begin
   Render<TProduto>(TProdutoService.GetProdutos);
 
   // seta o tempo de vida do cache
-  SetCache(120);
+  SetCache(30);
 end;
 
 procedure TMyController.Getproduto(id: Integer);
@@ -90,7 +90,7 @@ begin
     Exit;
 
   Render(TProdutoService.GetProduto(Id));
-  SetCache(120);
+  SetCache(30);
 end;
 
 procedure TMyController.Createproduto;

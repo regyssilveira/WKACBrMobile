@@ -97,7 +97,7 @@ begin
   if TmpDataset.IsEmpty then
     Render(500, 'Não existe nenhum cliente cadastrado na base de dados')
   else
-    Render(TmpDataset, True);
+    Render(TmpDataset);
 end;
 
 procedure TNFCeController.GetCliente(Aid: Integer);
@@ -112,7 +112,7 @@ begin
   if TmpDataset.IsEmpty then
     Render(500, Format('Não existe cliente cadastrado com o código "%d" na base de dados', [AId]))
   else
-    Render(TmpDataset, True);
+    Render(TmpDataset);
 end;
 
 procedure TNFCeController.GetProdutos;
@@ -127,7 +127,7 @@ begin
   if TmpDataset.IsEmpty then
     Render(500, 'Não existe nenhum produto cadastrado na base de dados')
   else
-    Render(TmpDataset, True);
+    Render(TmpDataset);
 end;
 
 procedure TNFCeController.GetProduto(AId: Integer);
@@ -142,7 +142,21 @@ begin
   if TmpDataset.IsEmpty then
     Render(500, Format('Não existe produto cadastrado com o código "%d" na base de dados', [AId]))
   else
-    Render(TmpDataset, True);
+    Render(TmpDataset);
+end;
+
+procedure TNFCeController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
+begin
+  if ATipo.ToUpper = 'XML' then
+    Self.GetNFCeXML(Anumero, ASerie)
+  else
+  if ATipo.ToUpper = 'PDF' then
+    Self.GetNFCePDF(Anumero, ASerie)
+  else
+  if ATipo.ToUpper = 'ESCPOS' then
+    Self.GetNFCeEscPOS(Anumero, ASerie)
+  else
+    raise Exception.Create('tipo de saida desconhecida');
 end;
 
 procedure TNFCeController.GetNFCeXML(ANumero, ASerie: integer);
@@ -186,23 +200,32 @@ begin
   end;
 end;
 
-procedure TNFCeController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
-begin
-  if ATipo.ToUpper = 'XML' then
-    Self.GetNFCeXML(Anumero, ASerie)
-  else
-  if ATipo.ToUpper = 'PDF' then
-    Self.GetNFCePDF(Anumero, ASerie)
-  else
-  if ATipo.ToUpper = 'ESCPOS' then
-    Self.GetNFCeEscPOS(Anumero, ASerie)
-  else
-    raise Exception.Create('tipo de saida desconhecida');
-end;
-
 procedure TNFCeController.GetNFCeEscPOS(ANumero, ASerie: integer);
+var
+  DmNFCe: TdtmNFCe;
+  PathArqEscPOS: string;
+  StreamArqEscPOS: TMemoryStream;
 begin
-  {todo: implementar retorno string escpos}
+  DmNFCe := TdtmNFCe.Create(nil);
+  try
+    PathArqEscPOS := DmNFCe.GerarEscPOS(ANumero, ASerie);
+
+    StreamArqEscPOS := TMemoryStream.Create;
+    try
+      StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
+
+      Render(StreamArqEscPOS, True);
+      ContentType := 'text/plain';
+    except
+      on E: Exception do
+      begin
+        if Assigned(StreamArqEscPOS) then
+          StreamArqEscPOS.Free;
+      end;
+    end;
+  finally
+    DmNFCe.Free;
+  end;
 end;
 
 procedure TNFCeController.CreateNFCe;
