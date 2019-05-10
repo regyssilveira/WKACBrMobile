@@ -32,6 +32,7 @@ procedure TFrameAtualizar.btnAtualizarClick(Sender: TObject);
 var
   QryExecute: TFDQuery;
   I: Integer;
+  TempoInicio: TDateTime;
 begin
   QryExecute := TFDQuery.Create(Self);
   try
@@ -39,6 +40,8 @@ begin
     DtmPrincipal.tmpClientes.Open;
 
     ShowMessage('Começarei a atualizar agora...');
+
+    TempoInicio := NOW;
 
     ProgressBar1.Value := 0;
     ProgressBar1.Max :=
@@ -102,6 +105,8 @@ begin
     finally
       DtmPrincipal.tmpClientes.Close;
     end;
+
+    ShowMessage(FormatDateTime('hh:mm:ss:zzz', Now - TempoInicio));
 
     ShowMessage('pronto!');
   finally

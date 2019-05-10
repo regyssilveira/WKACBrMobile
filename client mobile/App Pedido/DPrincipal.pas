@@ -88,6 +88,7 @@ begin
   FCli := TRESTClient.Create(
     ConfigFile.IpServidor, ConfigFile.Porta
   );
+
   FCli.Username := 'admin';
   FCli.Password := 'adminpass';
 end;
@@ -223,10 +224,18 @@ begin
         )
       );
 
+      // visualizar pdf
       Intent := TJIntent.Create;
-      Intent.setAction(TJIntent.JavaClass.ACTION_VIEW);
       Intent.setType(StringToJString('application/pdf'));
+      Intent.setAction(TJIntent.JavaClass.ACTION_VIEW);
       Intent.putExtra(TJIntent.JavaClass.EXTRA_STREAM, URIArquivo);
+
+      // compartilhar
+//      Intent := TJIntent.Create;
+//      Intent.setType(StringToJString('application/pdf'));
+//      Intent.setAction(TJIntent.JavaClass.ACTION_MEDIA_SHARED);
+//      Intent.putExtra(TJIntent.JavaClass.EXTRA_STREAM, URIArquivo);
+
       try
         TAndroidHelper.Activity.startActivity(Intent);
       except

@@ -129,7 +129,10 @@ begin
     end;
 
     DtmPrincipal.InicializarRESTClient;
-    DtmPrincipal.Resp := DtmPrincipal.Cli.doPOST('/nfce/nfce', [], oPedido.AsJsonString);
+    DtmPrincipal.Resp := DtmPrincipal.Cli
+                            .Resource('/nfce/nfce')
+                            .doPOST<TNFCe>(oPedido, False);
+
     if DtmPrincipal.Resp.HasError then
       raise Exception.Create(DtmPrincipal.Resp.ResponseText);
 

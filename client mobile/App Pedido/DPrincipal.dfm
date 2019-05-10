@@ -15,15 +15,16 @@ object DtmPrincipal: TDtmPrincipal
   end
   object tmpProdutos: TFDMemTable
     AfterOpen = tmpProdutosAfterOpen
-    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.AssignedValues = [evMode, evRecsSkip]
     FetchOptions.Mode = fmAll
+    FetchOptions.RecsSkip = 10
     ResourceOptions.AssignedValues = [rvSilentMode]
     ResourceOptions.SilentMode = True
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 72
-    Top = 110
+    Left = 102
+    Top = 195
     object tmpProdutosid: TIntegerField
       FieldName = 'id'
     end
@@ -55,8 +56,8 @@ object DtmPrincipal: TDtmPrincipal
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 72
-    Top = 156
+    Left = 102
+    Top = 241
     object tmpClientesid: TIntegerField
       FieldName = 'id'
     end
