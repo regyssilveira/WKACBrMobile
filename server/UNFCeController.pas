@@ -31,6 +31,10 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetProduto(AId: Integer);
 
+    [MVCPath('/produtos/($AAtual)/($AQuantidade)')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GetProdutosPaginado(AAtual, AQuantidade: integer);
+
     [MVCPath('/clientes')]
     [MVCHTTPMethod([httpGET])]
     procedure GetClientes;
@@ -63,7 +67,8 @@ uses
   MVCFramework.Logger,
   UConfigClass,
   UNFCeClass,
-  DNFCe;
+  DNFCe,
+  FireDAC.Comp.Client;
 
 { TNFCeController }
 
@@ -126,6 +131,25 @@ begin
 
   if TmpDataset.IsEmpty then
     Render(500, 'Não existe nenhum produto cadastrado na base de dados')
+  else
+    Render(TmpDataset);
+end;
+
+procedure TNFCeController.GetProdutosPaginado(AAtual, AQuantidade: integer);
+var
+  TmpDataset: TFDQuery;
+begin
+  TmpDataset := TFDQuery.Create(nil);
+  TmpDataset.Connection := FDConexao;
+  TmpDataset.FetchOptions.RecsSkip := AAtual;
+  TmpDataset.FetchOptions.RecsMax  := AQuantidade;
+  TmpDataset.Open('select * from produtos');
+
+  if TmpDataset.IsEmpty then
+  begin
+    TmpDataset.Free;
+    Render(500, 'Não existe nenhum produto cadastrado na base de dados')
+  end
   else
     Render(TmpDataset);
 end;
