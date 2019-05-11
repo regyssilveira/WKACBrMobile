@@ -18,12 +18,8 @@ type
     TabMenu: TTabItem;
     TabConfiguracao: TTabItem;
     TabVenda: TTabItem;
-    Layout1: TLayout;
     Layout2: TLayout;
-    Layout3: TLayout;
     Label1: TLabel;
-    BtnVoltar: TSpeedButton;
-    BtnConfirmar: TSpeedButton;
     GridPanelLayout1: TGridPanelLayout;
     layPedido: TLayout;
     Image1: TImage;
@@ -48,6 +44,8 @@ type
     MultiView1: TMultiView;
     Label3: TLabel;
     FrameAtualizar2: TFrameAtualizar;
+    BtnVoltar: TSpeedButton;
+    BtnConfirmar: TSpeedButton;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);
@@ -98,8 +96,6 @@ procedure TForm1.BtnVoltarClick(Sender: TObject);
 begin
   ChangeTabAction1.Tab := TabMenu;
   ChangeTabAction1.Execute;
-
-  //TbcPrincipal.ActiveTab := TabMenu;
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
@@ -117,9 +113,6 @@ begin
   MultiView1.Visible := False;
   TbcPrincipal.ActiveTab := TabMenu;
 
-  DtmPrincipal.qryProdutos.Open;
-  DtmPrincipal.qryClientes.Open;
-
   TbcPrincipalChange(TbcPrincipal);
   FrameConfiguracao1.CarregarConfiguracoes;
 end;
@@ -128,25 +121,20 @@ procedure TForm1.rectAtualizarClick(Sender: TObject);
 begin
   ChangeTabAction1.Tab := TabAtualizacao;
   ChangeTabAction1.Execute;
-
-  //TbcPrincipal.ActiveTab := TabAtualizacao;
 end;
 
 procedure TForm1.RectConfigurarClick(Sender: TObject);
 begin
   ChangeTabAction1.Tab := TabConfiguracao;
   ChangeTabAction1.Execute;
-
-  //TbcPrincipal.ActiveTab := TabConfiguracao;
 end;
 
 procedure TForm1.rectPedidoClick(Sender: TObject);
 begin
   FramePedido1.Inicilizar;
+
   ChangeTabAction1.Tab := TabVenda;
   ChangeTabAction1.Execute;
-
-  //TbcPrincipal.ActiveTab := TabVenda;
 end;
 
 end.

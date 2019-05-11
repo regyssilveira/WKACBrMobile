@@ -4,7 +4,7 @@ object DtmPrincipal: TDtmPrincipal
   Width = 757
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Database=C:\Users\Personal\Documents\AppPedidos.sqlite'
+      'Database=C:\Users\regys\Documents\AppPedidos.sqlite'
       'DriverID=SQLite')
     ConnectedStoredUsage = []
     LoginPrompt = False

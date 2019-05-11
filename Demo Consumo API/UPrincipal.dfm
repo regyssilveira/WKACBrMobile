@@ -2,8 +2,8 @@ object FrmPrincipal: TFrmPrincipal
   Left = 0
   Top = 0
   Caption = 'Demo Consumo API'
-  ClientHeight = 682
-  ClientWidth = 1053
+  ClientHeight = 510
+  ClientWidth = 789
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,8 +18,8 @@ object FrmPrincipal: TFrmPrincipal
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 1047
-    Height = 676
+    Width = 783
+    Height = 504
     ActivePage = TabSheet3
     Align = alClient
     TabOrder = 0
@@ -30,8 +30,8 @@ object FrmPrincipal: TFrmPrincipal
         AlignWithMargins = True
         Left = 3
         Top = 102
-        Width = 1033
-        Height = 543
+        Width = 769
+        Height = 371
         Align = alClient
         DataSource = DtsProdutos
         TabOrder = 1
@@ -45,7 +45,7 @@ object FrmPrincipal: TFrmPrincipal
         AlignWithMargins = True
         Left = 3
         Top = 3
-        Width = 1033
+        Width = 769
         Height = 93
         ActivePage = TabSheet5
         Align = alTop
@@ -123,7 +123,7 @@ object FrmPrincipal: TFrmPrincipal
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 1039
+        Width = 775
         Height = 70
         Align = alTop
         BevelOuter = bvNone
@@ -157,8 +157,8 @@ object FrmPrincipal: TFrmPrincipal
         AlignWithMargins = True
         Left = 3
         Top = 73
-        Width = 1033
-        Height = 572
+        Width = 769
+        Height = 400
         Align = alClient
         DataSource = DtsClientes
         TabOrder = 1
@@ -220,8 +220,8 @@ object FrmPrincipal: TFrmPrincipal
   end
   object SaveDialog1: TSaveDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
-    Left = 940
-    Top = 275
+    Left = 405
+    Top = 330
   end
   object tmpProdutos: TFDMemTable
     FetchOptions.AssignedValues = [evMode, evRecsSkip]
