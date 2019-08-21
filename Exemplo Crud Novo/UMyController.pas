@@ -12,7 +12,6 @@ uses
   MVCFramework.Controllers.CacheController;
 
 type
-
   [MVCPath('/api')]
   TMyController = class(TMVCCacheController)
   protected
@@ -90,7 +89,7 @@ begin
     Exit;
 
   Render(TProdutoService.GetProduto(Id));
-  SetCache(30);
+  SetCache(3);
 end;
 
 procedure TMyController.Createproduto;

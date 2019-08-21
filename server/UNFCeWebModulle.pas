@@ -17,7 +17,6 @@ uses
 
 type
   TNFCEWebModule = class(TWebModule)
-    FDPhysFBDriverLink1: TFDPhysFBDriverLink;
     procedure WebModuleCreate(Sender: TObject);
     procedure WebModuleDestroy(Sender: TObject);
   private
@@ -108,7 +107,7 @@ begin
 
   FMVC.AddMiddleware(
     TMVCCustomAuthenticationMiddleware.Create(
-      TCustomAuth.Create, '/system/users/logged'
+      TCustomAuth.Create, '/system/usuarios/logados'
     )
   );
 end;
