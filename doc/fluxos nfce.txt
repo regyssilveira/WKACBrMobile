@@ -1,0 +1,16 @@
+fluxo normal da nota eletronica
+-------------------------------
+montar o xml
+validar a estrutura
+validar as regras de negocio
+assinar
+enviar
+tratar retorno
+
+
+fluxo normal da nota eletronica emitida off-line
+------------------------------------------------
+montar o xml
+validar a estrutura
+validar as regras de negocio
+gravar no banco para posterior envio

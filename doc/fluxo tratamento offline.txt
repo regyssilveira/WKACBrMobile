@@ -1,0 +1,17 @@
+- enviando a nota 10
+- deu erro e não obteve retorno
+- grava a nota 10 
+- clona a nota 10 com o numero 11, colocar off-line
+- cliente fica com a nota off-line (nota 11)
+
+nota 10 gravada
+nota 11 gravada (off-line)
+
+sanou os problemas
+- primeiro enviar todas as notas emitidas off-line e tratar retornos
+- segundo consultar todas as notas com problemas
+  - se o retorno for autorizado
+    - menos de 30 minutos, cancelar normal
+    - mais de 30 minutos, cancelar por substiuição (cancela a nota 10)
+  - se o retorno for não existe na base de dados da sefaz
+    - inutiliza a numeração

@@ -14,7 +14,7 @@ uses
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, Fmx.Bind.Grid, System.Bindings.Outputs,
   Fmx.Bind.Editors, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
-  FMX.ListView, FMX.Layouts;
+  FMX.ListView, FMX.Layouts, FMX.Edit;
 
 type
   TForm1 = class(TForm)
@@ -29,9 +29,6 @@ type
     tbClientesid: TIntegerField;
     tbClientesnome: TStringField;
     tbClientescpf: TStringField;
-    BindSourceDB1: TBindSourceDB;
-    BindingsList1: TBindingsList;
-    BindSourceDB2: TBindSourceDB;
     Layout1: TLayout;
     Button2: TButton;
     Button1: TButton;
@@ -41,8 +38,14 @@ type
     Layout4: TLayout;
     ListView1: TListView;
     ListView2: TListView;
-    LinkListControlToField3: TLinkListControlToField;
-    LinkListControlToField4: TLinkListControlToField;
+    BindSourceDB1: TBindSourceDB;
+    BindingsList1: TBindingsList;
+    LinkListControlToField1: TLinkListControlToField;
+    BindSourceDB2: TBindSourceDB;
+    LinkListControlToField2: TLinkListControlToField;
+    Layout5: TLayout;
+    SpeedButton1: TSpeedButton;
+    Edit1: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -68,7 +71,7 @@ uses
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  FCli := TRESTClient.Create('http://127.0.0.1', 8080);
+  FCli := TRESTClient.Create('http://192.168.88.28', 8080);
 
   tbClientes.CreateDataSet;
   tbProdutos.CreateDataSet;
@@ -114,7 +117,7 @@ end;
 
 procedure TForm1.tbProdutosAfterOpen(DataSet: TDataSet);
 begin
-  FResponse := Cli.doGET('/nfce/produtos', []);
+  FResponse := Cli.doGET('/nfce/produtos', ['0', '50']);
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText)
   else
