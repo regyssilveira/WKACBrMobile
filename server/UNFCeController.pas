@@ -100,7 +100,7 @@ begin
   );
 
   if TmpDataset.IsEmpty then
-    Render(500, 'Não existe nenhum cliente cadastrado na base de dados')
+    Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum cliente cadastrado na base de dados')
   else
     Render(TmpDataset);
 end;
@@ -115,7 +115,7 @@ begin
   );
 
   if TmpDataset.IsEmpty then
-    Render(500, Format('Não existe cliente cadastrado com o código "%d" na base de dados', [AId]))
+    Render(HTTP_STATUS.InternalServerError, Format('Não existe cliente cadastrado com o código "%d" na base de dados', [AId]))
   else
     Render(TmpDataset);
 end;
@@ -130,7 +130,7 @@ begin
   );
 
   if TmpDataset.IsEmpty then
-    Render(500, 'Não existe nenhum produto cadastrado na base de dados')
+    Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum produto cadastrado na base de dados')
   else
     Render(TmpDataset);
 end;
@@ -146,10 +146,7 @@ begin
   TmpDataset.Open('select * from produtos');
 
   if TmpDataset.IsEmpty then
-  begin
-    TmpDataset.Free;
-    Render(500, 'Não existe nenhum produto cadastrado na base de dados')
-  end
+    Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum produto cadastrado na base de dados')
   else
     Render(TmpDataset);
 end;
@@ -164,7 +161,7 @@ begin
   );
 
   if TmpDataset.IsEmpty then
-    Render(500, Format('Não existe produto cadastrado com o código "%d" na base de dados', [AId]))
+    Render(HTTP_STATUS.InternalServerError, Format('Não existe produto cadastrado com o código "%d" na base de dados', [AId]))
   else
     Render(TmpDataset);
 end;
@@ -190,7 +187,7 @@ begin
   DmNFCe := TdtmNFCe.Create(nil);
   try
     Render(DmNFCe.GerarXML(ANumero, ASerie));
-    ContentType := 'application/xml';
+    ContentType := TMVCMediaType.APPLICATION_XML;
   finally
     DmNFCe.Free;
   end;
@@ -211,7 +208,7 @@ begin
       StreamPDF.LoadFromFile(PathPDF);
 
       Render(StreamPDF, True);
-      ContentType := 'application/pdf';
+      ContentType := TMVCMediaType.APPLICATION_PDF;
     except
       on E: Exception do
       begin
@@ -239,7 +236,7 @@ begin
       StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
 
       Render(StreamArqEscPOS, True);
-      ContentType := 'text/plain';
+      ContentType := TMVCMediaType.TEXT_PLAIN;
     except
       on E: Exception do
       begin
@@ -269,7 +266,7 @@ begin
         DmNFCe.PreencherNFCe(oNFCe);
         StrRetorno := DmNFCe.Enviar;
 
-        Render(201, StrRetorno);
+        Render(HTTP_STATUS.Created, StrRetorno);
       finally
         DmNFCe.Free;
       end;
@@ -279,7 +276,7 @@ begin
   except
     on E: Exception do
     begin
-      Render(500, E.Message);
+      Render(HTTP_STATUS.InternalServerError, E.Message);
     end;
   end;
 end;

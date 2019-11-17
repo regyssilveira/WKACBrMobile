@@ -25,9 +25,6 @@ type
     function GerarEscPOS(numero, serie: integer): string;
   end;
 
-//var
-//  dtmNFCe: TdtmNFCe;
-
 implementation
 
 uses
@@ -436,9 +433,6 @@ begin
     ACBrNFe1.NotasFiscais.ImprimirPDF;
 
     Result := ACBrNFe1.DANFE.ArquivoPDF;
-      //ACBrNFe1.DANFE.PathPDF +
-      //ACBrUtil.OnlyNumber(ACBrNFe1.NotasFiscais[0].NFe.infNFe.ID) +
-      //'-nfe.pdf';
 
     if not FileExists(Result) then
       raise Exception.Create('Arquivo PDF não encontrado no servidor!');

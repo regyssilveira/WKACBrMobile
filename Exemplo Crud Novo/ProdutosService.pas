@@ -29,11 +29,6 @@ type
 
 implementation
 
-
-{ TProdutoService }
-
-
-
 { TProdutoService }
 
 class procedure TProdutoService.Delete(const ACodProduto: Integer);
