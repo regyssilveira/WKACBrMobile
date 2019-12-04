@@ -35,7 +35,7 @@ begin
     oParametros.Add('CharacterSet=WIN1252');
     oParametros.Add('Server=localhost');
     oParametros.Add('Port=3050');
-    oParametros.Add('Database=C:\CursoNFCeACBrMobile\bin\database\DADOS.FDB');
+    oParametros.Add('Database=D:\WKACBrMobile\bin\database\DADOS.FDB');
 
     // parametros para o controle do pool se necessário e quiser alterar
     //oParametros.Add('POOL_MaximumItems=50');

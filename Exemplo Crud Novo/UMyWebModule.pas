@@ -66,7 +66,7 @@ begin
   FMVC.AddMiddleware(
     TMVCBasicAuthenticationMiddleware.Create(
       TMVCDefaultAuthenticationHandler.New
-      .SetOnAuthentication(
+        .SetOnAuthentication(
         procedure(const AUserName, APassword: string;
           AUserRoles: TList<string>; var IsValid: Boolean;
           const ASessionData: TDictionary<String, String>)

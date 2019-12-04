@@ -70,13 +70,17 @@ begin
 end;
 
 procedure TMyController.Getprodutos;
+var
+  StrQuery: string;
 begin
+  StrQuery := Context.Request.QueryStringParam('like');
+
   // seta a chave e verifica se existe cache
-  SetCacheKey('cache::produto');
+  SetCacheKey('#cache::produto::' + StrQuery);
   if CacheAvailable then
     Exit;
 
-  Render<TProduto>(TProdutoService.GetProdutos);
+  Render<TProduto>(TProdutoService.GetProdutos(StrQuery));
 
   // seta o tempo de vida do cache
   SetCache(30);
@@ -84,11 +88,12 @@ end;
 
 procedure TMyController.Getproduto(id: Integer);
 begin
-  SetCacheKey('cache::produto::' + Id.ToString);
+  SetCacheKey('#cache::produto::' + Id.ToString);
   if CacheAvailable then
     Exit;
 
   Render(TProdutoService.GetProduto(Id));
+
   SetCache(3);
 end;
 
