@@ -74,8 +74,8 @@ uses
 
 procedure TNFCeController.Index;
 begin
-  //use Context property to access to the HTTP request and response 
-  Render('curso API NFC-e');
+  Render('<h1>curso API NFC-e</h1><p>Curso de NFC-e com mobile utilizando DMVC framework e ACBr</p>');
+  ContentType := 'text/html';
 end;
 
 procedure TNFCeController.OnAfterAction(Context: TWebContext; const AActionName: string);

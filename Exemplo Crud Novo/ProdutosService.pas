@@ -89,19 +89,19 @@ var
   FDConexao: TFDConnection;
   TmpDataset: TDataSet;
   Produto: TProduto;
-  StrSql: string;
+  StrWhere: string;
 begin
   Result := TObjectList<TProduto>.Create;
 
   FDConexao := TFDConnection.Create(nil);
   try
     if ALikeDescricao.Trim.IsEmpty then
-      StrSql := ''
+      StrWhere := ''
     else
-      StrSql := 'where descricao like ''%' + ALikeDescricao + '%''';
+      StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
 
     FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    FDConexao.ExecSQL('select * from produtos ' + StrSql, TmpDataset);
+    FDConexao.ExecSQL('select * from produtos ' + StrWhere, TmpDataset);
 
     if not TmpDataset.IsEmpty then
     begin

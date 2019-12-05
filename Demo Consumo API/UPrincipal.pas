@@ -87,7 +87,7 @@ begin
   if Assigned(FRestClient) then
     FRestClient.Free;
 
-  FRestClient := TRESTClient.Create('192.168.88.62', 8080);
+  FRestClient := TRESTClient.Create('localhost', 8080);
   FRestClient.Username := 'admin';
   FRestClient.Password := 'adminpass';
 

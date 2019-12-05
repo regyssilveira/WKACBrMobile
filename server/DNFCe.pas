@@ -150,10 +150,10 @@ end;
 function TdtmNFCe.Enviar: string;
 var
   PathTempImpressao: string;
-//var
-  //StatusNFCe: Integer;
-  //StrErros: string;
-  //NumeroLote: string;
+var
+  StatusNFCe: Integer;
+  StrErros: string;
+  NumeroLote: string;
 begin
   if ACBrNFe1.NotasFiscais.Count <= 0 then
     raise Exception.Create('nenhuma nota fiscal informada');
@@ -211,7 +211,8 @@ begin
 //  begin
 //    StatusNFCe := ACBrNFe1.WebServices.Enviar.cStat;
 //
-//    if ValorInRange(StatusNFCe, [100, 110, 150, 205, 301, 302]) then
+//    //if ACBrNFe1.NotasFiscais[0].Confirmada then  ou
+//    if ACBrNFe1.CstatConfirmada(StatusNFCe) then
 //    begin
 //      Result := ACBrNFe1.WebServices.Enviar.cStat.ToString + ' - ' +
 //                ACBrNFe1.WebServices.Enviar.xMotivo;

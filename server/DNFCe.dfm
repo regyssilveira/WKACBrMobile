@@ -55,8 +55,8 @@ object DtmNFCe: TDtmNFCe
     CasasDecimais.MaskvUnCom = ',0.00'
     ACBrNFe = ACBrNFe1
     ImprimeCodigoEan = True
-    ImprimeEmUmaLinha = True
     ImprimeQRCodeLateral = True
+    ImprimeEmUmaLinha = True
     PosPrinter = ACBrPosPrinter1
     Left = 96
     Top = 120
