@@ -52,6 +52,10 @@ type
     EdtQuantRegistros: TEdit;
     BtnEnviarPedidoString: TButton;
     BtnEnviarPedidoObjeto: TButton;
+    TabSheet7: TTabSheet;
+    Label4: TLabel;
+    EdtProdutoDescr: TEdit;
+    BtnBuscaProdutoLike: TButton;
     procedure BtnSalvarArquivoClick(Sender: TObject);
     procedure BtnBuscaClienteClick(Sender: TObject);
     procedure BtnBuscaProdutoClick(Sender: TObject);
@@ -60,6 +64,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure BtnEnviarPedidoStringClick(Sender: TObject);
     procedure BtnEnviarPedidoObjetoClick(Sender: TObject);
+    procedure BtnBuscaProdutoLikeClick(Sender: TObject);
   private
     FRestClient: TRESTClient;
     FResponse: IRESTResponse;
@@ -167,6 +172,27 @@ begin
   else
     FResponse := RESTClient.doGET('/nfce/produtos', [EdtCodProduto.Text]);
 
+  if FResponse.HasError then
+    raise Exception.Create(FResponse.ResponseText);
+
+  tmpProdutos.Close;
+  tmpProdutos.CreateDataSet;
+  tmpProdutos.DisableControls;
+  try
+    tmpProdutos.LoadFromJSONArrayString(FResponse.BodyAsString);
+  finally
+    tmpProdutos.EnableControls;
+  end;
+end;
+
+procedure TFrmPrincipal.BtnBuscaProdutoLikeClick(Sender: TObject);
+begin
+  FResponse := RESTClient.doGET(
+    '/nfce/produtos',         // recurso
+    [],                       // parametros de url
+    ['like'],                 // parametros de query (quando usa '?')
+    [EdtProdutoDescr.Text]    // valores dos parametros de query, na sequencia dos parametros acima
+  );
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 

@@ -123,9 +123,15 @@ end;
 procedure TNFCeController.GetProdutos;
 var
   TmpDataset: TDataSet;
+  StrWhere: string;
 begin
+  if Context.Request.QueryStringParamExists('like') then
+    StrWhere := 'where descricao like ''%' + Context.Request.QueryStringParam('like') + '%'''
+  else
+    StrWhere := '';
+
   FDConexao.ExecSQL(
-    'select * from produtos',
+    'select * from produtos ' + StrWhere,
     TmpDataset
   );
 

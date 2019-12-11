@@ -100,6 +100,16 @@ begin
     StrToInt(EdtQuantidade.Text),
     DtmPrincipal.qryProdutosVL_VENDA.AsFloat
   ]);
+  {
+  OU
+
+  TmpItensPedido.Append;
+  TmpItensPedidoId         := DtmPrincipal.qryProdutosID.AsInteger;
+  TmpItensPedidoDescricao  := DtmPrincipal.qryProdutosDESCRICAO.AsString;
+  TmpItensPedidoQuantidade := StrToInt(EdtQuantidade.Text);
+  TmpItensPedidoValorVenda := DtmPrincipal.qryProdutosVL_VENDA.AsFloat;
+  TmpItensPedido.Post;
+  }
 end;
 
 procedure TFramePedido.EnviarPedido;

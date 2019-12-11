@@ -11,7 +11,8 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.Comp.DataSet, FireDAC.DApt;
+  FireDAC.Comp.DataSet, FireDAC.DApt, FireDAC.FMXUI.Login, FireDAC.FMXUI.Error,
+  FireDAC.Comp.UI;
 
 type
   TDtmPrincipal = class(TDataModule)
@@ -38,6 +39,10 @@ type
     qryClientesid: TIntegerField;
     qryClientesnome: TStringField;
     qryClientescpf: TStringField;
+    FDGUIxLoginDialog1: TFDGUIxLoginDialog;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    FDGUIxErrorDialog1: TFDGUIxErrorDialog;
+    FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure tmpProdutosAfterOpen(DataSet: TDataSet);
     procedure tmpClientesAfterOpen(DataSet: TDataSet);
@@ -97,7 +102,7 @@ procedure TDtmPrincipal.tmpClientesAfterOpen(DataSet: TDataSet);
 var
   FutResponse: IFuture<string>;
 begin
-  //consumo assincrono
+  //consumo assincrono (FORMA PREFERENCIAL)
   InicializarRESTClient;
 
   FutResponse := TTask.Future<string>(
@@ -121,7 +126,7 @@ end;
 
 procedure TDtmPrincipal.tmpProdutosAfterOpen(DataSet: TDataSet);
 begin
-  // comsumo sincrono
+  // comsumo sincrono (NUNCA FAZER ASSIM, AQUI ESTÁ MERAMENTE PARA EFEITO EDUCACIONAL)
   InicializarRESTClient;
 
   FResp := Cli.doGET('/nfce/produtos', []);

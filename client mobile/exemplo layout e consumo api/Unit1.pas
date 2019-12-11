@@ -71,7 +71,7 @@ uses
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  FCli := TRESTClient.Create('http://192.168.88.28', 8080);
+  FCli := TRESTClient.Create('http://192.168.88.12', 8080);
 
   tbClientes.CreateDataSet;
   tbProdutos.CreateDataSet;
@@ -117,7 +117,7 @@ end;
 
 procedure TForm1.tbProdutosAfterOpen(DataSet: TDataSet);
 begin
-  FResponse := Cli.doGET('/nfce/produtos', ['0', '50']);
+  FResponse := Cli.doGET('/nfce/produtos', []);
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText)
   else

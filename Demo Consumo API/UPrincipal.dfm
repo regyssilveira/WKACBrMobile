@@ -20,7 +20,7 @@ object FrmPrincipal: TFrmPrincipal
     Top = 3
     Width = 783
     Height = 504
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
     TabWidth = 150
@@ -47,7 +47,7 @@ object FrmPrincipal: TFrmPrincipal
         Top = 3
         Width = 769
         Height = 93
-        ActivePage = TabSheet6
+        ActivePage = TabSheet7
         Align = alTop
         TabOrder = 0
         object TabSheet5: TTabSheet
@@ -113,6 +113,33 @@ object FrmPrincipal: TFrmPrincipal
             NumbersOnly = True
             TabOrder = 0
             Text = '10'
+          end
+        end
+        object TabSheet7: TTabSheet
+          Caption = 'Busca com Like'
+          ImageIndex = 2
+          object Label4: TLabel
+            Left = 15
+            Top = 20
+            Width = 46
+            Height = 13
+            Caption = 'Descri'#231#227'o'
+          end
+          object EdtProdutoDescr: TEdit
+            Left = 15
+            Top = 36
+            Width = 151
+            Height = 21
+            TabOrder = 0
+          end
+          object BtnBuscaProdutoLike: TButton
+            Left = 172
+            Top = 34
+            Width = 75
+            Height = 25
+            Caption = 'Buscar'
+            TabOrder = 1
+            OnClick = BtnBuscaProdutoLikeClick
           end
         end
       end

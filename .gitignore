@@ -69,5 +69,7 @@ AndroidManifest.template.xml
 bin
 Win32
 Android
+Android32
+Android64
 
 /client mobile/App Pedido/AppPedido.skincfg
