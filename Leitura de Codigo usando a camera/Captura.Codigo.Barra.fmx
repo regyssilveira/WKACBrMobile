@@ -1,0 +1,114 @@
+object FrmCapturaCodigoBarra: TFrmCapturaCodigoBarra
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 829
+  ClientWidth = 480
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  DesignerMasterStyle = 3
+  object Layout2: TLayout
+    Align = Client
+    Size.Width = 480.000000000000000000
+    Size.Height = 829.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    object ToolBar1: TToolBar
+      Position.Y = 48.000000000000000000
+      Size.Width = 480.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object btnMenu: TButton
+        Align = Left
+        Padding.Bottom = 4.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'detailstoolbutton'
+        TabOrder = 0
+        Text = 'btnMenu'
+        Visible = False
+      end
+      object lblScanStatus: TLabel
+        Align = Client
+        StyledSettings = [Size, Style, FontColor]
+        Margins.Right = 5.000000000000000000
+        Size.Width = 475.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Family = 'Default'
+        TextSettings.HorzAlign = Center
+        Text = 'ScanStatus'
+      end
+    end
+    object imgCamera: TImage
+      MultiResBitmap.Height = 117
+      MultiResBitmap.Width = 117
+      MultiResBitmap.LoadSize = 1
+      MultiResBitmap = <
+        item
+        end>
+      Align = Client
+      Size.Width = 480.000000000000000000
+      Size.Height = 733.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Camera1: TCamera
+      AngleOfView = 45.000000000000000000
+      Position.Z = -5.000000000000000000
+      Width = 1.000000000000000000
+      Height = 1.000000000000000000
+      Depth = 1.000000000000000000
+    end
+    object ToolBar2: TToolBar
+      Size.Width = 480.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Label1: TLabel
+        Align = HorzCenter
+        Position.X = 134.000000000000000000
+        Size.Width = 211.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Center
+        Text = 'Invent'#225'rio de Estoque'
+        TabOrder = 0
+      end
+      object Layout1: TLayout
+        Align = MostLeft
+        Size.Width = 50.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object BtnVoltar: TSpeedButton
+          Align = Client
+          Size.Width = 48.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'backtoolbutton'
+          Text = 'Voltar'
+          OnClick = BtnVoltarClick
+        end
+      end
+      object Layout3: TLayout
+        Align = MostRight
+        Position.X = 430.000000000000000000
+        Size.Width = 50.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+  end
+  object CameraComponent1: TCameraComponent
+    OnSampleBufferReady = CameraComponent1SampleBufferReady
+    Left = 137
+    Top = 126
+  end
+end
