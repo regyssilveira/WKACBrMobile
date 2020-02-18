@@ -1,0 +1,20 @@
+passo de emissão de nfc-e em modo off-line
+------------------------------------------
+- Gerou a nota, validou, tentou transmitir
+  - não tem internet
+    - ja emite diretamente no modo off-line
+  - tem internet mas deu erro de validação do lado da sefaz
+    - acerta e envia
+  - tem internet mas deu erro de comunicação
+    - entra no modo off-line
+      - estaciona (bloqueia para alteração) a nota atual (exemplo nota numero 10)
+      - clona a nota (tem que ficar identica) e pula a numeração e muda para off-line (mesma nota com numero 11) e imprime duas vias
+
+Voltou a internet
+  - envia a nota off-line (numero 11)
+  - consulta a nota origem (exemplo nota numero 10)
+    - se nota autorizadada
+      - se dentro de 30 minutos, cancela normal
+      - se acima de 30 minutos, cancela por substituição apontando a nota que substituiu (numero 11)
+    - se não foi autorizada
+      - inutiliza a numeração
