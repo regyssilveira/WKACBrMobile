@@ -18,7 +18,7 @@ type
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
   public
-    [MVCPath('/')]
+    [MVCPath]
     [MVCHTTPMethod([httpGET])]
     procedure GetMyRootPage;
 
@@ -54,7 +54,7 @@ uses
 procedure TMyController.GetMyRootPage;
 begin
   Render('<h1>API Demo server</h1><p>Bem vindo a minha primeira API RESTFULL.</p>');
-  ContentType := 'text/html';
+  ContentType := TMVCMediaType.TEXT_HTML;
 end;
 
 procedure TMyController.OnAfterAction(Context: TWebContext; const AActionName: string);
@@ -78,8 +78,12 @@ begin
   // seta a chave e verifica se existe cache
   SetCacheKey('#cache::produto::' + StrQuery);
   if CacheAvailable then
+  begin
+    Log.Info('>>>>>>>> usou o log.', '');
     Exit;
+  end;
 
+  Log.Info('>>>>>>>>>não usou o log.', '');
   Render<TProduto>(TProdutoService.GetProdutos(StrQuery));
 
   // seta o tempo de vida do cache
@@ -114,6 +118,10 @@ procedure TMyController.Updateproduto(id: Integer);
 var
   Produto: TProduto;
 begin
+  // forçar limpeza do cache se existir para o id do produto
+  SetCacheKey('#cache::produto::' + Id.ToString);
+  SetCache(0);
+
   Produto := Context.Request.BodyAs<TProduto>;
   try
     TProdutoService.Update(Id, Produto);
@@ -125,6 +133,10 @@ end;
 
 procedure TMyController.Deleteproduto(id: Integer);
 begin
+  // forçar limpeza do cache se existir para o id do produto
+  SetCacheKey('#cache::produto::' + Id.ToString);
+  SetCache(0);
+
   TProdutoService.Delete(Id);
   Render(200, Format('Produto "%d" apagado com sucesso', [Id]));
 end;

@@ -101,7 +101,7 @@ begin
       StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
 
     FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    FDConexao.ExecSQL('select * from produtos ' + StrWhere, TmpDataset);
+    FDConexao.ExecSQL('select * from produtos ' + StrWhere + ' order by id', TmpDataset);
 
     if not TmpDataset.IsEmpty then
     begin
