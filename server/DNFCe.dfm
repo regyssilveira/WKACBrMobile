@@ -1,7 +1,7 @@
 object DtmNFCe: TDtmNFCe
   OldCreateOrder = False
-  Height = 264
-  Width = 422
+  Height = 289
+  Width = 449
   object ACBrNFe1: TACBrNFe
     Configuracoes.Geral.SSLLib = libWinCrypt
     Configuracoes.Geral.SSLCryptLib = cryWinCrypt
@@ -25,6 +25,12 @@ object DtmNFCe: TDtmNFCe
     MargemSuperior = 0.800000000000000000
     MargemEsquerda = 0.600000000000000000
     MargemDireita = 0.510000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -34,6 +40,7 @@ object DtmNFCe: TDtmNFCe
     ImprimeCodigoEan = True
     ImprimeQRCodeLateral = True
     ImprimeLogoLateral = True
+    FormularioContinuo = True
     FonteLinhaItem.Charset = DEFAULT_CHARSET
     FonteLinhaItem.Color = clWindowText
     FonteLinhaItem.Height = -9
@@ -48,6 +55,12 @@ object DtmNFCe: TDtmNFCe
     MargemSuperior = 0.800000000000000000
     MargemEsquerda = 0.600000000000000000
     MargemDireita = 0.510000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -57,6 +70,7 @@ object DtmNFCe: TDtmNFCe
     ImprimeCodigoEan = True
     ImprimeQRCodeLateral = True
     ImprimeEmUmaLinha = True
+    FormularioContinuo = True
     PosPrinter = ACBrPosPrinter1
     Left = 96
     Top = 120

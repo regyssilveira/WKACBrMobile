@@ -19,7 +19,7 @@ type
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
   public
-    [MVCPath('/')]
+    [MVCPath]
     [MVCHTTPMethod([httpGET])]
     procedure Index;
 
@@ -35,6 +35,8 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetProdutosPaginado(AAtual, AQuantidade: integer);
 
+
+
     [MVCPath('/clientes')]
     [MVCHTTPMethod([httpGET])]
     procedure GetClientes;
@@ -43,6 +45,12 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetCliente(Aid: Integer);
 
+
+
+    [MVCPath('/nfce')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GerarNFCeExemplo;
+
     [MVCPath('/nfce')]
     [MVCHTTPMethod([httpPOST])]
     procedure CreateNFCe;
@@ -50,10 +58,6 @@ type
     [MVCPath('/nfce/($ANumero)/($ASerie)/($ATipo)')]
     [MVCHTTPMethod([httpGET])]
     procedure GetNFCe(ANumero: integer; ASerie: integer; ATipo: string);
-
-    [MVCPath('/nfce')]
-    [MVCHTTPMethod([httpGET])]
-    procedure GerarNFCeExemplo;
   end;
 
 implementation
@@ -74,8 +78,11 @@ uses
 
 procedure TNFCeController.Index;
 begin
-  Render('<h1>curso API NFC-e</h1><p>Curso de NFC-e com mobile utilizando DMVC framework e ACBr</p>');
-  ContentType := 'text/html';
+  Render(
+    '<h1>curso API NFC-e</h1>' +
+    '<p>Curso de NFC-e com mobile utilizando DMVC framework e ACBr</p>'
+  );
+  ContentType := TMVCMediaType.TEXT_HTML;
 end;
 
 procedure TNFCeController.OnAfterAction(Context: TWebContext; const AActionName: string);
@@ -213,7 +220,7 @@ begin
     try
       StreamPDF.LoadFromFile(PathPDF);
 
-      Render(StreamPDF, True);
+      Render(StreamPDF);
       ContentType := TMVCMediaType.APPLICATION_PDF;
     except
       on E: Exception do
@@ -241,7 +248,7 @@ begin
     try
       StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
 
-      Render(StreamArqEscPOS, True);
+      Render(StreamArqEscPOS);
       ContentType := TMVCMediaType.TEXT_PLAIN;
     except
       on E: Exception do

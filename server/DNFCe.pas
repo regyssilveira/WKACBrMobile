@@ -104,7 +104,7 @@ begin
   ACBrNFe1.Configuracoes.Geral.Salvar       := True;
   ACBrNFe1.Configuracoes.Geral.VersaoDF     := TpcnVersaoDF.ve400;
   ACBrNFe1.Configuracoes.Geral.VersaoQRCode := TpcnVersaoQrCode.veqr200;
-  ACBrNFe1.Configuracoes.Geral.FormaEmissao := teNormal;
+  ACBrNFe1.Configuracoes.Geral.FormaEmissao := TpcnTipoEmissao.teNormal;
 
   // autenticação e assinatura seguras
   ACBrNFe1.Configuracoes.Geral.SSLLib := TSSLLib.libWinCrypt;
@@ -134,6 +134,13 @@ begin
   ACBrNFe1.Configuracoes.WebServices.Visualizar := False;
   ACBrNFe1.Configuracoes.WebServices.Ambiente   := taHomologacao;
 
+  // interessante deixar configuravel para nf-e, para nfc-e somente timeout, os outros não são relevantes
+  ACBrNFe1.Configuracoes.WebServices.TimeOut                  := 18000;  // tempo limite de espera pelo webservice
+  ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 5000;   // tempo padrão que vai aguardar para consultar após enviar a NF-e
+  ACBrNFe1.Configuracoes.WebServices.IntervaloTentativas      := 3000;   // Intervalo entre as tentativas de envio
+  ACBrNFe1.Configuracoes.WebServices.Tentativas               := 10;     // quantidade de tentativas de envio
+  ACBrNFe1.Configuracoes.WebServices.AjustaAguardaConsultaRet := True;   // ajustar "AguardarConsultaRet" com o valor retornado pelo webservice
+
   // proxy de acesso
   ACBrNFe1.Configuracoes.WebServices.ProxyHost := '';
   ACBrNFe1.Configuracoes.WebServices.ProxyPort := '';
@@ -141,8 +148,8 @@ begin
   ACBrNFe1.Configuracoes.WebServices.ProxyPass := '';
 
   ACBrNFe1.DANFE.PathPDF := PathPDF;
-  ACBrNFe1.DANFE.Sistema := 'nome sistema';
   ACBrNFe1.DANFE.Logo    := '';
+  ACBrNFe1.DANFE.Sistema := 'nome sistema';
   ACBrNFe1.DANFE.Site    := 'https://regys.com.br';
   ACBrNFe1.DANFE.Email   := 'regys.silveira@gmail.com';
 end;
@@ -194,6 +201,9 @@ begin
   // na vida real o XML deverá ser gravado no banco de dados ou em pasta de
   // arquivamento e mantido por 5 anos
   ACBrNFe1.NotasFiscais[0].GravarXML(PathNotaFiscalExemplo);
+
+  // para gravar no banco ler a propriedade
+  //ACBrNFe1.NotasFiscais[0].XML
 
   // opcional imprimir diretamente do servidor, para isso é preciso ter
   // confiurado o impressor
@@ -302,6 +312,18 @@ begin
   ONFe.Dest.CNPJCPF := ANFCe.cpf;
   ONFe.Dest.xNome   := ANFCe.Nome;
 
+  ONFe.Dest.EnderDest.fone    := '(11)2222.4444';
+  ONFe.Dest.EnderDest.xLgr    := 'ENDERECO TESTE';
+  ONFe.Dest.EnderDest.nro     := '1';
+  ONFe.Dest.EnderDest.xCpl    := '';
+  ONFe.Dest.EnderDest.xBairro := 'BAIRRO';
+  ONFe.Dest.EnderDest.xMun    := 'MANAUS';
+  ONFe.Dest.EnderDest.cMun    := 1302603;
+  ONFe.Dest.EnderDest.UF      := CUFtoUF(13);
+  ONFe.Dest.EnderDest.CEP     := 11222333;
+  ONFe.Dest.EnderDest.cPais   := 1058;
+  ONFe.Dest.EnderDest.xPais   := 'BRASIL';
+
   ValorTotalNF := 0.00;
   I := 0;
   for NFCeItem in ANFCe.Itens do
@@ -313,7 +335,7 @@ begin
     OItemNota.Prod.cProd    := NFCeItem.Id.ToString;
     OItemNota.Prod.xProd    := NFCeItem.Descricao;
     OItemNota.Prod.NCM      := '10061092';
-    OItemNota.Prod.CFOP     := '5405';
+    OItemNota.Prod.CFOP     := '5102';
     OItemNota.Prod.CEST     := '';
 
     OItemNota.Prod.cEAN     := 'SEM GTIN';
@@ -338,7 +360,7 @@ begin
     OItemNota.Imposto.ICMS.orig := TpcnOrigemMercadoria.oeNacional;
 
     // ICMS ********************************************************
-    OItemNota.Imposto.ICMS.CSOSN       := TpcnCSOSNIcms.csosn500;
+    OItemNota.Imposto.ICMS.CSOSN       := TpcnCSOSNIcms.csosn102;
     OItemNota.Imposto.ICMS.pCredSN     := 0.00;
     OItemNota.Imposto.ICMS.vCredICMSSN := 0.00;
 

@@ -24,26 +24,31 @@ type
 
 implementation
 
+uses
+  UPoolConnection;
+
 { TBaseController }
+
+procedure TBaseController.OnBeforeAction(Context: TWebContext;
+  const AActionName: string; var Handled: Boolean);
+begin
+  // como seria para guardar uma variavel que acessa o webmodule
+  if not Assigned(FWebModule) then
+    FWebModule := GetCurrentWebModule as TNFCEWebModule;
+
+  // criando uma conexão somente para o controler e usando o pool connection
+  if not Assigned(FDConexao) then
+    FDConexao := TFDConnection.Create(nil);
+
+  FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+
+  inherited;
+end;
 
 procedure TBaseController.OnAfterAction(Context: TWebContext;
   const AActionName: string);
 begin
   FDConexao.Free;
-
-  inherited;
-end;
-
-procedure TBaseController.OnBeforeAction(Context: TWebContext;
-  const AActionName: string; var Handled: Boolean);
-begin
-  if not Assigned(FWebModule) then
-    FWebModule := GetCurrentWebModule as TNFCEWebModule;
-
-  if not Assigned(FDConexao) then
-    FDConexao := TFDConnection.Create(nil);
-
-  FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
 
   inherited;
 end;

@@ -42,8 +42,6 @@ type
     property Serie: Integer read FSerie write FSerie;
     property cpf: string read Fcpf write Fcpf;
     property Nome: string read FNome write FNome;
-
-    //[MVCListOfAttribute(TNFCeItem)]
     property Itens: TObjectList<TNFCeItem> read FItens write FItens;
   end;
 
@@ -62,7 +60,7 @@ var
   JsonObj: TJSONObject;
 begin
   Serializar := TMVCJsonDataObjectsSerializer.Create;
-  JsonObj := TJSONObject.Create;
+  JsonObj    := TJSONObject.Create;
   try
     Serializar.ObjectToJSONObject(Self, JsonObj, stDefault, []);
     Result := JsonObj.ToJSON;
