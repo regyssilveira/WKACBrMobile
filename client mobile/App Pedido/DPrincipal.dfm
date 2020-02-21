@@ -1,7 +1,7 @@
 object DtmPrincipal: TDtmPrincipal
   OldCreateOrder = False
   Height = 363
-  Width = 931
+  Width = 551
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Database=C:\Users\regys\Documents\AppPedidos.sqlite'
@@ -10,7 +10,7 @@ object DtmPrincipal: TDtmPrincipal
     LoginPrompt = False
     AfterConnect = FDConnection1AfterConnect
     BeforeConnect = FDConnection1BeforeConnect
-    Left = 72
+    Left = 82
     Top = 64
   end
   object tmpProdutos: TFDMemTable
@@ -23,8 +23,8 @@ object DtmPrincipal: TDtmPrincipal
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 102
-    Top = 195
+    Left = 77
+    Top = 155
     object tmpProdutosid: TIntegerField
       FieldName = 'id'
     end
@@ -56,8 +56,8 @@ object DtmPrincipal: TDtmPrincipal
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 172
-    Top = 196
+    Left = 147
+    Top = 156
     object tmpClientesid: TIntegerField
       FieldName = 'id'
     end
@@ -131,21 +131,21 @@ object DtmPrincipal: TDtmPrincipal
   end
   object FDGUIxLoginDialog1: TFDGUIxLoginDialog
     Provider = 'FMX'
-    Left = 820
-    Top = 30
+    Left = 410
+    Top = 40
   end
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'FMX'
-    Left = 820
-    Top = 80
+    Left = 410
+    Top = 90
   end
   object FDGUIxErrorDialog1: TFDGUIxErrorDialog
     Provider = 'FMX'
-    Left = 820
-    Top = 130
+    Left = 410
+    Top = 140
   end
   object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
-    Left = 820
-    Top = 180
+    Left = 410
+    Top = 190
   end
 end

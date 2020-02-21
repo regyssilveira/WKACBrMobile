@@ -20,7 +20,7 @@ object FrmPrincipal: TFrmPrincipal
     Top = 3
     Width = 783
     Height = 504
-    ActivePage = TabSheet1
+    ActivePage = TabSheet4
     Align = alClient
     TabOrder = 0
     TabWidth = 150

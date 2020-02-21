@@ -91,9 +91,9 @@ begin
       DtmPrincipal.tmpClientes.First;
       while not DtmPrincipal.tmpClientes.Eof do
       begin
-        QryExecute.Params[0].AsIntegers[I]  := DtmPrincipal.tmpClientesid.AsInteger;
-        QryExecute.Params[1].AsStrings[I]   := DtmPrincipal.tmpClientesnome.AsString;
-        QryExecute.Params[2].AsStrings[I]   := DtmPrincipal.tmpClientescpf.AsString;
+        QryExecute.Params[0].AsIntegers[I] := DtmPrincipal.tmpClientesid.AsInteger;
+        QryExecute.Params[1].AsStrings[I]  := DtmPrincipal.tmpClientesnome.AsString;
+        QryExecute.Params[2].AsStrings[I]  := DtmPrincipal.tmpClientescpf.AsString;
 
         DtmPrincipal.tmpClientes.Next;
         ProgressBar1.Value := ProgressBar1.Value + 1;

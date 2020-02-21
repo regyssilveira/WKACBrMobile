@@ -50,12 +50,11 @@ type
   private
     FCli: TRESTClient;
     FResp: IRESTResponse;
+    function GetCli: TRESTClient;
   public
-    procedure InicializarRESTClient;
-
     procedure GetPDFFromNFCe(const ANumero, ASerie: integer);
 
-    property Cli: TRESTClient read FCli write FCli;
+    property Cli: TRESTClient read GetCli;
     property Resp: IRESTResponse read FResp write FResp;
   end;
 
@@ -85,7 +84,7 @@ uses
   UConfigClass,
   FMX.DialogService.Async;
 
-procedure TDtmPrincipal.InicializarRESTClient;
+function TDtmPrincipal.GetCli: TRESTClient;
 begin
   if Assigned(FCli) then
     FCli.DisposeOf;
@@ -96,6 +95,8 @@ begin
 
   FCli.Username := 'admin';
   FCli.Password := 'adminpass';
+
+  Result := FCli;
 end;
 
 procedure TDtmPrincipal.tmpClientesAfterOpen(DataSet: TDataSet);
@@ -103,8 +104,6 @@ var
   FutResponse: IFuture<string>;
 begin
   //consumo assincrono (FORMA PREFERENCIAL)
-  InicializarRESTClient;
-
   FutResponse := TTask.Future<string>(
     function: string
     begin
@@ -126,9 +125,8 @@ end;
 
 procedure TDtmPrincipal.tmpProdutosAfterOpen(DataSet: TDataSet);
 begin
-  // comsumo sincrono (NUNCA FAZER ASSIM, AQUI ESTÁ MERAMENTE PARA EFEITO EDUCACIONAL)
-  InicializarRESTClient;
-
+  // comsumo sincrono
+  //(NUNCA FAZER ASSIM, AQUI ESTÁ MERAMENTE PARA EFEITO EDUCACIONAL)
   FResp := Cli.doGET('/nfce/produtos', []);
   if FResp.HasError then
     raise Exception.Create(FResp.ResponseText);
@@ -188,7 +186,8 @@ end;
 
 procedure TDtmPrincipal.FDConnection1BeforeConnect(Sender: TObject);
 begin
-  FDConnection1.Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite');
+  FDConnection1.Params.Values['Database'] :=
+    TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite');
 end;
 
 procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);

@@ -1,6 +1,6 @@
 object FramePedido: TFramePedido
   Size.Width = 366.000000000000000000
-  Size.Height = 748.000000000000000000
+  Size.Height = 610.000000000000000000
   Size.PlatformDefault = False
   object Layout1: TLayout
     Align = Top
@@ -135,7 +135,7 @@ object FramePedido: TFramePedido
     Margins.Right = 5.000000000000000000
     Margins.Bottom = 5.000000000000000000
     Size.Width = 356.000000000000000000
-    Size.Height = 547.000000000000000000
+    Size.Height = 409.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 2
     object Label4: TLabel
@@ -153,7 +153,7 @@ object FramePedido: TFramePedido
       FooterAppearanceClassName = 'TListHeaderObjects'
       Align = Client
       Size.Width = 356.000000000000000000
-      Size.Height = 530.000000000000000000
+      Size.Height = 392.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
       ItemAppearanceObjects.ItemObjects.ObjectsCollection = <

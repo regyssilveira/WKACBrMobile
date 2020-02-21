@@ -45,8 +45,8 @@ type
   private
 
   public
-    procedure Inicilizar;
     procedure Limpar;
+    procedure Inicializar;
     procedure EnviarPedido;
   end;
 
@@ -58,7 +58,7 @@ uses DPrincipal, UNFCeClass;
 
 { TFramePedido }
 
-procedure TFramePedido.Inicilizar;
+procedure TFramePedido.Inicializar;
 begin
   Self.Limpar;
 
@@ -71,8 +71,8 @@ end;
 
 procedure TFramePedido.Limpar;
 begin
-  EdtClienteNome.Text := '';
-  EdtClienteCPF.Text  := '';
+  EdtClienteNome.Text := EmptyStr;
+  EdtClienteCPF.Text  := EmptyStr;
 
   TmpItensPedido.Close;
   TmpItensPedido.CreateDataSet;
@@ -138,7 +138,6 @@ begin
       TmpItensPedido.Next;
     end;
 
-    DtmPrincipal.InicializarRESTClient;
     DtmPrincipal.Resp := DtmPrincipal.Cli
                             .Resource('/nfce/nfce')
                             .doPOST<TNFCe>(oPedido, False);

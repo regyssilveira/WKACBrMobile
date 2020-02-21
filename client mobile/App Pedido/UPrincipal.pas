@@ -46,6 +46,7 @@ type
     FrameAtualizar2: TFrameAtualizar;
     BtnVoltar: TSpeedButton;
     BtnConfirmar: TSpeedButton;
+    StyleBook1: TStyleBook;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);
@@ -131,7 +132,7 @@ end;
 
 procedure TForm1.rectPedidoClick(Sender: TObject);
 begin
-  FramePedido1.Inicilizar;
+  FramePedido1.Inicializar;
 
   ChangeTabAction1.Tab := TabVenda;
   ChangeTabAction1.Execute;
