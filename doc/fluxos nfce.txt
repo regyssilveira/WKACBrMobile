@@ -1,11 +1,20 @@
 fluxo normal da nota eletronica
 -------------------------------
-montar o xml
-validar a estrutura
-validar as regras de negocio
-assinar
-enviar
-tratar retorno
+1 montar o xml
+2 validar a estrutura
+3 validar as regras de negocio
+4 gravo o XML
+5 assinar (opcional, porque o componente faz sozinho)
+6 enviar
+7 tratar retorno
+8 grava o XML atualizado e autorizado
+
+problemas no retorno
+---------------------
+1 Carrega o XML do passo 4
+2 consulta
+3 trata retorno
+
 
 
 fluxo normal da nota eletronica emitida off-line

@@ -35,8 +35,6 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetProdutosPaginado(AAtual, AQuantidade: integer);
 
-
-
     [MVCPath('/clientes')]
     [MVCHTTPMethod([httpGET])]
     procedure GetClientes;
@@ -44,8 +42,6 @@ type
     [MVCPath('/clientes/($Aid)')]
     [MVCHTTPMethod([httpGET])]
     procedure GetCliente(Aid: Integer);
-
-
 
     [MVCPath('/nfce')]
     [MVCHTTPMethod([httpGET])]
@@ -72,7 +68,7 @@ uses
   UConfigClass,
   UNFCeClass,
   DNFCe,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client, DSAT;
 
 { TNFCeController }
 
@@ -196,69 +192,146 @@ end;
 procedure TNFCeController.GetNFCeXML(ANumero, ASerie: integer);
 var
   DmNFCe: TdtmNFCe;
+  DmSAT: TDtmSAT;
 begin
-  DmNFCe := TdtmNFCe.Create(nil);
-  try
-    Render(DmNFCe.GerarXML(ANumero, ASerie));
-    ContentType := TMVCMediaType.APPLICATION_XML;
-  finally
-    DmNFCe.Free;
+  case ConfigServer.Tipo of
+    tpNFCe:
+      begin
+        DmNFCe := TdtmNFCe.Create(nil);
+        try
+          ContentType := TMVCMediaType.APPLICATION_XML;
+          Render(DmNFCe.GerarXML(ANumero, ASerie));
+        finally
+          DmNFCe.Free;
+        end;
+      end;
+
+    tpSAT:
+      begin
+        DmSAT := TDtmSAT.Create(nil);
+        try
+          ContentType := TMVCMediaType.APPLICATION_XML;
+          Render(DmSAT.GerarXML(ANumero, ASerie));
+        finally
+          DmSAT.Free;
+        end;
+      end;
   end;
 end;
 
 procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer);
 var
   DmNFCe: TdtmNFCe;
+  DmSAT: TDtmSAT;
   PathPDF: string;
   StreamPDF: TMemoryStream;
 begin
-  DmNFCe := TdtmNFCe.Create(nil);
-  try
-    PathPDF := DmNFCe.GerarPDF(ANumero, ASerie);
-
-    StreamPDF := TMemoryStream.Create;
-    try
-      StreamPDF.LoadFromFile(PathPDF);
-
-      Render(StreamPDF);
-      ContentType := TMVCMediaType.APPLICATION_PDF;
-    except
-      on E: Exception do
+  case ConfigServer.Tipo of
+    tpNFCe:
       begin
-        if Assigned(StreamPDF) then
-          StreamPDF.Free;
+        DmNFCe := TdtmNFCe.Create(nil);
+        try
+          PathPDF := DmNFCe.GerarPDF(ANumero, ASerie);
+
+          StreamPDF := TMemoryStream.Create;
+          try
+            StreamPDF.LoadFromFile(PathPDF);
+
+            ContentType := TMVCMediaType.APPLICATION_PDF;
+            Render(StreamPDF);
+          except
+            on E: Exception do
+            begin
+              if Assigned(StreamPDF) then
+                StreamPDF.Free;
+            end;
+          end;
+        finally
+          DmNFCe.Free;
+        end;
       end;
-    end;
-  finally
-    DmNFCe.Free;
+
+    tpSAT:
+      begin
+        DmSAT := TDtmSAT.Create(nil);
+        try
+          PathPDF := DmSAT.GerarPDF(ANumero, ASerie);
+
+          StreamPDF := TMemoryStream.Create;
+          try
+            StreamPDF.LoadFromFile(PathPDF);
+
+            ContentType := TMVCMediaType.APPLICATION_PDF;
+            Render(StreamPDF);
+          except
+            on E: Exception do
+            begin
+              if Assigned(StreamPDF) then
+                StreamPDF.Free;
+            end;
+          end;
+        finally
+          DmSAT.Free;
+        end;
+      end;
   end;
 end;
 
 procedure TNFCeController.GetNFCeEscPOS(ANumero, ASerie: integer);
 var
   DmNFCe: TdtmNFCe;
+  DmSAT: TDtmSAT;
   PathArqEscPOS: string;
   StreamArqEscPOS: TMemoryStream;
 begin
-  DmNFCe := TdtmNFCe.Create(nil);
-  try
-    PathArqEscPOS := DmNFCe.GerarEscPOS(ANumero, ASerie);
-
-    StreamArqEscPOS := TMemoryStream.Create;
-    try
-      StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
-
-      Render(StreamArqEscPOS);
-      ContentType := TMVCMediaType.TEXT_PLAIN;
-    except
-      on E: Exception do
+  case ConfigServer.Tipo of
+    tpNFCe:
       begin
-        if Assigned(StreamArqEscPOS) then
-          StreamArqEscPOS.Free;
+        DmNFCe := TdtmNFCe.Create(nil);
+        try
+          PathArqEscPOS := DmNFCe.GerarEscPOS(ANumero, ASerie);
+
+          StreamArqEscPOS := TMemoryStream.Create;
+          try
+            StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
+
+            ContentType := TMVCMediaType.TEXT_PLAIN;
+            Render(StreamArqEscPOS);
+          except
+            on E: Exception do
+            begin
+              if Assigned(StreamArqEscPOS) then
+                StreamArqEscPOS.Free;
+            end;
+          end;
+        finally
+          DmNFCe.Free;
+        end;
       end;
-    end;
-  finally
-    DmNFCe.Free;
+
+    tpSAT:
+      begin
+        DmSAT := TDtmSAT.Create(nil);
+        try
+          PathArqEscPOS := DmSAT.GerarEscPOS(ANumero, ASerie);
+
+          StreamArqEscPOS := TMemoryStream.Create;
+          try
+            StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
+
+            ContentType := TMVCMediaType.TEXT_PLAIN;
+            Render(StreamArqEscPOS);
+          except
+            on E: Exception do
+            begin
+              if Assigned(StreamArqEscPOS) then
+                StreamArqEscPOS.Free;
+            end;
+          end;
+        finally
+          DmSAT.Free;
+        end;
+      end;
   end;
 end;
 
@@ -266,6 +339,7 @@ procedure TNFCeController.CreateNFCe;
 var
   oNFCe: TNFCe;
   DmNFCe: TdtmNFCe;
+  DmSAT: TDtmSAT;
   StrRetorno: string;
 begin
   try
@@ -274,14 +348,32 @@ begin
       if oNFCe.Itens.Count <= 0 then
         raise Exception.Create('Nenhum item foi informado!');
 
-      DmNFCe := TdtmNFCe.Create(nil);
-      try
-        DmNFCe.PreencherNFCe(oNFCe);
-        StrRetorno := DmNFCe.Enviar;
+      case ConfigServer.Tipo of
+        tpNFCe:
+          begin
+            DmNFCe := TdtmNFCe.Create(nil);
+            try
+              DmNFCe.PreencherNFCe(oNFCe);
+              StrRetorno := DmNFCe.Enviar;
 
-        Render(HTTP_STATUS.Created, StrRetorno);
-      finally
-        DmNFCe.Free;
+              Render(HTTP_STATUS.Created, StrRetorno);
+            finally
+              DmNFCe.Free;
+            end;
+          end;
+
+        tpSAT:
+          begin
+            DmSAT := TDtmSAT.Create(nil);
+            try
+              DmSAT.PreencherNFCe(oNFCe);
+              StrRetorno := DmSAT.Enviar;
+
+              Render(HTTP_STATUS.Created, StrRetorno);
+            finally
+              DmSAT.Free;
+            end;
+          end;
       end;
     finally
       oNFCe.Free;
@@ -301,25 +393,22 @@ var
   oNFCeItem: TNFCeItem;
 begin
   oNFCe := TNFCe.Create;
-  try
-    oNFCe.cpf  := '';
-    oNFCe.Nome := '';
 
-    for I := 1 to 5 do
-    begin
-      oNFCeItem := TNFCeItem.Create;
-      oNFCeItem.Id         := I;
-      oNFCeItem.Descricao  := 'Descricao teste ' + I.ToString;
-      oNFCeItem.Valor      := I * 10;
-      oNFCeItem.Quantidade := I;
+  oNFCe.cpf  := '';
+  oNFCe.Nome := '';
 
-      oNFCe.Itens.Add(oNFCeItem);
+  for I := 1 to 5 do
+  begin
+    oNFCeItem := TNFCeItem.Create;
+    oNFCeItem.Id         := I;
+    oNFCeItem.Descricao  := 'Descricao teste ' + I.ToString;
+    oNFCeItem.Valor      := I * 10;
+    oNFCeItem.Quantidade := I;
 
-      Render(oNFCe.AsJsonString);
-    end;
-  finally
-    oNFCe.Free;
+    oNFCe.Itens.Add(oNFCeItem);
   end;
+
+  Render(oNFCe);
 end;
 
 

@@ -56,6 +56,7 @@ begin
       Config[TMVCConfigKey.FallbackResource]         := 'index.html';
       Config[TMVCConfigKey.MaxRequestSize]           := IntToStr(TMVCConstants.DEFAULT_MAX_REQUEST_SIZE);
       Config['redis_connection_string']              := '127.0.0.1:6379';
+      Config['redis_connection_key']                 := '';
     end);
 
   FMVC.AddController(TMyController);

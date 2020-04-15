@@ -3,8 +3,10 @@ unit DNFCe;
 interface
 
 uses
+  UNFCeClass,
+
   System.SysUtils, System.Classes, ACBrNFeDANFEClass, ACBrDANFCeFortesFr,
-  ACBrBase, ACBrDFe, ACBrNFe, UNFCeClass, ACBrDFeReport, ACBrDFeDANFeReport,
+  ACBrBase, ACBrDFe, ACBrNFe, ACBrDFeReport, ACBrDFeDANFeReport,
   ACBrPosPrinter, ACBrNFeDANFeESCPOS;
 
 type
@@ -113,7 +115,7 @@ begin
   // configurações de timezone
   ACBrNFe1.Configuracoes.WebServices.TimeZoneConf.ModoDeteccao := TTimeZoneModoDeteccao.tzSistema;
 
-  // propriedades para melhorar a aparência dos retornos de validaçã dos schemas
+  // propriedades para melhorar a aparência dos retornos de validação dos schemas
   // %TAGNIVEL%  : Representa o Nivel da TAG; ex: <transp><vol><lacres>
   // %TAG%       : Representa a TAG; ex: <nLacre>
   // %ID%        : Representa a ID da TAG; ex X34
@@ -123,10 +125,10 @@ begin
   ACBrNFe1.Configuracoes.Geral.FormatoAlerta    := '[ %TAGNIVEL% %TAG% ] %DESCRICAO% - %MSG%';
 
   // certificado
-  ACBrNFe1.Configuracoes.Certificados.Senha := '1234566';
-  ACBrNFe1.Configuracoes.Certificados.ArquivoPFX  := PathApp + 'certificado.pfx';
+  ACBrNFe1.Configuracoes.Certificados.Senha         := '1234566';
+  ACBrNFe1.Configuracoes.Certificados.ArquivoPFX    := PathApp + 'certificado.pfx';
   //ACBrNFe1.Configuracoes.Certificados.NumeroSerie := '';
-  //ACBrNFe1.Configuracoes.Certificados.DadosPFX := '';
+  //ACBrNFe1.Configuracoes.Certificados.DadosPFX    := '';
 
   // configurações do webservice
   ACBrNFe1.Configuracoes.WebServices.UF         := 'AM';
@@ -428,6 +430,14 @@ begin
 
     PathTempImpressao     := ExtractFilePath(ParamStr(0)) + 'arquivoescpos.txt';
     ACBrPosPrinter1.Porta := PathTempImpressao;
+
+    // Porta pode ser:
+    // \\192.168.1.1 - endereço ip da impressora
+    // \\nomecomputador\nomecompartilhamento - caminho do compartilhamento
+    // COMx - Porta COM
+    // LPTx - Porta LPT
+    // c:\diretorio\nomearquio.txt - gerando para arquivo
+    // RAW:nome da impressora - nome da impressora no windows   "RAW:MP-45200 TH"
 
     ACBrNFe1.NotasFiscais.Clear;
     ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);

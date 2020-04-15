@@ -39,6 +39,7 @@ begin
   FDConexao := TFDConnection.Create(nil);
   try
     FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+
     CountDelete := FDConexao.ExecSQL(
       'delete from produtos where ID=?',
       [ACodProduto],
@@ -62,6 +63,7 @@ begin
   FDConexao := TFDConnection.Create(nil);
   try
     FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+
     FDConexao.ExecSQL(
       'select * from produtos where ID=' + ACodProduto.ToString,
       TmpDataset

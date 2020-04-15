@@ -18,7 +18,8 @@ uses
   DNFCe in 'DNFCe.pas' {DtmNFCe: TDataModule},
   UBaseController in 'UBaseController.pas',
   AuthHandlerU in 'AuthHandlerU.pas',
-  UPoolConnection in 'UPoolConnection.pas';
+  UPoolConnection in 'UPoolConnection.pas',
+  DSAT in 'DSAT.pas' {DtmSAT: TDataModule};
 
 {$R *.res}
 

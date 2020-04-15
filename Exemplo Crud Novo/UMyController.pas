@@ -53,8 +53,8 @@ uses
 
 procedure TMyController.GetMyRootPage;
 begin
-  Render('<h1>API Demo server</h1><p>Bem vindo a minha primeira API RESTFULL.</p>');
   ContentType := TMVCMediaType.TEXT_HTML;
+  Render('<h1>API Demo server</h1><p>Bem vindo a minha primeira API RESTFULL.</p>');
 end;
 
 procedure TMyController.OnAfterAction(Context: TWebContext; const AActionName: string);
