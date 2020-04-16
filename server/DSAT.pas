@@ -15,6 +15,8 @@ type
     ACBrSATExtratoESCPOS1: TACBrSATExtratoESCPOS;
     ACBrSATExtratoFortes1: TACBrSATExtratoFortes;
     ACBrPosPrinter1: TACBrPosPrinter;
+    procedure ACBrSAT1GetcodigoDeAtivacao(var Chave: AnsiString);
+    procedure ACBrSAT1GetsignAC(var Chave: AnsiString);
   private
     procedure ConfigurarSAT;
     function PathNotaFiscalExemplo: string;
@@ -47,6 +49,16 @@ begin
   Result := ExtractFilePath(ParamStr(0)) + 'cfe.xml';
 end;
 
+procedure TDtmSAT.ACBrSAT1GetcodigoDeAtivacao(var Chave: AnsiString);
+begin
+  Chave := '00000000';
+end;
+
+procedure TDtmSAT.ACBrSAT1GetsignAC(var Chave: AnsiString);
+begin
+  Chave := 'SGR-SAT SISTEMA DE GESTAO E RETAGUARDA DO SAT';
+end;
+
 procedure TDtmSAT.ConfigurarSAT;
 var
   PathApp, PathTmp, PathPDF, PathArquivos: string;
@@ -62,19 +74,19 @@ begin
   ForceDirectories(PathPDF);
 
   ACBrSAT1.DesInicializar;
-  ACBrSAT1.Modelo                        := TACBrSATModelo.satDinamico_stdcall;
-  ACBrSAT1.NomeDLL                       := 'c:\diretorio\sat.dll';
+  ACBrSAT1.Modelo                        := TACBrSATModelo.satDinamico_cdecl;
+  ACBrSAT1.NomeDLL                       := 'GERSAT.dll';
   ACBrSAT1.Config.ide_numeroCaixa        := 1;
-  ACBrSAT1.Config.ide_CNPJ               := '11222333444455';
-  ACBrSAT1.Config.emit_CNPJ              := '11222333444455';
-  ACBrSAT1.Config.emit_IE                := '11222333444455';
-  ACBrSAT1.Config.emit_IM                := '11222333444455';
+  ACBrSAT1.Config.ide_CNPJ               := '16716114000172';  // cnpj software house
+  ACBrSAT1.Config.emit_CNPJ              := '03654119000176';
+  ACBrSAT1.Config.emit_IE                := '000052619494';
+  ACBrSAT1.Config.emit_IM                := '';
   ACBrSAT1.Config.emit_cRegTribISSQN     := RTISSMicroempresaMunicipal;
   ACBrSAT1.Config.emit_indRatISSQN       := irSim;
-  //ACBrSAT1.Config.PaginaDeCodigo         := ;
-  //ACBrSAT1.Config.EhUTF8                 := ;
-  ACBrSAT1.Config.infCFe_versaoDadosEnt  := 0.07;
   ACBrSAT1.Config.emit_cRegTrib          := RTSimplesNacional;
+  ACBrSAT1.Config.PaginaDeCodigo         := 0;
+  ACBrSAT1.Config.EhUTF8                 := True;
+  ACBrSAT1.Config.infCFe_versaoDadosEnt  := 0.08;
 
   ACBrSAT1.ConfigArquivos.SalvarCFe      := True;
   ACBrSAT1.ConfigArquivos.SalvarCFeCanc  := True;
@@ -100,6 +112,9 @@ begin
   ACBrSAT1.Extrato.Logo                  := '';
   ACBrSAT1.Extrato.Site                  := 'https://regys.com.br';
   ACBrSAT1.Extrato.Email                 := 'regys.silveira@gmail.com';
+
+  // configurações para gerar pdf
+  ACBrSATExtratoFortes1.PathPDF := PathPDF;
 
   // configurar margens do danfe
 //    ACBrSAT1.Extrato.MargemSuperior := ;
@@ -209,6 +224,8 @@ end;
 
 function TDtmSAT.Enviar: string;
 begin
+  ConfigurarSAT;
+
   // gerar o XML do CF-e
   try
     ACBrSAT1.EnviarDadosVenda;
@@ -226,7 +243,13 @@ begin
   if ACBrSAT1.Resposta.codigoDeRetorno = 6000 then
   begin
     // gravar no banco o xml e status da venda
+  Result :=
+    '{ ' +
+    '  "numero:": ' + ACBrSAT1.CFe.ide.nCFe.ToString   + ',' +
+    '  "numerocaixa:": '  + ACBrSAT1.CFe.ide.numeroCaixa.ToString +
+    '}';
 
+    ACBrSAT1.CFe.SaveToFile(PathNotaFiscalExemplo);
   end
   else
     raise Exception.CreateFmt('%d - %s', [ACBrSAT1.Resposta.codigoDeErro, ACBrSAT1.Resposta.mensagemRetorno]);
@@ -243,7 +266,8 @@ begin
 
     ACBrSAT1.CFe.Clear;
     ACBrSAT1.CFe.LoadFromFile(PathNotaFiscalExemplo);
-    ACBrSAT1.Extrato.Filtro := TACBrSATExtratoFiltro.fiPDF;
+    ACBrSAT1.Extrato.PathPDF := ExtractFilePath(ParamStr(0)) + 'PDF';
+    ACBrSAT1.Extrato.Filtro  := TACBrSATExtratoFiltro.fiPDF;
     ACBrSAT1.ImprimirExtrato;
 
     Result := ACBrSAT1.Extrato.ArquivoPDF;

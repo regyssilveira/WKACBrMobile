@@ -3,15 +3,24 @@ object DtmSAT: TDtmSAT
   Height = 368
   Width = 599
   object ACBrSAT1: TACBrSAT
+    Extrato = ACBrSATExtratoESCPOS1
     Config.infCFe_versaoDadosEnt = 0.070000000000000010
-    Config.ide_numeroCaixa = 0
+    Config.ide_numeroCaixa = 1
     Config.ide_tpAmb = taHomologacao
     Config.emit_cRegTrib = RTSimplesNacional
     Config.emit_cRegTribISSQN = RTISSMicroempresaMunicipal
     Config.emit_indRatISSQN = irSim
-    Config.EhUTF8 = False
-    Config.PaginaDeCodigo = 0
-    Config.XmlSignLib = xsNone
+    Config.EhUTF8 = True
+    Config.PaginaDeCodigo = 65001
+    Config.XmlSignLib = xsLibXml2
+    ConfigArquivos.SalvarCFe = True
+    ConfigArquivos.SalvarCFeCanc = True
+    ConfigArquivos.SalvarEnvio = True
+    ConfigArquivos.SepararPorCNPJ = True
+    ConfigArquivos.SepararPorModelo = True
+    ConfigArquivos.SepararPorAno = True
+    ConfigArquivos.SepararPorMes = True
+    ConfigArquivos.SepararPorDia = True
     ConfigArquivos.PrefixoArqCFe = 'AD'
     ConfigArquivos.PrefixoArqCFeCanc = 'ADC'
     Rede.tipoInter = infETHE
@@ -19,6 +28,8 @@ object DtmSAT: TDtmSAT
     Rede.tipoLan = lanDHCP
     Rede.proxy = 0
     Rede.proxy_porta = 0
+    OnGetcodigoDeAtivacao = ACBrSAT1GetcodigoDeAtivacao
+    OnGetsignAC = ACBrSAT1GetsignAC
     Left = 120
     Top = 80
   end
@@ -27,7 +38,7 @@ object DtmSAT: TDtmSAT
     MargemInferior = 8.000000000000000000
     MargemSuperior = 8.000000000000000000
     MargemEsquerda = 6.000000000000000000
-    MargemDireita = 5.100000000000000000
+    MargemDireita = 5.099999999999999000
     ExpandeLogoMarcaConfig.Altura = 0
     ExpandeLogoMarcaConfig.Esquerda = 0
     ExpandeLogoMarcaConfig.Topo = 0
@@ -39,6 +50,7 @@ object DtmSAT: TDtmSAT
     CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
+    ACBrSAT = ACBrSAT1
     MsgAppQRCode = 
       'Consulte o QR Code pelo aplicativo  "De olho na nota", dispon'#237've' +
       'l na AppStore (Apple) e PlayStore (Android)'
