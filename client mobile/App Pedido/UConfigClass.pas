@@ -13,6 +13,8 @@ type
     procedure SetIpServidor(const Value: String);
     procedure SetPorta(const Value: Integer);
   public
+    procedure Salvar;
+
     property IpServidor: String read GetIpServidor write SetIpServidor;
     property Porta: Integer     read GetPorta      write SetPorta;
   end;
@@ -39,16 +41,19 @@ begin
   Result := Self.ReadInteger('CONFIG', 'Porta', 8080);
 end;
 
+procedure TConfigFile.Salvar;
+begin
+  Self.UpdateFile;
+end;
+
 procedure TConfigFile.SetIpServidor(const Value: String);
 begin
   Self.WriteString('CONFIG', 'IpServidor', Value);
-  Self.UpdateFile;
 end;
 
 procedure TConfigFile.SetPorta(const Value: Integer);
 begin
   Self.WriteInteger('CONFIG', 'Porta', Value);
-  Self.UpdateFile;
 end;
 
 initialization

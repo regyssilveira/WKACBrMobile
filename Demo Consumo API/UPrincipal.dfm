@@ -47,7 +47,7 @@ object FrmPrincipal: TFrmPrincipal
         Top = 3
         Width = 769
         Height = 93
-        ActivePage = TabSheet5
+        ActivePage = TabSheet6
         Align = alTop
         TabOrder = 0
         object TabSheet5: TTabSheet

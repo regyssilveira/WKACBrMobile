@@ -93,6 +93,7 @@ begin
     FRestClient.Free;
 
   FRestClient := TRESTClient.Create('localhost', 8080);
+  //RestClient.URL := 'localhost:8080';
   FRestClient.Username := 'admin';
   FRestClient.Password := 'adminpass';
 
@@ -229,8 +230,8 @@ begin
     end;
 
     FResponse := RESTClient
-                    .Resource('/nfce/nfce')
-                    .doPOST<TNFCe>(OPedido, False);
+                      .Resource('/nfce/nfce')
+                      .doPOST<TNFCe>(OPedido, False);
 
     if FResponse.HasError then
       raise Exception.Create(FResponse.ResponseText)

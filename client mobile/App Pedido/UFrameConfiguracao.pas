@@ -44,6 +44,8 @@ begin
       begin
         ConfigFile.IpServidor := EdtIP.Text;
         ConfigFile.Porta      := StrToInt(EdtPorta.Text);
+
+        ConfigFile.Salvar;
       end;
     end
   );

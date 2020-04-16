@@ -88,7 +88,7 @@ begin
     raise Exception.Create('Nenhum produto informado!');
   end;
 
-  if StrToInt(EdtQuantidade.Text) <= 0 then
+  if EdtQuantidade.Text.ToInteger <= 0 then
   begin
     EdtQuantidade.SetFocus;
     raise Exception.Create('Informe um valor maior que zero para quantidade!');
