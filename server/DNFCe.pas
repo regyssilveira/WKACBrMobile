@@ -169,9 +169,9 @@ begin
 
   Self.ConfigurarNFe;
 
-//  // assinar omitido para facilitar o uso no curso
-//  ACBrNFe1.NotasFiscais.Assinar;
-//
+  // assinar omitido para facilitar o uso no curso
+  ACBrNFe1.NotasFiscais.Assinar;
+
 //  // validar
 //  try
 //    ACBrNFe1.NotasFiscais.Validar;
@@ -192,7 +192,6 @@ begin
 //  // validar regras de negocios
 //  if not ACBrNFe1.NotasFiscais.ValidarRegrasdeNegocios(StrErros) then
 //    raise EFilerError.Create('ERRO REGRAS DE NEGOCIO: ' + StrErros);
-
 
   PathTempImpressao := ExtractFilePath(ParamStr(0)) + '\impressao\';
   ForceDirectories(PathTempImpressao);

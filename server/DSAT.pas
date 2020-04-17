@@ -243,11 +243,11 @@ begin
   if ACBrSAT1.Resposta.codigoDeRetorno = 6000 then
   begin
     // gravar no banco o xml e status da venda
-  Result :=
-    '{ ' +
-    '  "numero:": ' + ACBrSAT1.CFe.ide.nCFe.ToString   + ',' +
-    '  "numerocaixa:": '  + ACBrSAT1.CFe.ide.numeroCaixa.ToString +
-    '}';
+    Result :=
+      '{ ' +
+      '  "numero:": ' + ACBrSAT1.CFe.ide.nCFe.ToString   + ',' +
+      '  "numerocaixa:": '  + ACBrSAT1.CFe.ide.numeroCaixa.ToString +
+      '}';
 
     ACBrSAT1.CFe.SaveToFile(PathNotaFiscalExemplo);
   end

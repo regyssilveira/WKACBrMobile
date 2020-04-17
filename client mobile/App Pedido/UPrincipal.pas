@@ -4,6 +4,15 @@ interface
 
 uses
   System.IOUtils,
+  System.Permissions,
+
+  {$IFDEF ANDROID}
+    Androidapi.JNI.GraphicsContentViewText,
+    Androidapi.JNI.JavaTypes,
+    Androidapi.JNI.Net,
+    Androidapi.JNI.Os,
+    Androidapi.Helpers,
+  {$ENDIF}
 
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
@@ -43,10 +52,10 @@ type
     ChangeTabAction2: TChangeTabAction;
     MultiView1: TMultiView;
     Label3: TLabel;
-    FrameAtualizar2: TFrameAtualizar;
     BtnVoltar: TSpeedButton;
     BtnConfirmar: TSpeedButton;
     StyleBook1: TStyleBook;
+    BtnRequisitarPermissoes: TButton;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);
@@ -56,6 +65,9 @@ type
     procedure rectPedidoClick(Sender: TObject);
     procedure rectAtualizarClick(Sender: TObject);
     procedure RectConfigurarClick(Sender: TObject);
+    procedure BtnRequisitarPermissoesClick(Sender: TObject);
+    procedure OnRequestPermissions(Sender: TObject; const APermissions: TArray<string>;
+      const AGrantResults: TArray<TPermissionStatus>);
   private
     { Private declarations }
   public
@@ -69,7 +81,8 @@ implementation
 
 {$R *.fmx}
 
-uses DPrincipal;
+uses
+  DPrincipal;
 
 procedure TForm1.TbcPrincipalChange(Sender: TObject);
 begin
@@ -91,6 +104,30 @@ begin
         FrameConfiguracao1.SalvarConfiguracoes;
       end;
   end;
+end;
+
+procedure TForm1.OnRequestPermissions(Sender: TObject; const APermissions: TArray<string>;
+  const AGrantResults: TArray<TPermissionStatus>);
+begin
+  if (Length(AGrantResults) = 2) and
+     (AGrantResults[0] = TPermissionStatus.Granted) and
+     (AGrantResults[1] = TPermissionStatus.Granted) then
+  begin
+    ShowMessage('Você um usuário legal, obrigado por liberar o acesso a memória!')
+  end
+  else
+    ShowMessage('Sem acesso a memória você tera problema ao finalizar o pedido!');
+end;
+
+procedure TForm1.BtnRequisitarPermissoesClick(Sender: TObject);
+begin
+  PermissionsService.RequestPermissions(
+    [
+      JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE),
+      JStringToString(TJManifest_permission.JavaClass.WRITE_EXTERNAL_STORAGE)
+    ],
+    OnRequestPermissions
+  );
 end;
 
 procedure TForm1.BtnVoltarClick(Sender: TObject);

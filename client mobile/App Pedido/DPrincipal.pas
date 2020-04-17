@@ -5,6 +5,7 @@ interface
 uses
   MVCFramework.RESTClient,
   System.Threading,
+  System.Permissions,
 
   System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
@@ -82,7 +83,8 @@ uses
   System.IOUtils,
   MVCFramework.DataSet.Utils,
   UConfigClass,
-  FMX.DialogService.Async;
+  FMX.DialogService,
+  FMX.Dialogs;
 
 function TDtmPrincipal.GetCli: TRESTClient;
 begin
@@ -106,12 +108,14 @@ begin
   //consumo assincrono (FORMA PREFERENCIAL)
   FutResponse := TTask.Future<string>(
     function: string
+    var
+      Response: IRESTResponse;
     begin
-      FResp := Cli.doGET('/nfce/clientes', []);
-      if FResp.HasError then
+      Response := Cli.doGET('/nfce/clientes', []);
+      if Response.HasError then
         raise Exception.Create(FResp.ResponseText);
 
-      Result := FResp.BodyAsString;
+      Result := Response.BodyAsString;
     end);
 
   DataSet.DisableControls;
@@ -196,25 +200,34 @@ var
   PathFilePDF: string;
   {$IFDEF ANDROID}
   Intent: JIntent;
-  URIArquivo: JParcelable;
   {$ENDIF}
+  FutStream: IFuture<TStream>;
 begin
-  FResp := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
-  if Resp.HasError then
-    raise Exception.Create(FResp.ResponseText);
+  FutStream := TTask.Future<TStream>(
+    function: TStream
+    var
+      Response: IRESTResponse;
+    begin
+      Response := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
+      if Response.HasError then
+        raise Exception.Create(FResp.ResponseText);
+
+      Result := Response.Body;
+    end);
 
   //caminho do arquivo baixado
-  PathFilePDF := TPath.Combine(
-    TPath.GetSharedDocumentsPath,
-    Format('nf%9.9d%3.3d.pdf', [ANumero, ASerie])
-  );
-  if System.SysUtils.FileExists(PathFilePDF) then
-    System.SysUtils.DeleteFile(PathFilePDF);
+//  PathFilePDF := TPath.Combine(
+//    TPath.GetSharedDocumentsPath,
+//    Format('nf%9.9d%3.3d.pdf', [ANumero, ASerie])
+//  );
+  PathFilePDF := TPath.Combine(TPath.GetSharedDocumentsPath, 'notafiscal.pdf');
+  if TFile.Exists(PathFilePDF) then
+    TFile.Delete(PathFilePDF);
 
   // salvar arquivo pdf local
   PDFStream := TMemoryStream.Create;
   try
-    PDFStream.LoadFromStream(FResp.Body);
+    PDFStream.LoadFromStream(FutStream.Value);
     PDFStream.Position := 0;
     PDFStream.SaveToFile(PathFilePDF);
 
@@ -222,23 +235,15 @@ begin
     if FileExists(PathFilePDF) then
     begin
       {$IFDEF ANDROID}
-      URIArquivo := JParcelable(
-        TJNet_Uri.JavaClass.fromFile(
-          TJFile.JavaClass.init(StringToJString(PathFilePDF))
-        )
-      );
-
       // visualizar pdf
       Intent := TJIntent.Create;
-      Intent.setType(StringToJString('application/pdf'));
       Intent.setAction(TJIntent.JavaClass.ACTION_VIEW);
-      Intent.putExtra(TJIntent.JavaClass.EXTRA_STREAM, URIArquivo);
+      Intent.setDataAndType(StrToJURI('file://' + PathFilePDF), StringToJString('application/pdf'));
 
       // compartilhar
 //      Intent := TJIntent.Create;
-//      Intent.setType(StringToJString('application/pdf'));
 //      Intent.setAction(TJIntent.JavaClass.ACTION_MEDIA_SHARED);
-//      Intent.putExtra(TJIntent.JavaClass.EXTRA_STREAM, URIArquivo);
+//      Intent.setDataAndType(StrToJURI('file://' + PathFilePDF), StringToJString('application/pdf'));
 
       try
         TAndroidHelper.Activity.startActivity(Intent);
