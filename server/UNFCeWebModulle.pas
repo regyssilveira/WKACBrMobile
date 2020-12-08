@@ -57,12 +57,6 @@ begin
 
   // To enable compression (deflate, gzip) just add this middleware as the last one
   FMVC.AddMiddleware(TMVCCompressionMiddleware.Create);
-
-//  FMVC.AddMiddleware(
-//    TMVCCustomAuthenticationMiddleware.Create(
-//      TCustomAuth.Create, '/system/usuarios/logados'
-//    )
-//  );
 end;
 
 procedure TNFCEWebModule.WebModuleDestroy(Sender: TObject);

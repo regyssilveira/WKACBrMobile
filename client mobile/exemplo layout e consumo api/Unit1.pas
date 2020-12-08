@@ -71,7 +71,7 @@ uses
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  FCli := TRESTClient.Create('http://192.168.88.12', 8080);
+  FCli := TRESTClient.Create('http://localhost', 8080);
 
   tbClientes.CreateDataSet;
   tbProdutos.CreateDataSet;

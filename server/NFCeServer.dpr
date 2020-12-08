@@ -19,7 +19,8 @@ uses
   UBaseController in 'UBaseController.pas',
   AuthHandlerU in 'AuthHandlerU.pas',
   UPoolConnection in 'UPoolConnection.pas',
-  DSAT in 'DSAT.pas' {DtmSAT: TDataModule};
+  DSAT in 'DSAT.pas' {DtmSAT: TDataModule},
+  dfe.service in 'dfe.service.pas';
 
 {$R *.res}
 

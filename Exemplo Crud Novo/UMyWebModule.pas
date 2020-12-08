@@ -59,7 +59,6 @@ begin
 
   FMVC.AddController(TMyController);
 
-  // To enable compression (deflate, gzip) just add this middleware as the last one
   FMVC.AddMiddleware(TMVCCompressionMiddleware.Create);
 
   FMVC.AddMiddleware(

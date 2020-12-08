@@ -71,6 +71,7 @@ type
     FAtual: Integer;
 
     function GetRestClient: TRestClient;
+    procedure PopularDatasetComJSON(ADataset: TFDmemtable; AJSON: Widestring);
   public
     property RESTClient: TRestClient read GetRestClient;
   end;
@@ -86,6 +87,18 @@ uses
 {$R *.dfm}
 
 { TFrmPrincipal }
+
+procedure TFrmPrincipal.PopularDatasetComJSON(ADataset: TFDmemtable; AJSON: Widestring);
+begin
+  ADataset.Close;
+  ADataset.CreateDataSet;
+  ADataset.DisableControls;
+  try
+    ADataset.LoadFromJSONArrayString(AJSON);
+  finally
+    ADataset.EnableControls;
+  end;
+end;
 
 function TFrmPrincipal.GetRestClient: TRestClient;
 begin
@@ -111,15 +124,7 @@ begin
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
-  tmpClientes.Close;
-  tmpClientes.CreateDataSet;
-
-  tmpClientes.DisableControls;
-  try
-    tmpClientes.LoadFromJSONArrayString(FResponse.BodyAsString);
-  finally
-    tmpClientes.EnableControls;
-  end;
+  PopularDatasetComJSON(tmpClientes, FResponse.BodyAsString);
 end;
 
 procedure TFrmPrincipal.BtnBuscaPagAnteriorClick(Sender: TObject);
@@ -135,14 +140,7 @@ begin
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
-  tmpProdutos.Close;
-  tmpProdutos.CreateDataSet;
-  tmpProdutos.DisableControls;
-  try
-    tmpProdutos.LoadFromJSONArrayString(FResponse.BodyAsString);
-  finally
-    tmpProdutos.EnableControls;
-  end;
+  PopularDatasetComJSON(tmpProdutos, FResponse.BodyAsString);
 end;
 
 procedure TFrmPrincipal.BtnBuscaPagProximoClick(Sender: TObject);
@@ -156,14 +154,7 @@ begin
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
-  tmpProdutos.Close;
-  tmpProdutos.CreateDataSet;
-  tmpProdutos.DisableControls;
-  try
-    tmpProdutos.LoadFromJSONArrayString(FResponse.BodyAsString);
-  finally
-    tmpProdutos.EnableControls;
-  end;
+  PopularDatasetComJSON(tmpProdutos, FResponse.BodyAsString);
 end;
 
 procedure TFrmPrincipal.BtnBuscaProdutoClick(Sender: TObject);
@@ -176,14 +167,7 @@ begin
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
-  tmpProdutos.Close;
-  tmpProdutos.CreateDataSet;
-  tmpProdutos.DisableControls;
-  try
-    tmpProdutos.LoadFromJSONArrayString(FResponse.BodyAsString);
-  finally
-    tmpProdutos.EnableControls;
-  end;
+  PopularDatasetComJSON(tmpProdutos, FResponse.BodyAsString);
 end;
 
 procedure TFrmPrincipal.BtnBuscaProdutoLikeClick(Sender: TObject);
@@ -197,14 +181,7 @@ begin
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
-  tmpProdutos.Close;
-  tmpProdutos.CreateDataSet;
-  tmpProdutos.DisableControls;
-  try
-    tmpProdutos.LoadFromJSONArrayString(FResponse.BodyAsString);
-  finally
-    tmpProdutos.EnableControls;
-  end;
+  PopularDatasetComJSON(tmpProdutos, FResponse.BodyAsString);
 end;
 
 procedure TFrmPrincipal.BtnEnviarPedidoObjetoClick(Sender: TObject);
@@ -230,8 +207,8 @@ begin
     end;
 
     FResponse := RESTClient
-                      .Resource('/nfce/nfce')
-                      .doPOST<TNFCe>(OPedido, False);
+                  .Resource('/nfce/nfce')
+                  .doPOST<TNFCe>(OPedido, False);
 
     if FResponse.HasError then
       raise Exception.Create(FResponse.ResponseText)

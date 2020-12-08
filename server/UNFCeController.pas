@@ -56,6 +56,7 @@ type
     procedure GetNFCe(ANumero: integer; ASerie: integer; ATipo: string);
   end;
 
+
 implementation
 
 uses
@@ -68,17 +69,17 @@ uses
   UConfigClass,
   UNFCeClass,
   DNFCe,
-  FireDAC.Comp.Client, DSAT;
+  FireDAC.Comp.Client, DSAT, dfe.service;
 
 { TNFCeController }
 
 procedure TNFCeController.Index;
 begin
+  ContentType := TMVCMediaType.TEXT_HTML;
   Render(
     '<h1>curso API NFC-e</h1>' +
     '<p>Curso de NFC-e com mobile utilizando DMVC framework e ACBr</p>'
   );
-  ContentType := TMVCMediaType.TEXT_HTML;
 end;
 
 procedure TNFCeController.OnAfterAction(Context: TWebContext; const AActionName: string);
@@ -97,11 +98,7 @@ procedure TNFCeController.GetClientes;
 var
   TmpDataset: TDataSet;
 begin
-  FDConexao.ExecSQL(
-    'select * from clientes',
-    TmpDataset
-  );
-
+  TmpDataset := Service.GetClientes;
   if TmpDataset.IsEmpty then
     Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum cliente cadastrado na base de dados')
   else
@@ -112,11 +109,7 @@ procedure TNFCeController.GetCliente(Aid: Integer);
 var
   TmpDataset: TDataSet;
 begin
-  FDConexao.ExecSQL(
-    'select * from clientes where id=' + AId.ToString,
-    TmpDataset
-  );
-
+  TmpDataset := Service.GetClienteById(Aid);
   if TmpDataset.IsEmpty then
     Render(HTTP_STATUS.InternalServerError, Format('Não existe cliente cadastrado com o código "%d" na base de dados', [AId]))
   else
@@ -126,17 +119,13 @@ end;
 procedure TNFCeController.GetProdutos;
 var
   TmpDataset: TDataSet;
-  StrWhere: string;
+const
+  QRY_STRLIKE = 'like';
 begin
-  if Context.Request.QueryStringParamExists('like') then
-    StrWhere := 'where descricao like ''%' + Context.Request.QueryStringParam('like') + '%'''
+  if Context.Request.QueryStringParamExists(QRY_STRLIKE) then
+    TmpDataset := Service.GetProdutoWhere(Context.Request.QueryStringParam(QRY_STRLIKE))
   else
-    StrWhere := '';
-
-  FDConexao.ExecSQL(
-    'select * from produtos ' + StrWhere,
-    TmpDataset
-  );
+    TmpDataset := Service.GetProdutos;
 
   if TmpDataset.IsEmpty then
     Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum produto cadastrado na base de dados')
@@ -148,12 +137,7 @@ procedure TNFCeController.GetProdutosPaginado(AAtual, AQuantidade: integer);
 var
   TmpDataset: TFDQuery;
 begin
-  TmpDataset := TFDQuery.Create(nil);
-  TmpDataset.Connection := FDConexao;
-  TmpDataset.FetchOptions.RecsSkip := AAtual;
-  TmpDataset.FetchOptions.RecsMax  := AQuantidade;
-  TmpDataset.Open('select * from produtos');
-
+  TmpDataset := Service.GetProdutosPaginado(AAtual, AQuantidade);
   if TmpDataset.IsEmpty then
     Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum produto cadastrado na base de dados')
   else
@@ -164,11 +148,7 @@ procedure TNFCeController.GetProduto(AId: Integer);
 var
   TmpDataset: TDataSet;
 begin
-  FDConexao.ExecSQL(
-    'select * from produtos where id=' + AId.ToString,
-    TmpDataset
-  );
-
+  TmpDataset := Service.GetProdutoById(AId);
   if TmpDataset.IsEmpty then
     Render(HTTP_STATUS.InternalServerError, Format('Não existe produto cadastrado com o código "%d" na base de dados', [AId]))
   else

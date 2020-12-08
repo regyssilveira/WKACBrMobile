@@ -1,7 +1,7 @@
 object DtmNFCe: TDtmNFCe
   OldCreateOrder = False
   Height = 289
-  Width = 449
+  Width = 419
   object ACBrNFe1: TACBrNFe
     Configuracoes.Geral.SSLLib = libWinCrypt
     Configuracoes.Geral.SSLCryptLib = cryWinCrypt

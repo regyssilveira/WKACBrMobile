@@ -1,7 +1,7 @@
 object DtmSAT: TDtmSAT
   OldCreateOrder = False
-  Height = 368
-  Width = 599
+  Height = 356
+  Width = 417
   object ACBrSAT1: TACBrSAT
     Extrato = ACBrSATExtratoESCPOS1
     Config.infCFe_versaoDadosEnt = 0.070000000000000010

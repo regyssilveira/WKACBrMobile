@@ -3,6 +3,6 @@ object NFCEWebModule: TNFCEWebModule
   OnCreate = WebModuleCreate
   OnDestroy = WebModuleDestroy
   Actions = <>
-  Height = 325
-  Width = 624
+  Height = 383
+  Width = 488
 end

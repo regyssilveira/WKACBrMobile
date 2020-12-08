@@ -3,23 +3,21 @@ unit UBaseController;
 interface
 
 uses
+  dfe.service,
+
   UNFCeWebModulle,
   MVCFramework,
-  MVCFramework.Commons,
-
-  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error,
-  FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
-  FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB,
-  FireDAC.Comp.Client, FireDAC.Phys.FBDef, FireDAC.Phys.IBBase, FireDAC.Phys.FB;
+  MVCFramework.Commons;
 
 type
   TBaseController = class(TMVCController)
+  private
+    FService: TDFService;
   protected
-    FWebModule: TNFCEWebModule;
-    FDConexao: TFDConnection;
-
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
+
+    property Service: TDFService read FService write FService;
   end;
 
 implementation
@@ -32,24 +30,14 @@ uses
 procedure TBaseController.OnBeforeAction(Context: TWebContext;
   const AActionName: string; var Handled: Boolean);
 begin
-  // como seria para guardar uma variavel que acessa o webmodule
-  if not Assigned(FWebModule) then
-    FWebModule := GetCurrentWebModule as TNFCEWebModule;
-
-  // criando uma conexão somente para o controler e usando o pool connection
-  if not Assigned(FDConexao) then
-    FDConexao := TFDConnection.Create(nil);
-
-  FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-
+  FService := TDFService.Create;
   inherited;
 end;
 
 procedure TBaseController.OnAfterAction(Context: TWebContext;
   const AActionName: string);
 begin
-  FDConexao.Free;
-
+  FService.DisposeOf;
   inherited;
 end;
 

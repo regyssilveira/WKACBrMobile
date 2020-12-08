@@ -129,6 +129,7 @@ begin
   ACBrNFe1.Configuracoes.Certificados.ArquivoPFX    := PathApp + 'certificado.pfx';
   //ACBrNFe1.Configuracoes.Certificados.NumeroSerie := '';
   //ACBrNFe1.Configuracoes.Certificados.DadosPFX    := '';
+  //ACBrNFe1.Configuracoes.Certificados.URLPFX      := '';
 
   // configurações do webservice
   ACBrNFe1.Configuracoes.WebServices.UF         := 'AM';
@@ -169,9 +170,9 @@ begin
 
   Self.ConfigurarNFe;
 
-  // assinar omitido para facilitar o uso no curso
-  ACBrNFe1.NotasFiscais.Assinar;
-
+//  // assinar omitido para facilitar o uso no curso
+//  ACBrNFe1.NotasFiscais.Assinar;
+//
 //  // validar
 //  try
 //    ACBrNFe1.NotasFiscais.Validar;
@@ -383,7 +384,7 @@ begin
   end;
 
   // pagamento
-  OPagto := ONFe.pag.Add;
+  OPagto := ONFe.pag.New;
   OPagto.tPag      := TpcnFormaPagamento.fpDinheiro;
   OPagto.vPag      := ValorTotalNF;
   OPagto.tpIntegra := tiPagNaoIntegrado;

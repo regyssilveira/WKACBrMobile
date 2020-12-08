@@ -160,7 +160,7 @@ begin
     begin
       NumItem := NumItem + 1;
 
-      with Det.Add do
+      with Det.New do
       begin
         nItem         := NumItem;
         Prod.cProd    := Item.Id.ToString;
@@ -214,7 +214,7 @@ begin
     Total.vCFeLei12741 := 0;
 
     //PAGAMENTOS apenas para NFC-e
-    with Pagto.Add do
+    with Pagto.New do
     begin
       vMP := ValorTotal;
       cMP := TpcnCodigoMP.mpDinheiro;

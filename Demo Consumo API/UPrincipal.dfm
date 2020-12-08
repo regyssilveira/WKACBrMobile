@@ -47,7 +47,7 @@ object FrmPrincipal: TFrmPrincipal
         Top = 3
         Width = 769
         Height = 93
-        ActivePage = TabSheet6
+        ActivePage = TabSheet5
         Align = alTop
         TabOrder = 0
         object TabSheet5: TTabSheet
@@ -247,7 +247,7 @@ object FrmPrincipal: TFrmPrincipal
   end
   object SaveDialog1: TSaveDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
-    Left = 405
+    Left = 390
     Top = 330
   end
   object tmpProdutos: TFDMemTable
