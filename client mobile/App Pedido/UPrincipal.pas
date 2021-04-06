@@ -106,6 +106,17 @@ begin
   end;
 end;
 
+procedure TForm1.BtnRequisitarPermissoesClick(Sender: TObject);
+begin
+  PermissionsService.RequestPermissions(
+    [
+      JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE),
+      JStringToString(TJManifest_permission.JavaClass.WRITE_EXTERNAL_STORAGE)
+    ],
+    OnRequestPermissions
+  );
+end;
+
 procedure TForm1.OnRequestPermissions(Sender: TObject; const APermissions: TArray<string>;
   const AGrantResults: TArray<TPermissionStatus>);
 begin
@@ -117,17 +128,6 @@ begin
   end
   else
     ShowMessage('Sem acesso a memória você tera problema ao finalizar o pedido!');
-end;
-
-procedure TForm1.BtnRequisitarPermissoesClick(Sender: TObject);
-begin
-  PermissionsService.RequestPermissions(
-    [
-      JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE),
-      JStringToString(TJManifest_permission.JavaClass.WRITE_EXTERNAL_STORAGE)
-    ],
-    OnRequestPermissions
-  );
 end;
 
 procedure TForm1.BtnVoltarClick(Sender: TObject);
