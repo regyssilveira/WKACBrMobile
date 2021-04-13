@@ -140,8 +140,8 @@ begin
   // interessante deixar configuravel para nf-e, para nfc-e somente timeout, os outros não são relevantes
   ACBrNFe1.Configuracoes.WebServices.TimeOut                  := 18000;  // tempo limite de espera pelo webservice
   ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 5000;   // tempo padrão que vai aguardar para consultar após enviar a NF-e
-  ACBrNFe1.Configuracoes.WebServices.IntervaloTentativas      := 3000;   // Intervalo entre as tentativas de envio
   ACBrNFe1.Configuracoes.WebServices.Tentativas               := 10;     // quantidade de tentativas de envio
+  ACBrNFe1.Configuracoes.WebServices.IntervaloTentativas      := 3000;   // Intervalo entre as tentativas de envio
   ACBrNFe1.Configuracoes.WebServices.AjustaAguardaConsultaRet := True;   // ajustar "AguardarConsultaRet" com o valor retornado pelo webservice
 
   // proxy de acesso
@@ -217,6 +217,16 @@ begin
     '  "Serie:": '  + ACBrNFe1.NotasFiscais[0].NFe.Ide.serie.ToString +
     '}' ;
 
+//  // modo de carregamento para envio offline
+//  // apos isso segue envio normal
+//  ACBrNFe1.NotasFiscais.clear;
+//  ACBrNFe1.NotasFiscais.LoadFromString(tabelacampo.asstring);
+
+//  // consulta de nota
+//  ACBrNFe1.Consultar();
+//  ACBrNFe1.WebServices.Consulta.cStat;
+//  ACBrNFe1.WebServices.Consulta.XMotivo;
+
 //  omitido para evitar o uso de certificado durante o curso
 //  NumeroLote := FormatDateTime('yymmddhhmm', NOW);
 //  if ACBrNFe1.Enviar(NumeroLote, True, True) then
@@ -231,9 +241,10 @@ begin
 //    end
 //    else
 //    begin
-//      raise Exception.Create(
-//        ACBrNFe1.WebServices.Enviar.cStat.ToString + ' - ' + ACBrNFe1.WebServices.Enviar.xMotivo
-//      );
+//      raise Exception.CreateFmt('Erro ao enviar: %d - %s', [
+//        ACBrNFe1.WebServices.Enviar.cStat,
+//        ACBrNFe1.WebServices.Enviar.xMotivo
+//      ]);
 //    end;
 //  end
 //  else
@@ -254,9 +265,9 @@ var
   I: Integer;
   ValorTotalNF: double;
 begin
-  ACBrNFe1.NotasFiscais.Clear;
-
   ConfigurarNFe;
+
+  ACBrNFe1.NotasFiscais.Clear;
 
   ONFe := ACBrNFe1.NotasFiscais.Add.NFe;
 
@@ -314,7 +325,7 @@ begin
   ONFe.Dest.CNPJCPF := ANFCe.cpf;
   ONFe.Dest.xNome   := ANFCe.Nome;
 
-  ONFe.Dest.EnderDest.fone    := '(11)2222.4444';
+  ONFe.Dest.EnderDest.fone    := '';
   ONFe.Dest.EnderDest.xLgr    := 'ENDERECO TESTE';
   ONFe.Dest.EnderDest.nro     := '1';
   ONFe.Dest.EnderDest.xCpl    := '';
@@ -366,7 +377,7 @@ begin
     OItemNota.Imposto.ICMS.pCredSN     := 0.00;
     OItemNota.Imposto.ICMS.vCredICMSSN := 0.00;
 
-    // PIS *******************************************************
+    // PIS *********************************************************
     OItemNota.Imposto.PIS.CST       := TpcnCstPis.pis07;
     OItemNota.Imposto.PIS.vBC       := 0;
     OItemNota.Imposto.PIS.pPIS      := 0;
@@ -458,8 +469,8 @@ var
 begin
   OldCfgDANFE := ACBrNFe1.DANFE;
   try
-    ACBrNFe1.DANFE := ACBrNFeDANFCeFortes1;
     Self.ConfigurarNFe;
+    ACBrNFe1.DANFE := ACBrNFeDANFCeFortes1;
 
     ACBrNFe1.NotasFiscais.Clear;
     ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);

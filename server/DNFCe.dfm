@@ -87,6 +87,6 @@ object DtmNFCe: TDtmNFCe
     ConfigQRCode.ErrorLevel = 0
     LinhasEntreCupons = 0
     Left = 96
-    Top = 168
+    Top = 178
   end
 end

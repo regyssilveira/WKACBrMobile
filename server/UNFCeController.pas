@@ -100,7 +100,7 @@ var
 begin
   TmpDataset := Service.GetClientes;
   if TmpDataset.IsEmpty then
-    Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum cliente cadastrado na base de dados')
+    Render(HTTP_STATUS.NotFound, 'Não existe nenhum cliente cadastrado na base de dados')
   else
     Render(TmpDataset);
 end;
@@ -111,7 +111,7 @@ var
 begin
   TmpDataset := Service.GetClienteById(Aid);
   if TmpDataset.IsEmpty then
-    Render(HTTP_STATUS.InternalServerError, Format('Não existe cliente cadastrado com o código "%d" na base de dados', [AId]))
+    Render(HTTP_STATUS.NotFound, Format('Não existe cliente cadastrado com o código "%d" na base de dados', [AId]))
   else
     Render(TmpDataset);
 end;
@@ -128,7 +128,7 @@ begin
     TmpDataset := Service.GetProdutos;
 
   if TmpDataset.IsEmpty then
-    Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum produto cadastrado na base de dados')
+    Render(HTTP_STATUS.NotFound, 'Não existe nenhum produto cadastrado na base de dados')
   else
     Render(TmpDataset);
 end;
@@ -139,7 +139,7 @@ var
 begin
   TmpDataset := Service.GetProdutosPaginado(AAtual, AQuantidade);
   if TmpDataset.IsEmpty then
-    Render(HTTP_STATUS.InternalServerError, 'Não existe nenhum produto cadastrado na base de dados')
+    Render(HTTP_STATUS.NotFound, 'Não existe nenhum produto cadastrado na base de dados')
   else
     Render(TmpDataset);
 end;
@@ -150,7 +150,7 @@ var
 begin
   TmpDataset := Service.GetProdutoById(AId);
   if TmpDataset.IsEmpty then
-    Render(HTTP_STATUS.InternalServerError, Format('Não existe produto cadastrado com o código "%d" na base de dados', [AId]))
+    Render(HTTP_STATUS.NotFound, Format('Não existe produto cadastrado com o código "%d" na base de dados', [AId]))
   else
     Render(TmpDataset);
 end;

@@ -169,7 +169,7 @@ begin
         prod.NCM      := '99';
         Prod.CFOP     := '5102';
         Prod.uCom     := 'UN';
-        Prod.indRegra := irTruncamento;
+        Prod.indRegra := irArredondamento;
         Prod.qCom     := Item.Quantidade;
         Prod.vUnCom   := Item.Valor;
         Prod.vDesc    := 0;
@@ -247,7 +247,7 @@ begin
       '{ ' +
       '  "numero:": ' + ACBrSAT1.CFe.ide.nCFe.ToString   + ',' +
       '  "numerocaixa:": '  + ACBrSAT1.CFe.ide.numeroCaixa.ToString +
-      '}';
+      '} ' ;
 
     ACBrSAT1.CFe.SaveToFile(PathNotaFiscalExemplo);
   end
@@ -261,17 +261,17 @@ var
 begin
   OldCfgDANFE := ACBrSAT1.Extrato;
   try
-    ACBrSAT1.Extrato := ACBrSATExtratoFortes1;
     Self.ConfigurarSAT;
+    ACBrSAT1.Extrato := ACBrSATExtratoFortes1;
 
     ACBrSAT1.CFe.Clear;
     ACBrSAT1.CFe.LoadFromFile(PathNotaFiscalExemplo);
+    //ACBrSAT1.CFe.SetXMLString('xml que vc gravou no banco após emitiro o cfe');
     ACBrSAT1.Extrato.PathPDF := ExtractFilePath(ParamStr(0)) + 'PDF';
     ACBrSAT1.Extrato.Filtro  := TACBrSATExtratoFiltro.fiPDF;
     ACBrSAT1.ImprimirExtrato;
 
     Result := ACBrSAT1.Extrato.ArquivoPDF;
-
     if not FileExists(Result) then
       raise Exception.Create('Arquivo PDF não encontrado no servidor!');
   finally
@@ -297,8 +297,8 @@ var
 begin
   OldCfgDANFE := ACBrSAT1.Extrato;
   try
-    ACBrSAT1.Extrato := ACBrSATExtratoESCPOS1;
     Self.ConfigurarSAT;
+    ACBrSAT1.Extrato := ACBrSATExtratoESCPOS1;
 
     PathTempImpressao     := ExtractFilePath(ParamStr(0)) + 'arquivoescpos.txt';
     ACBrPosPrinter1.Porta := PathTempImpressao;

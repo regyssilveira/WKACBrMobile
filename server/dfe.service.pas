@@ -54,7 +54,7 @@ end;
 
 function TDFService.GetClienteById(const AId: Integer): TDataSet;
 begin
-  FDConexao.ExecSQL('select * from clientes where id=0' + AId.ToString, Result);
+  FDConexao.ExecSQL('select * from clientes where id=' + AId.ToString, Result);
 end;
 
 function TDFService.GetProdutoById(const AId: Integer): TDataSet;

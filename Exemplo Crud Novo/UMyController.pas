@@ -26,6 +26,10 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetProdutos;
 
+    [MVCPath('/produtosdts')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GetProdutosDataset;
+
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpGET])]
     procedure GetProduto(id: Integer);
@@ -47,6 +51,7 @@ implementation
 
 uses
   System.SysUtils,
+  Data.DB,
 
   ProdutosService,
   ProdutosClass;
@@ -79,15 +84,28 @@ begin
   SetCacheKey('#cache::produto::' + StrQuery);
   if CacheAvailable then
   begin
-    Log.Info('>>>>>>>> usou o log.', '');
+    Log.Info('>>>>>>>> usou o cache.', '');
     Exit;
   end;
 
-  Log.Info('>>>>>>>>>não usou o log.', '');
+  Log.Info('>>>>>>>>>não usou o cache.', '');
   Render<TProduto>(TProdutoService.GetProdutos(StrQuery));
 
   // seta o tempo de vida do cache
   SetCache(30);
+end;
+
+procedure TMyController.GetProdutosDataset;
+var
+  TmpDataset: TDataset;
+begin
+  TmpDataset :=
+    TProdutoService.GetProdutosDataset(
+      Context.Request.QueryStringParam('like')
+    );
+
+  // fazer sem cache como exemplo e usando dataset
+  Render(TmpDataset);
 end;
 
 procedure TMyController.Getproduto(id: Integer);
@@ -108,7 +126,7 @@ begin
   Produto := Context.Request.BodyAs<TProduto>;
   try
     TProdutoService.Post(Produto);
-    Render(200, 'Produto criado com sucesso');
+    Render(201, 'Produto criado com sucesso');
   finally
     Produto.Free;
   end;

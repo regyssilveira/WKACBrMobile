@@ -14,7 +14,7 @@ uses
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, Fmx.Bind.Grid, System.Bindings.Outputs,
   Fmx.Bind.Editors, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
-  FMX.ListView, FMX.Layouts, FMX.Edit;
+  FMX.ListView, FMX.Layouts, FMX.Edit, FMX.Memo.Types;
 
 type
   TForm1 = class(TForm)
@@ -46,6 +46,7 @@ type
     Layout5: TLayout;
     SpeedButton1: TSpeedButton;
     Edit1: TEdit;
+    StyleBook1: TStyleBook;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -71,7 +72,7 @@ uses
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  FCli := TRESTClient.Create('http://localhost', 8080);
+  FCli := TRESTClient.Create('http://192.168.88.23', 8080);
 
   tbClientes.CreateDataSet;
   tbProdutos.CreateDataSet;
@@ -80,7 +81,7 @@ end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-  FCli.Free;
+  FCli.DisposeOf;
 end;
 
 

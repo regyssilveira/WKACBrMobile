@@ -21,6 +21,7 @@ type
 
   public
     class function GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
+    class function GetProdutosDataset(const ALikeDescricao: string): TDataset;
     class function GetProduto(const ACodProduto: Integer): TProduto;
     class procedure Post(const AProduto: TProduto);
     class procedure Update(const AId: Integer; const AProduto: TProduto);
@@ -31,23 +32,73 @@ implementation
 
 { TProdutoService }
 
-class procedure TProdutoService.Delete(const ACodProduto: Integer);
+class function TProdutoService.GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
 var
   FDConexao: TFDConnection;
-  CountDelete: Integer;
+  TmpDataset: TDataSet;
+  Produto: TProduto;
+  StrWhere: string;
+begin
+  Result := TObjectList<TProduto>.Create;
+
+  FDConexao := TFDConnection.Create(nil);
+  try
+    if ALikeDescricao.Trim.IsEmpty then
+      StrWhere := ''
+    else
+      StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
+
+    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+    FDConexao.ExecSQL(
+      'select * from produtos ' + StrWhere + ' order by id',
+      TmpDataset
+    );
+
+    if not TmpDataset.IsEmpty then
+    begin
+      TmpDataset.First;
+      while not TmpDataset.Eof do
+      begin
+        Produto := TProduto.Create;
+        Produto.Id          := TmpDataset.FieldByName('ID').AsInteger;
+        Produto.Gtin        := TmpDataset.FieldByName('GTIN').AsString;
+        Produto.Descricao   := TmpDataset.FieldByName('DESCRICAO').AsString;
+        Produto.ValorVenda  := TmpDataset.FieldByName('VL_VENDA').AsCurrency;
+        Produto.Unidade     := TmpDataset.FieldByName('UN').AsString;
+        Produto.DataCriacao := TmpDataset.FieldByName('DT_CRIACAO').AsDateTime;
+
+        Result.Add(Produto);
+        TmpDataset.Next;
+      end;
+    end
+    else
+      raise EDatabaseError.Create('Nenhum produto cadastrado na base de dados!');
+  finally
+    TmpDataset.Free;
+    FDConexao.Free;
+  end;
+end;
+
+class function TProdutoService.GetProdutosDataset(const ALikeDescricao: string): TDataset;
+var
+  FDConexao: TFDConnection;
+  StrWhere: string;
 begin
   FDConexao := TFDConnection.Create(nil);
   try
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+    if ALikeDescricao.Trim.IsEmpty then
+      StrWhere := ''
+    else
+      StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
 
-    CountDelete := FDConexao.ExecSQL(
-      'delete from produtos where ID=?',
-      [ACodProduto],
-      [ftInteger]
+    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+    FDConexao.ExecSQL(
+      'select * from produtos ' + StrWhere + ' order by id',
+      Result
     );
 
-    if CountDelete = 0 then
-      raise EDatabaseError.Create('Nenhum produto foi excluido!');
+    if Result.IsEmpty then
+      raise EDatabaseError.Create('Nenhum produto cadastrado na base de dados!');
   finally
     FDConexao.Free;
   end;
@@ -80,50 +131,6 @@ begin
     end
     else
       raise EDatabaseError.CreateFmt('Produto "%d" não encontrado na base de dados!', [ACodProduto]);
-  finally
-    TmpDataset.Free;
-    FDConexao.Free;
-  end;
-end;
-
-class function TProdutoService.GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
-var
-  FDConexao: TFDConnection;
-  TmpDataset: TDataSet;
-  Produto: TProduto;
-  StrWhere: string;
-begin
-  Result := TObjectList<TProduto>.Create;
-
-  FDConexao := TFDConnection.Create(nil);
-  try
-    if ALikeDescricao.Trim.IsEmpty then
-      StrWhere := ''
-    else
-      StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
-
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    FDConexao.ExecSQL('select * from produtos ' + StrWhere + ' order by id', TmpDataset);
-
-    if not TmpDataset.IsEmpty then
-    begin
-      TmpDataset.First;
-      while not TmpDataset.Eof do
-      begin
-        Produto := TProduto.Create;
-        Produto.Id          := TmpDataset.FieldByName('ID').AsInteger;
-        Produto.Gtin        := TmpDataset.FieldByName('GTIN').AsString;
-        Produto.Descricao   := TmpDataset.FieldByName('DESCRICAO').AsString;
-        Produto.ValorVenda  := TmpDataset.FieldByName('VL_VENDA').AsCurrency;
-        Produto.Unidade     := TmpDataset.FieldByName('UN').AsString;
-        Produto.DataCriacao := TmpDataset.FieldByName('DT_CRIACAO').AsDateTime;
-
-        Result.Add(Produto);
-        TmpDataset.Next;
-      end;
-    end
-    else
-      raise EDatabaseError.Create('Nenhum produto cadastrado na base de dados!');
   finally
     TmpDataset.Free;
     FDConexao.Free;
@@ -211,6 +218,28 @@ begin
 
     if CountAtu <= 0 then
       raise Exception.Create('Nenhum produto foi atualizado');
+  finally
+    FDConexao.Free;
+  end;
+end;
+
+class procedure TProdutoService.Delete(const ACodProduto: Integer);
+var
+  FDConexao: TFDConnection;
+  CountDelete: Integer;
+begin
+  FDConexao := TFDConnection.Create(nil);
+  try
+    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+
+    CountDelete := FDConexao.ExecSQL(
+      'delete from produtos where ID=?',
+      [ACodProduto],
+      [ftInteger]
+    );
+
+    if CountDelete = 0 then
+      raise EDatabaseError.Create('Nenhum produto foi excluido!');
   finally
     FDConexao.Free;
   end;
