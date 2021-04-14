@@ -10,7 +10,7 @@ object DtmPrincipal: TDtmPrincipal
     LoginPrompt = False
     AfterConnect = FDConnection1AfterConnect
     BeforeConnect = FDConnection1BeforeConnect
-    Left = 82
+    Left = 87
     Top = 64
   end
   object tmpProdutos: TFDMemTable

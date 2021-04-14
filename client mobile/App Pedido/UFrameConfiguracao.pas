@@ -28,7 +28,8 @@ implementation
 {$R *.fmx}
 
 uses
-  UConfigClass, FMX.DialogService.Async;
+  UConfigClass,
+  FMX.DialogService.Async;
 
 procedure TFrameConfiguracao.SalvarConfiguracoes;
 begin
@@ -49,6 +50,8 @@ begin
       end;
     end
   );
+
+  ShowMessage('teste');
 end;
 
 procedure TFrameConfiguracao.CarregarConfiguracoes;

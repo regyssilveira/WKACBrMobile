@@ -1,11 +1,11 @@
 object FrameConfiguracao: TFrameConfiguracao
-  Size.Width = 471.000000000000000000
+  Size.Width = 398.000000000000000000
   Size.Height = 644.000000000000000000
   Size.PlatformDefault = False
   object Layout1: TLayout
     Align = Center
     Size.Width = 327.000000000000000000
-    Size.Height = 318.000000000000000000
+    Size.Height = 183.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     object Layout2: TLayout

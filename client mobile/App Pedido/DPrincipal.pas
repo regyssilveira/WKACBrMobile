@@ -13,7 +13,7 @@ uses
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
   FireDAC.Comp.DataSet, FireDAC.DApt, FireDAC.FMXUI.Login, FireDAC.FMXUI.Error,
-  FireDAC.Comp.UI;
+  FireDAC.Comp.UI, FireDAC.Phys.SQLiteWrapper.Stat;
 
 type
   TDtmPrincipal = class(TDataModule)
@@ -200,6 +200,7 @@ var
   PathFilePDF: string;
   {$IFDEF ANDROID}
   Intent: JIntent;
+  LFile: JFile;
   {$ENDIF}
   FutStream: IFuture<TStream>;
 begin
@@ -213,13 +214,10 @@ begin
         raise Exception.Create(FResp.ResponseText);
 
       Result := Response.Body;
-    end);
+    end
+  );
 
   //caminho do arquivo baixado
-//  PathFilePDF := TPath.Combine(
-//    TPath.GetSharedDocumentsPath,
-//    Format('nf%9.9d%3.3d.pdf', [ANumero, ASerie])
-//  );
   PathFilePDF := TPath.Combine(TPath.GetSharedDocumentsPath, 'notafiscal.pdf');
   if TFile.Exists(PathFilePDF) then
     TFile.Delete(PathFilePDF);
@@ -229,42 +227,48 @@ begin
   try
     PDFStream.LoadFromStream(FutStream.Value);
     PDFStream.Position := 0;
+
     PDFStream.SaveToFile(PathFilePDF);
+  finally
+    PDFStream.DisposeOf;
+  end;
 
-    // abrir pdf no editor padrão
-    if FileExists(PathFilePDF) then
-    begin
-      {$IFDEF ANDROID}
-      // visualizar pdf
-      Intent := TJIntent.Create;
-      Intent.setAction(TJIntent.JavaClass.ACTION_VIEW);
-      Intent.setDataAndType(StrToJURI('file://' + PathFilePDF), StringToJString('application/pdf'));
+  // abrir pdf no editor padrão
+  if TFile.Exists(PathFilePDF) then
+  begin
+    ShowMessage(PathFilePDF);
 
-      // compartilhar
+    {$IFDEF ANDROID}
+    // visualizar pdf
+    LFile := TJFile.JavaClass.init(StringToJString(PathFilePDF));
+
+    Intent := TJIntent.Create;
+    Intent.setAction(TJIntent.JavaClass.ACTION_VIEW);
+    Intent.setFlags(TJIntent.JavaClass.FLAG_GRANT_READ_URI_PERMISSION);
+    Intent.setDataAndType(TAndroidHelper.JFileToJURI(LFile), StringToJString('application/pdf'));
+
+    // compartilhar
 //      Intent := TJIntent.Create;
 //      Intent.setAction(TJIntent.JavaClass.ACTION_MEDIA_SHARED);
 //      Intent.setDataAndType(StrToJURI('file://' + PathFilePDF), StringToJString('application/pdf'));
 
-      try
-        TAndroidHelper.Activity.startActivity(Intent);
-      except
-      end;
-      {$ELSE}
-      ShellExecute(
-        0,
-        nil,
-        PChar(PathFilePDF),
-        nil,
-        nil,
-        SW_SHOWNOACTIVATE
-      );
-      {$ENDIF}
-    end
-    else
-      raise Exception.Create('Arquivo PDF não encontrado!');
-  finally
-    PDFStream.DisposeOf;
-  end;
+    try
+      TAndroidHelper.Activity.startActivity(Intent);
+    except
+    end;
+    {$ELSE}
+    ShellExecute(
+      0,
+      nil,
+      PChar(PathFilePDF),
+      nil,
+      nil,
+      SW_SHOWNOACTIVATE
+    );
+    {$ENDIF}
+  end
+  else
+    raise Exception.Create('Arquivo PDF não encontrado!');
 end;
 
 
