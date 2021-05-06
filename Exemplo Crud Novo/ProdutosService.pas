@@ -18,37 +18,50 @@ uses
 type
   TProdutoService = class
   private
-
+    FDConexao: TFDConnection;
   public
-    class function GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
-    class function GetProdutosDataset(const ALikeDescricao: string): TDataset;
-    class function GetProduto(const ACodProduto: Integer): TProduto;
-    class procedure Post(const AProduto: TProduto);
-    class procedure Update(const AId: Integer; const AProduto: TProduto);
-    class procedure Delete(const ACodProduto: Integer);
+    constructor Create;
+    destructor Destroy; override;
+
+    function GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
+    function GetProdutosDataset(const ALikeDescricao: string): TDataset;
+    function GetProduto(const ACodProduto: Integer): TProduto;
+    procedure Post(const AProduto: TProduto);
+    procedure Update(const AId: Integer; const AProduto: TProduto);
+    procedure Delete(const ACodProduto: Integer);
   end;
 
 implementation
 
 { TProdutoService }
 
-class function TProdutoService.GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
+constructor TProdutoService.Create;
+begin
+  inherited;
+  FDConexao := TFDConnection.Create(nil);
+  FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+end;
+
+destructor TProdutoService.Destroy;
+begin
+  FDConexao.DisposeOf;
+  inherited;
+end;
+
+function TProdutoService.GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
 var
-  FDConexao: TFDConnection;
   TmpDataset: TDataSet;
   Produto: TProduto;
   StrWhere: string;
 begin
   Result := TObjectList<TProduto>.Create;
 
-  FDConexao := TFDConnection.Create(nil);
   try
     if ALikeDescricao.Trim.IsEmpty then
       StrWhere := ''
     else
       StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
 
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
     FDConexao.ExecSQL(
       'select * from produtos ' + StrWhere + ' order by id',
       TmpDataset
@@ -75,46 +88,34 @@ begin
       raise EDatabaseError.Create('Nenhum produto cadastrado na base de dados!');
   finally
     TmpDataset.Free;
-    FDConexao.Free;
   end;
 end;
 
-class function TProdutoService.GetProdutosDataset(const ALikeDescricao: string): TDataset;
+function TProdutoService.GetProdutosDataset(const ALikeDescricao: string): TDataset;
 var
-  FDConexao: TFDConnection;
   StrWhere: string;
 begin
-  FDConexao := TFDConnection.Create(nil);
-  try
-    if ALikeDescricao.Trim.IsEmpty then
-      StrWhere := ''
-    else
-      StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
+  if ALikeDescricao.Trim.IsEmpty then
+    StrWhere := ''
+  else
+    StrWhere := 'where descricao like ''%' + ALikeDescricao + '%''';
 
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    FDConexao.ExecSQL(
-      'select * from produtos ' + StrWhere + ' order by id',
-      Result
-    );
+  FDConexao.ExecSQL(
+    'select * from produtos ' + StrWhere + ' order by id',
+    Result
+  );
 
-    if Result.IsEmpty then
-      raise EDatabaseError.Create('Nenhum produto cadastrado na base de dados!');
-  finally
-    FDConexao.Free;
-  end;
+  if Result.IsEmpty then
+    raise EDatabaseError.Create('Nenhum produto cadastrado na base de dados!');
 end;
 
-class function TProdutoService.GetProduto(const ACodProduto: Integer): TProduto;
+function TProdutoService.GetProduto(const ACodProduto: Integer): TProduto;
 var
-  FDConexao: TFDConnection;
   TmpDataset: TDataSet;
 begin
   Result := TProduto.Create;
 
-  FDConexao := TFDConnection.Create(nil);
   try
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-
     FDConexao.ExecSQL(
       'select * from produtos where ID=' + ACodProduto.ToString,
       TmpDataset
@@ -133,13 +134,10 @@ begin
       raise EDatabaseError.CreateFmt('Produto "%d" não encontrado na base de dados!', [ACodProduto]);
   finally
     TmpDataset.Free;
-    FDConexao.Free;
   end;
 end;
 
-class procedure TProdutoService.Post(const AProduto: TProduto);
-var
-  FDConexao: TFDConnection;
+procedure TProdutoService.Post(const AProduto: TProduto);
 const
   SQL_INSERT: string =
     'INSERT INTO PRODUTOS (                                ' + sLineBreak +
@@ -154,33 +152,25 @@ begin
   if AProduto.ValorVenda <= 0 then
     raise EDatabaseError.Create('valor do produto deve ser um valor maior que zero');
 
-  FDConexao := TFDConnection.Create(nil);
-  try
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    FDConexao.ExecSQL(SQL_INSERT,
-      [
-        Aproduto.Gtin,
-        Aproduto.Descricao,
-        Aproduto.ValorVenda,
-        Aproduto.Unidade
-      ],
-      [
-        ftString,
-        ftString,
-        ftFloat,
-        ftString
-      ]
-    );
-  finally
-    FDConexao.Free;
-  end;
+  FDConexao.ExecSQL(SQL_INSERT,
+    [
+      Aproduto.Gtin,
+      Aproduto.Descricao,
+      Aproduto.ValorVenda,
+      Aproduto.Unidade
+    ],
+    [
+      ftString,
+      ftString,
+      ftFloat,
+      ftString
+    ]
+  );
 end;
 
-class procedure TProdutoService.Update(const AId: Integer; const AProduto: TProduto);
+procedure TProdutoService.Update(const AId: Integer; const AProduto: TProduto);
 var
-  FDConexao: TFDConnection;
   CountAtu: Integer;
-
 const
   SQL_UPDATE: string =
     'UPDATE PRODUTOS SET         ' + sLineBreak +
@@ -196,53 +186,39 @@ begin
   if AProduto.ValorVenda <= 0 then
     raise EDatabaseError.Create('valor do produto deve ser um valor maior que zero');
 
-  FDConexao := TFDConnection.Create(nil);
-  try
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
-    CountAtu := FDConexao.ExecSQL(SQL_UPDATE,
-      [
-        Aproduto.Gtin,
-        Aproduto.Descricao,
-        Aproduto.ValorVenda,
-        Aproduto.Unidade,
-        AId
-      ],
-      [
-        ftString,
-        ftString,
-        ftFloat,
-        ftString,
-        ftInteger
-      ]
-    );
+  CountAtu := FDConexao.ExecSQL(SQL_UPDATE,
+    [
+      Aproduto.Gtin,
+      Aproduto.Descricao,
+      Aproduto.ValorVenda,
+      Aproduto.Unidade,
+      AId
+    ],
+    [
+      ftString,
+      ftString,
+      ftFloat,
+      ftString,
+      ftInteger
+    ]
+  );
 
-    if CountAtu <= 0 then
-      raise Exception.Create('Nenhum produto foi atualizado');
-  finally
-    FDConexao.Free;
-  end;
+  if CountAtu <= 0 then
+    raise Exception.Create('Nenhum produto foi atualizado');
 end;
 
-class procedure TProdutoService.Delete(const ACodProduto: Integer);
+procedure TProdutoService.Delete(const ACodProduto: Integer);
 var
-  FDConexao: TFDConnection;
   CountDelete: Integer;
 begin
-  FDConexao := TFDConnection.Create(nil);
-  try
-    FDConexao.ConnectionDefName := NOME_CONEXAO_FB;
+  CountDelete := FDConexao.ExecSQL(
+    'delete from produtos where ID=?',
+    [ACodProduto],
+    [ftInteger]
+  );
 
-    CountDelete := FDConexao.ExecSQL(
-      'delete from produtos where ID=?',
-      [ACodProduto],
-      [ftInteger]
-    );
-
-    if CountDelete = 0 then
-      raise EDatabaseError.Create('Nenhum produto foi excluido!');
-  finally
-    FDConexao.Free;
-  end;
+  if CountDelete = 0 then
+    raise EDatabaseError.Create('Nenhum produto foi excluido!');
 end;
 
 end.

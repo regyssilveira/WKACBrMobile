@@ -6,6 +6,8 @@ uses
   Redis.Commons,
   Redis.NetLib.indy,
 
+  ProdutosService,
+
   MVCFramework,
   MVCFramework.Logger,
   MVCFramework.Commons,
@@ -14,6 +16,8 @@ uses
 type
   [MVCPath('/api')]
   TMyController = class(TMVCCacheController)
+  private
+    FProdutoService: TProdutoService;
   protected
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
@@ -26,17 +30,13 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetProdutos;
 
-    [MVCPath('/produtosdts')]
-    [MVCHTTPMethod([httpGET])]
-    procedure GetProdutosDataset;
+    [MVCPath('/produtos')]
+    [MVCHTTPMethod([httpPOST])]
+    procedure CreateProduto;
 
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpGET])]
     procedure GetProduto(id: Integer);
-
-    [MVCPath('/produtos')]
-    [MVCHTTPMethod([httpPOST])]
-    procedure CreateProduto;
 
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpPUT])]
@@ -45,6 +45,11 @@ type
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpDELETE])]
     procedure DeleteProduto(id: Integer);
+
+
+    [MVCPath('/produtosdts')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GetProdutosDataset;
   end;
 
 implementation
@@ -53,25 +58,27 @@ uses
   System.SysUtils,
   Data.DB,
 
-  ProdutosService,
   ProdutosClass;
 
 procedure TMyController.GetMyRootPage;
 begin
   ContentType := TMVCMediaType.TEXT_HTML;
-  Render('<h1>API Demo server</h1><p>Bem vindo a minha primeira API RESTFULL.</p>');
+  Render(
+    '<h1>API Demo server</h1>' +
+    '<p>Bem vindo a minha primeira API RESTFULL.</p>'
+  );
 end;
 
 procedure TMyController.OnAfterAction(Context: TWebContext; const AActionName: string);
 begin
-
+  FProdutoService.DisposeOf;
   inherited;
 end;
 
 procedure TMyController.OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean);
 begin
-
   inherited;
+  FProdutoService := TProdutoService.Create;
 end;
 
 procedure TMyController.Getprodutos;
@@ -88,11 +95,11 @@ begin
     Exit;
   end;
 
-  Log.Info('>>>>>>>>>não usou o cache.', '');
-  Render<TProduto>(TProdutoService.GetProdutos(StrQuery));
+  Log.Info('>>>>>>>>> não usou o cache.', '');
+  Render<TProduto>(FProdutoService.GetProdutos(StrQuery));
 
   // seta o tempo de vida do cache
-  SetCache(30);
+  SetCache(10);
 end;
 
 procedure TMyController.GetProdutosDataset;
@@ -100,7 +107,7 @@ var
   TmpDataset: TDataset;
 begin
   TmpDataset :=
-    TProdutoService.GetProdutosDataset(
+    FProdutoService.GetProdutosDataset(
       Context.Request.QueryStringParam('like')
     );
 
@@ -114,7 +121,7 @@ begin
   if CacheAvailable then
     Exit;
 
-  Render(TProdutoService.GetProduto(Id));
+  Render(FProdutoService.GetProduto(Id));
 
   SetCache(3);
 end;
@@ -125,7 +132,7 @@ var
 begin
   Produto := Context.Request.BodyAs<TProduto>;
   try
-    TProdutoService.Post(Produto);
+    FProdutoService.Post(Produto);
     Render(201, 'Produto criado com sucesso');
   finally
     Produto.Free;
@@ -142,7 +149,7 @@ begin
 
   Produto := Context.Request.BodyAs<TProduto>;
   try
-    TProdutoService.Update(Id, Produto);
+    FProdutoService.Update(Id, Produto);
     Render(200, Format('Produto "%d" atualizado com sucesso', [Id]));
   finally
     Produto.Free;
@@ -155,7 +162,7 @@ begin
   SetCacheKey('#cache::produto::' + Id.ToString);
   SetCache(0);
 
-  TProdutoService.Delete(Id);
+  FProdutoService.Delete(Id);
   Render(200, Format('Produto "%d" apagado com sucesso', [Id]));
 end;
 
