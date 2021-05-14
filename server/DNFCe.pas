@@ -5,6 +5,8 @@ interface
 uses
   UNFCeClass,
 
+  System.IOUtils,
+
   System.SysUtils, System.Classes, ACBrNFeDANFEClass, ACBrDANFCeFortesFr,
   ACBrBase, ACBrDFe, ACBrNFe, ACBrDFeReport, ACBrDFeDANFeReport,
   ACBrPosPrinter, ACBrNFeDANFeESCPOS;
@@ -168,11 +170,6 @@ begin
   if ACBrNFe1.NotasFiscais.Count <= 0 then
     raise Exception.Create('nenhuma nota fiscal informada');
 
-  Self.ConfigurarNFe;
-
-//  // assinar omitido para facilitar o uso no curso
-//  ACBrNFe1.NotasFiscais.Assinar;
-//
 //  // validar
 //  try
 //    ACBrNFe1.NotasFiscais.Validar;
@@ -217,19 +214,9 @@ begin
     '  "Serie:": '  + ACBrNFe1.NotasFiscais[0].NFe.Ide.serie.ToString +
     '}' ;
 
-//  // modo de carregamento para envio offline
-//  // apos isso segue envio normal
-//  ACBrNFe1.NotasFiscais.clear;
-//  ACBrNFe1.NotasFiscais.LoadFromString(tabelacampo.asstring);
-
-//  // consulta de nota
-//  ACBrNFe1.Consultar();
-//  ACBrNFe1.WebServices.Consulta.cStat;
-//  ACBrNFe1.WebServices.Consulta.XMotivo;
-
 //  omitido para evitar o uso de certificado durante o curso
 //  NumeroLote := FormatDateTime('yymmddhhmm', NOW);
-//  if ACBrNFe1.Enviar(NumeroLote, True, True) then
+//  if ACBrNFe1.Enviar(NumeroLote, True, True, True) then
 //  begin
 //    StatusNFCe := ACBrNFe1.WebServices.Enviar.cStat;
 //
@@ -254,6 +241,17 @@ begin
 //      ACBrNFe1.WebServices.Enviar.xMotivo
 //    ]);
 //  end;
+
+//  // modo de carregamento para envio offline
+//  // apos isso segue envio normal
+//  ACBrNFe1.NotasFiscais.clear;
+//  ACBrNFe1.NotasFiscais.LoadFromString(tabelacampo.asstring);
+
+//  // consulta de nota
+//  ACBrNFe1.Consultar();
+//  ACBrNFe1.WebServices.Consulta.cStat;
+//  ACBrNFe1.WebServices.Consulta.XMotivo;
+
 end;
 
 procedure TdtmNFCe.PreencherNFCe(ANFCe: TNFCe);
@@ -343,7 +341,7 @@ begin
   begin
     Inc(I);
 
-    OItemNota := ONFe.Det.Add;
+    OItemNota := ONFe.Det.New;
     OItemNota.Prod.nItem    := I;
     OItemNota.Prod.cProd    := NFCeItem.Id.ToString;
     OItemNota.Prod.xProd    := NFCeItem.Descricao;
@@ -449,6 +447,7 @@ begin
     // LPTx - Porta LPT
     // c:\diretorio\nomearquio.txt - gerando para arquivo
     // RAW:nome da impressora - nome da impressora no windows   "RAW:MP-45200 TH"
+    // USB
 
     ACBrNFe1.NotasFiscais.Clear;
     ACBrNFe1.NotasFiscais.LoadFromFile(PathNotaFiscalExemplo);

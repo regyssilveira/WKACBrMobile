@@ -7,7 +7,7 @@ uses
   IniFiles;
 
 type
-  TTipoAplicacao = (tpNFCe, tpSAT);
+  TTipoAplicacao = (tpNFCe, tpSAT, tpMFe);
 
   TConfigServer = class(TIniFile)
   const

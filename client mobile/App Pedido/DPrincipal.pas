@@ -128,16 +128,24 @@ begin
 end;
 
 procedure TDtmPrincipal.tmpProdutosAfterOpen(DataSet: TDataSet);
+var
+  FutResponse: IFuture<string>;
 begin
-  // comsumo sincrono
-  //(NUNCA FAZER ASSIM, AQUI ESTÁ MERAMENTE PARA EFEITO EDUCACIONAL)
-  FResp := Cli.doGET('/nfce/produtos', []);
-  if FResp.HasError then
-    raise Exception.Create(FResp.ResponseText);
+  FutResponse := TTask.Future<string>(
+    function: string
+    var
+      Response: IRESTResponse;
+    begin
+      Response := Cli.doGET('/nfce/produtos', []);
+      if Response.HasError then
+        raise Exception.Create(FResp.ResponseText);
+
+      Result := Response.BodyAsString;
+    end);
 
   DataSet.DisableControls;
   try
-    tmpProdutos.LoadFromJSONArrayString(FResp.BodyAsString);
+    tmpProdutos.LoadFromJSONArrayString(FutResponse.Value);
     tmpProdutos.First;
   finally
     DataSet.EnableControls;
@@ -202,30 +210,21 @@ var
   Intent: JIntent;
   LFile: JFile;
   {$ENDIF}
-  FutStream: IFuture<TStream>;
+  Response: IRESTResponse;
 begin
-  FutStream := TTask.Future<TStream>(
-    function: TStream
-    var
-      Response: IRESTResponse;
-    begin
-      Response := Cli.doGET('/nfce/nfce', [ANumero.ToString, ASerie.ToString, 'PDF']);
-      if Response.HasError then
-        raise Exception.Create(FResp.ResponseText);
-
-      Result := Response.Body;
-    end
-  );
-
   //caminho do arquivo baixado
-  PathFilePDF := TPath.Combine(TPath.GetSharedDocumentsPath, 'notafiscal.pdf');
+  PathFilePDF := TPath.Combine(TPath.GetSharedDownloadsPath, 'notafiscal.pdf');
   if TFile.Exists(PathFilePDF) then
     TFile.Delete(PathFilePDF);
+
+  Response := Cli.doGET('/nfce/pedido', [ANumero.ToString, ASerie.ToString, 'PDF']);
+  if Response.HasError then
+    raise Exception.Create(FResp.ResponseText);
 
   // salvar arquivo pdf local
   PDFStream := TMemoryStream.Create;
   try
-    PDFStream.LoadFromStream(FutStream.Value);
+    PDFStream.LoadFromStream(Response.Body);
     PDFStream.Position := 0;
 
     PDFStream.SaveToFile(PathFilePDF);

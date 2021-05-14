@@ -35,7 +35,7 @@ var
 implementation
 
 uses
-  ACBrUtil, pcnConversao, ACBrSATClass;
+  ACBrUtil, pcnConversao, ACBrSATClass, pcnCFe;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
@@ -86,7 +86,7 @@ begin
   ACBrSAT1.Config.emit_cRegTrib          := RTSimplesNacional;
   ACBrSAT1.Config.PaginaDeCodigo         := 0;
   ACBrSAT1.Config.EhUTF8                 := True;
-  ACBrSAT1.Config.infCFe_versaoDadosEnt  := 0.08;
+  ACBrSAT1.Config.infCFe_versaoDadosEnt  := 0;
 
   ACBrSAT1.ConfigArquivos.SalvarCFe      := True;
   ACBrSAT1.ConfigArquivos.SalvarCFeCanc  := True;
@@ -131,6 +131,7 @@ var
   MsgErroGTIN: String;
   Item: TNFCeItem;
   ValorTotal: Double;
+  OItem: TDetCollectionItem;
 begin
   ConfigurarSAT;
 
@@ -176,6 +177,7 @@ begin
         Prod.vOutro   := 0;
         Prod.CEST     := '';
 
+        // adicionado somente para efeitos de exemplo na forma de pagamento
         ValorTotal := ValorTotal + (Prod.qCom * Prod.vUnCom);
 
         // observações do produto

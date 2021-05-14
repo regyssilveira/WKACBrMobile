@@ -50,8 +50,6 @@ begin
       end;
     end
   );
-
-  ShowMessage('teste');
 end;
 
 procedure TFrameConfiguracao.CarregarConfiguracoes;

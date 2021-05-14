@@ -3,7 +3,7 @@ fluxo normal da nota eletronica
 1 montar o xml
 2 validar a estrutura
 3 validar as regras de negocio
-4 gravo o XML
+4 gravo o XML (bloqueia a nota para edição)
 5 assinar (opcional, porque o componente faz sozinho)
 6 enviar
 7 tratar retorno
@@ -19,7 +19,7 @@ problemas no retorno
 
 fluxo normal da nota eletronica emitida off-line
 ------------------------------------------------
-montar o xml
-validar a estrutura
-validar as regras de negocio
-gravar no banco para posterior envio
+1 montar o xml
+2 validar a estrutura
+3 validar as regras de negocio
+4 gravar no banco para posterior envio

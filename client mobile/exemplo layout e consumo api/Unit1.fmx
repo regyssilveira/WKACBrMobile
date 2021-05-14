@@ -112,7 +112,8 @@ object Form1: TForm1
         item
           AppearanceObjectName = 'vl_venda'
           AppearanceClassName = 'TTextObjectAppearance'
-          Appearance.TextColor = claRed
+          Appearance.TextAlign = Trailing
+          Appearance.TextColor = claPurple
           Appearance.Width = 116.000000000000000000
           Appearance.Height = 19.000000000000000000
           Appearance.Align = Trailing
@@ -122,9 +123,9 @@ object Form1: TForm1
           AppearanceObjectName = 'dt_criacao'
           AppearanceClassName = 'TTextObjectAppearance'
           Appearance.TextColor = claSpringgreen
-          Appearance.Width = 119.000000000000000000
+          Appearance.Width = 95.000000000000000000
           Appearance.Height = 19.000000000000000000
-          Appearance.PlaceOffset.X = 161.000000000000000000
+          Appearance.PlaceOffset.X = 121.000000000000000000
           Appearance.PlaceOffset.Y = 23.000000000000000000
         end
         item
@@ -133,7 +134,7 @@ object Form1: TForm1
           Appearance.TextColor = claSpringgreen
           Appearance.Width = 41.000000000000000000
           Appearance.Height = 19.000000000000000000
-          Appearance.PlaceOffset.X = 115.000000000000000000
+          Appearance.PlaceOffset.X = 75.000000000000000000
           Appearance.PlaceOffset.Y = 23.000000000000000000
         end
         item
@@ -141,7 +142,7 @@ object Form1: TForm1
           AppearanceClassName = 'TTextObjectAppearance'
           Appearance.TextAlign = Leading
           Appearance.TextColor = claSpringgreen
-          Appearance.Width = 112.000000000000000000
+          Appearance.Width = 71.000000000000000000
           Appearance.Height = 19.000000000000000000
           Appearance.PlaceOffset.Y = 23.000000000000000000
         end>
@@ -161,7 +162,7 @@ object Form1: TForm1
     TabOrder = 8
     object ListView1: TListView
       ItemAppearanceClassName = 'TListItemAppearance'
-      ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+      ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
       HeaderAppearanceClassName = 'TListHeaderObjects'
       FooterAppearanceClassName = 'TListHeaderObjects'
       Align = Client
@@ -205,121 +206,6 @@ object Form1: TForm1
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
-  end
-  object tbProdutos: TFDMemTable
-    AfterOpen = tbProdutosAfterOpen
-    FetchOptions.AssignedValues = [evMode]
-    FetchOptions.Mode = fmAll
-    ResourceOptions.AssignedValues = [rvSilentMode]
-    ResourceOptions.SilentMode = True
-    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
-    UpdateOptions.CheckRequired = False
-    UpdateOptions.AutoCommitUpdates = True
-    Left = 304
-    Top = 320
-    object tbProdutosid: TIntegerField
-      FieldName = 'id'
-    end
-    object tbProdutosgtin: TStringField
-      FieldName = 'gtin'
-      Size = 14
-    end
-    object tbProdutosdescricao: TStringField
-      FieldName = 'descricao'
-      Size = 50
-    end
-    object tbProdutosvl_venda: TFloatField
-      FieldName = 'vl_venda'
-    end
-    object tbProdutosdt_criacao: TDateField
-      FieldName = 'dt_criacao'
-    end
-    object tbProdutosun: TStringField
-      FieldName = 'un'
-      Size = 3
-    end
-  end
-  object tbClientes: TFDMemTable
-    AfterOpen = tbClientesAfterOpen
-    FetchOptions.AssignedValues = [evMode]
-    FetchOptions.Mode = fmAll
-    ResourceOptions.AssignedValues = [rvSilentMode]
-    ResourceOptions.SilentMode = True
-    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
-    UpdateOptions.CheckRequired = False
-    UpdateOptions.AutoCommitUpdates = True
-    Left = 304
-    Top = 400
-    object tbClientesid: TIntegerField
-      FieldName = 'id'
-    end
-    object tbClientesnome: TStringField
-      FieldName = 'nome'
-      Size = 50
-    end
-    object tbClientescpf: TStringField
-      FieldName = 'cpf'
-      Size = 11
-    end
-  end
-  object BindSourceDB1: TBindSourceDB
-    DataSet = tbProdutos
-    ScopeMappings = <>
-    Left = 208
-    Top = 336
-  end
-  object BindingsList1: TBindingsList
-    Methods = <>
-    OutputConverters = <>
-    Left = 155
-    Top = 280
-    object LinkListControlToField1: TLinkListControlToField
-      Category = 'Quick Bindings'
-      DataSource = BindSourceDB1
-      Control = ListView2
-      FillExpressions = <
-        item
-          SourceMemberName = 'dt_criacao'
-          ControlMemberName = 'dt_criacao'
-        end
-        item
-          SourceMemberName = 'un'
-          ControlMemberName = 'unidade'
-        end
-        item
-          SourceMemberName = 'vl_venda'
-          ControlMemberName = 'vl_venda'
-        end
-        item
-          SourceMemberName = 'gtin'
-          ControlMemberName = 'gtin'
-        end
-        item
-          SourceMemberName = 'id'
-          ControlMemberName = 'Id'
-        end
-        item
-          SourceMemberName = 'descricao'
-          ControlMemberName = 'descricao'
-        end>
-      FillHeaderExpressions = <>
-      FillBreakGroups = <>
-    end
-    object LinkListControlToField2: TLinkListControlToField
-      Category = 'Quick Bindings'
-      DataSource = BindSourceDB2
-      FieldName = 'nome'
-      Control = ListView1
-      FillExpressions = <>
-      FillHeaderExpressions = <>
-      FillBreakGroups = <>
-    end
-  end
-  object BindSourceDB2: TBindSourceDB
-    DataSet = tbClientes
-    ScopeMappings = <>
-    Left = 216
-    Top = 344
   end
   object StyleBook1: TStyleBook
     Styles = <
@@ -3476,5 +3362,120 @@ object Form1: TForm1
       end>
     Left = 135
     Top = 364
+  end
+  object tbProdutos: TFDMemTable
+    AfterOpen = tbProdutosAfterOpen
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 304
+    Top = 320
+    object tbProdutosid: TIntegerField
+      FieldName = 'id'
+    end
+    object tbProdutosgtin: TStringField
+      FieldName = 'gtin'
+      Size = 14
+    end
+    object tbProdutosdescricao: TStringField
+      FieldName = 'descricao'
+      Size = 50
+    end
+    object tbProdutosvl_venda: TFloatField
+      FieldName = 'vl_venda'
+    end
+    object tbProdutosdt_criacao: TDateField
+      FieldName = 'dt_criacao'
+    end
+    object tbProdutosun: TStringField
+      FieldName = 'un'
+      Size = 3
+    end
+  end
+  object tbClientes: TFDMemTable
+    AfterOpen = tbClientesAfterOpen
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 304
+    Top = 400
+    object tbClientesid: TIntegerField
+      FieldName = 'id'
+    end
+    object tbClientesnome: TStringField
+      FieldName = 'nome'
+      Size = 50
+    end
+    object tbClientescpf: TStringField
+      FieldName = 'cpf'
+      Size = 11
+    end
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = tbProdutos
+    ScopeMappings = <>
+    Left = 208
+    Top = 336
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 155
+    Top = 280
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      Control = ListView2
+      FillExpressions = <
+        item
+          SourceMemberName = 'dt_criacao'
+          ControlMemberName = 'dt_criacao'
+        end
+        item
+          SourceMemberName = 'un'
+          ControlMemberName = 'unidade'
+        end
+        item
+          SourceMemberName = 'vl_venda'
+          ControlMemberName = 'vl_venda'
+        end
+        item
+          SourceMemberName = 'gtin'
+          ControlMemberName = 'gtin'
+        end
+        item
+          SourceMemberName = 'id'
+          ControlMemberName = 'Id'
+        end
+        item
+          SourceMemberName = 'descricao'
+          ControlMemberName = 'descricao'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+    object LinkListControlToField2: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB2
+      FieldName = 'nome'
+      Control = ListView1
+      FillExpressions = <>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+  object BindSourceDB2: TBindSourceDB
+    DataSet = tbClientes
+    ScopeMappings = <>
+    Left = 216
+    Top = 344
   end
 end

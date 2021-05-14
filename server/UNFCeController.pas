@@ -43,15 +43,15 @@ type
     [MVCHTTPMethod([httpGET])]
     procedure GetCliente(Aid: Integer);
 
-    [MVCPath('/nfce')]
+    [MVCPath('/pedido')]
     [MVCHTTPMethod([httpGET])]
     procedure GerarNFCeExemplo;
 
-    [MVCPath('/nfce')]
+    [MVCPath('/pedido')]
     [MVCHTTPMethod([httpPOST])]
     procedure CreateNFCe;
 
-    [MVCPath('/nfce/($ANumero)/($ASerie)/($ATipo)')]
+    [MVCPath('/pedido/($ANumero)/($ASerie)/($ATipo)')]
     [MVCHTTPMethod([httpGET])]
     procedure GetNFCe(ANumero: integer; ASerie: integer; ATipo: string);
   end;
@@ -174,12 +174,13 @@ var
   DmNFCe: TdtmNFCe;
   DmSAT: TDtmSAT;
 begin
+  ContentType := TMVCMediaType.APPLICATION_XML;
+
   case ConfigServer.Tipo of
     tpNFCe:
       begin
         DmNFCe := TdtmNFCe.Create(nil);
         try
-          ContentType := TMVCMediaType.APPLICATION_XML;
           Render(DmNFCe.GerarXML(ANumero, ASerie));
         finally
           DmNFCe.Free;
@@ -190,7 +191,6 @@ begin
       begin
         DmSAT := TDtmSAT.Create(nil);
         try
-          ContentType := TMVCMediaType.APPLICATION_XML;
           Render(DmSAT.GerarXML(ANumero, ASerie));
         finally
           DmSAT.Free;
@@ -206,6 +206,8 @@ var
   PathPDF: string;
   StreamPDF: TMemoryStream;
 begin
+  ContentType := TMVCMediaType.APPLICATION_PDF;
+
   case ConfigServer.Tipo of
     tpNFCe:
       begin
@@ -216,8 +218,6 @@ begin
           StreamPDF := TMemoryStream.Create;
           try
             StreamPDF.LoadFromFile(PathPDF);
-
-            ContentType := TMVCMediaType.APPLICATION_PDF;
             Render(StreamPDF);
           except
             on E: Exception do
@@ -240,8 +240,6 @@ begin
           StreamPDF := TMemoryStream.Create;
           try
             StreamPDF.LoadFromFile(PathPDF);
-
-            ContentType := TMVCMediaType.APPLICATION_PDF;
             Render(StreamPDF);
           except
             on E: Exception do
@@ -264,6 +262,8 @@ var
   PathArqEscPOS: string;
   StreamArqEscPOS: TMemoryStream;
 begin
+  ContentType := TMVCMediaType.TEXT_PLAIN;
+
   case ConfigServer.Tipo of
     tpNFCe:
       begin
@@ -274,8 +274,6 @@ begin
           StreamArqEscPOS := TMemoryStream.Create;
           try
             StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
-
-            ContentType := TMVCMediaType.TEXT_PLAIN;
             Render(StreamArqEscPOS);
           except
             on E: Exception do
@@ -298,8 +296,6 @@ begin
           StreamArqEscPOS := TMemoryStream.Create;
           try
             StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
-
-            ContentType := TMVCMediaType.TEXT_PLAIN;
             Render(StreamArqEscPOS);
           except
             on E: Exception do
@@ -336,7 +332,7 @@ begin
               DmNFCe.PreencherNFCe(oNFCe);
               StrRetorno := DmNFCe.Enviar;
 
-              Render(HTTP_STATUS.Created, StrRetorno);
+              Render(StrRetorno);
             finally
               DmNFCe.Free;
             end;

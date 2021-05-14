@@ -42,7 +42,6 @@ type
     rectPedido: TRectangle;
     rectAtualizar: TRectangle;
     RectConfigurar: TRectangle;
-    FrameConfiguracao1: TFrameConfiguracao;
     TabAtualizacao: TTabItem;
     FramePedido1: TFramePedido;
     ActionList1: TActionList;
@@ -60,6 +59,7 @@ type
     FrameAtualizar2: TFrameAtualizar;
     Label3: TLabel;
     Label6: TLabel;
+    FrameConfiguracao1: TFrameConfiguracao;
     procedure BtnVoltarClick(Sender: TObject);
     procedure BtnConfirmarClick(Sender: TObject);
     procedure TbcPrincipalChange(Sender: TObject);
@@ -70,9 +70,12 @@ type
     procedure rectAtualizarClick(Sender: TObject);
     procedure RectConfigurarClick(Sender: TObject);
     procedure BtnRequisitarPermissoesClick(Sender: TObject);
+    {$IFDEF ANDROID}
     procedure OnRequestPermissions(Sender: TObject; const APermissions: TArray<string>;
       const AGrantResults: TArray<TPermissionStatus>);
+    {$ENDIF}
   private
+    procedure GoTab(ATab: TTabItem);
     { Private declarations }
   public
     { Public declarations }
@@ -87,6 +90,12 @@ implementation
 
 uses
   DPrincipal;
+
+procedure TForm1.GoTab(ATab: TTabItem);
+begin
+  ChangeTabAction1.Tab := ATab;
+  ChangeTabAction1.Execute;
+end;
 
 procedure TForm1.TbcPrincipalChange(Sender: TObject);
 begin
@@ -112,6 +121,7 @@ end;
 
 procedure TForm1.BtnRequisitarPermissoesClick(Sender: TObject);
 begin
+{$IFDEF ANDROID}
   PermissionsService.RequestPermissions(
     [
       JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE),
@@ -119,8 +129,10 @@ begin
     ],
     OnRequestPermissions
   );
+{$ENDIF}
 end;
 
+{$IFDEF ANDROID}
 procedure TForm1.OnRequestPermissions(Sender: TObject; const APermissions: TArray<string>;
   const AGrantResults: TArray<TPermissionStatus>);
 begin
@@ -133,11 +145,11 @@ begin
   else
     ShowMessage('Sem acesso a memória você tera problema ao finalizar o pedido!');
 end;
+{$ENDIF}
 
 procedure TForm1.BtnVoltarClick(Sender: TObject);
 begin
-  ChangeTabAction1.Tab := TabMenu;
-  ChangeTabAction1.Execute;
+  GoTab(TabMenu);
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
@@ -161,22 +173,18 @@ end;
 
 procedure TForm1.rectAtualizarClick(Sender: TObject);
 begin
-  ChangeTabAction1.Tab := TabAtualizacao;
-  ChangeTabAction1.Execute;
+  GoTab(TabAtualizacao);
 end;
 
 procedure TForm1.RectConfigurarClick(Sender: TObject);
 begin
-  ChangeTabAction1.Tab := TabConfiguracao;
-  ChangeTabAction1.Execute;
+  GoTab(TabConfiguracao);
 end;
 
 procedure TForm1.rectPedidoClick(Sender: TObject);
 begin
   FramePedido1.Inicializar;
-
-  ChangeTabAction1.Tab := TabVenda;
-  ChangeTabAction1.Execute;
+  GoTab(TabVenda);
 end;
 
 end.

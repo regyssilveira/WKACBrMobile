@@ -207,13 +207,13 @@ begin
     end;
 
     FResponse := RESTClient
-                  .Resource('/nfce/nfce')
+                  .Resource('/nfce/pedido')
                   .doPOST<TNFCe>(OPedido, False);
 
     if FResponse.HasError then
-      raise Exception.Create(FResponse.ResponseText)
-    else
-      ShowMessage('Pedido incluido com sucesso!');
+      raise Exception.Create(FResponse.ResponseText);
+
+    ShowMessage('Pedido incluido com sucesso!');
   finally
     OPedido.Free;
   end;
@@ -241,11 +241,11 @@ begin
       OPedido.Itens.Add(OPedidoItem);
     end;
 
-    FResponse := RESTClient.doPOST('/nfce/nfce', [], OPedido.AsJsonString);
+    FResponse := RESTClient.doPOST('/nfce/pedido', [], OPedido.AsJsonString);
     if FResponse.HasError then
-      raise Exception.Create(FResponse.ResponseText)
-    else
-      ShowMessage('Pedido incluido com sucesso!');
+      raise Exception.Create(FResponse.ResponseText);
+
+    ShowMessage('Pedido incluido com sucesso!');
   finally
     OPedido.Free;
   end;
@@ -290,7 +290,7 @@ begin
 
   if SaveDialog1.Execute then
   begin
-    FResponse := RESTClient.doGET('/nfce/nfce', ['1', '1', Tipo]);
+    FResponse := RESTClient.doGET('/nfce/pedido', ['1', '1', Tipo]);
     if FResponse.HasError then
       raise Exception.Create(FResponse.ResponseText);
 

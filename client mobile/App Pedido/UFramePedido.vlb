@@ -1,88 +1,88 @@
 ﻿[TmpItensPedido]
 Visible=False
-Coordinates=638,166,108,36
+Coordinates=638,166,94,33
 
 [DtmPrincipal.qryProdutos]
 Visible=False
-Coordinates=638,386,161,36
+Coordinates=638,386,141,33
 
 [Layout3]
-Coordinates=182,592,60,36
+Coordinates=182,592,53,33
 
 [Layout1]
-Coordinates=96,592,60,36
+Coordinates=96,592,53,33
 
 [DtmPrincipal.qryClientes]
-Coordinates=200,292,156,124
+Coordinates=200,292,136,105
 
 [TmpItensPedidoDescricao]
-Coordinates=638,1,165,36
+Coordinates=638,1,143,33
 
 [BindSourceDB2]
-Coordinates=510,10,147,212
+Coordinates=510,10,123,177
 
 [BindingsList1]
-Coordinates=638,56,91,36
+Coordinates=638,56,82,33
 
 [Layout5]
-Coordinates=268,592,60,36
+Coordinates=268,592,53,33
 
 [DtmPrincipal.tmpClientes]
-Coordinates=382,292,160,124
+Coordinates=382,292,139,105
 
 [Layout2]
-Coordinates=354,592,60,36
+Coordinates=354,592,53,33
 
 [Edit2]
-Coordinates=10,508,44,58
+Coordinates=10,508,40,51
 
 [BindSourceDB1]
-Coordinates=197,54,106,168
+Coordinates=197,54,92,141
 
 [BtnAdicionarProduto]
-Coordinates=568,292,133,58
+Coordinates=568,292,118,51
 
 [Label5]
-Coordinates=419,508,53,58
+Coordinates=419,508,46,51
 
 [EdtClienteNome]
-Coordinates=159,508,108,58
+Coordinates=159,508,93,51
 
 [TmpItensPedidoId]
-Coordinates=638,221,119,36
+Coordinates=638,221,103,33
 
 [TmpItensPedidoQuantidade]
-Coordinates=638,276,174,36
+Coordinates=638,276,151,33
 
 [Label4]
-Coordinates=80,508,53,58
+Coordinates=80,508,46,51
 
 [TmpItensPedidoValorVenda]
-Coordinates=638,331,175,36
+Coordinates=638,331,151,33
 
 [Label3]
-Coordinates=577,508,53,58
+Coordinates=577,508,46,51
 
 [EdtProduto]
-Coordinates=340,40,101,146
+Coordinates=340,40,84,123
 Visible=True
 
 [DtmPrincipal.tmpProdutos]
-Coordinates=10,292,164,190
+Coordinates=10,292,144,159
 
 [EdtQuantidade]
-Coordinates=656,508,100,58
+Coordinates=656,508,87,51
 
 [EdtClienteCPF]
-Coordinates=293,508,100,58
+Coordinates=293,508,85,51
 
 [Label1]
-Coordinates=498,508,53,58
+Coordinates=498,508,46,51
 
 [ListView1]
-Coordinates=10,10,107,256
+Coordinates=10,10,89,213
 Visible=True
 
 [Layout4]
-Coordinates=10,592,60,36
+Coordinates=10,592,53,33
 
