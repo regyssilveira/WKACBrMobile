@@ -3,14 +3,14 @@ unit DSAT;
 interface
 
 uses
-  UNFCeClass,
+  UNFCeClass, UDatamoduleInterface,
 
   System.SysUtils, System.Classes, ACBrPosPrinter, ACBrSATExtratoReportClass,
   ACBrSATExtratoFortesFr, ACBrDFeReport, ACBrSATExtratoClass,
   ACBrSATExtratoESCPOS, ACBrBase, ACBrSAT;
 
 type
-  TDtmSAT = class(TDataModule)
+  TDtmSAT = class(TDataModule, IDatamodule)
     ACBrSAT1: TACBrSAT;
     ACBrSATExtratoESCPOS1: TACBrSATExtratoESCPOS;
     ACBrSATExtratoFortes1: TACBrSATExtratoFortes;

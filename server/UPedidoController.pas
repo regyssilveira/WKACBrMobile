@@ -1,4 +1,4 @@
-unit UNFCeController;
+unit UPedidoController;
 
 interface
 
@@ -9,8 +9,8 @@ uses
   UBaseController;
 
 type
-  [MVCPath('/nfce')]
-  TNFCeController = class(TBaseController)
+  [MVCPath('/api')]
+  TPedidoController = class(TBaseController)
   private
     procedure GetNFCePDF(ANumero: integer; ASerie: integer); overload;
     procedure GetNFCeXML(ANumero: integer; ASerie: integer); overload;
@@ -61,19 +61,24 @@ implementation
 
 uses
   Data.DB,
-  System.NetEncoding,
+
   ACBrValidador,
+
+  FireDAC.Comp.Client,
+
+  System.NetEncoding,
   System.SysUtils,
   System.StrUtils,
+
+  UDatamoduleInterface,
   MVCFramework.Logger,
-  UConfigClass,
   UNFCeClass,
-  DNFCe,
-  FireDAC.Comp.Client, DSAT, dfe.service;
+
+  dfe.service;
 
 { TNFCeController }
 
-procedure TNFCeController.Index;
+procedure TPedidoController.Index;
 begin
   ContentType := TMVCMediaType.TEXT_HTML;
   Render(
@@ -82,19 +87,19 @@ begin
   );
 end;
 
-procedure TNFCeController.OnAfterAction(Context: TWebContext; const AActionName: string);
+procedure TPedidoController.OnAfterAction(Context: TWebContext; const AActionName: string);
 begin
   inherited;
 
 end;
 
-procedure TNFCeController.OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean);
+procedure TPedidoController.OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean);
 begin
   inherited;
 
 end;
 
-procedure TNFCeController.GetClientes;
+procedure TPedidoController.GetClientes;
 var
   TmpDataset: TDataSet;
 begin
@@ -105,7 +110,7 @@ begin
     Render(TmpDataset);
 end;
 
-procedure TNFCeController.GetCliente(Aid: Integer);
+procedure TPedidoController.GetCliente(Aid: Integer);
 var
   TmpDataset: TDataSet;
 begin
@@ -116,7 +121,7 @@ begin
     Render(TmpDataset);
 end;
 
-procedure TNFCeController.GetProdutos;
+procedure TPedidoController.GetProdutos;
 var
   TmpDataset: TDataSet;
 const
@@ -133,7 +138,7 @@ begin
     Render(TmpDataset);
 end;
 
-procedure TNFCeController.GetProdutosPaginado(AAtual, AQuantidade: integer);
+procedure TPedidoController.GetProdutosPaginado(AAtual, AQuantidade: integer);
 var
   TmpDataset: TFDQuery;
 begin
@@ -144,7 +149,7 @@ begin
     Render(TmpDataset);
 end;
 
-procedure TNFCeController.GetProduto(AId: Integer);
+procedure TPedidoController.GetProduto(AId: Integer);
 var
   TmpDataset: TDataSet;
 begin
@@ -155,7 +160,7 @@ begin
     Render(TmpDataset);
 end;
 
-procedure TNFCeController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
+procedure TPedidoController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
 begin
   if ATipo.ToUpper = 'XML' then
     Self.GetNFCeXML(Anumero, ASerie)
@@ -169,153 +174,58 @@ begin
     raise Exception.Create('tipo de saida desconhecida');
 end;
 
-procedure TNFCeController.GetNFCeXML(ANumero, ASerie: integer);
-var
-  DmNFCe: TdtmNFCe;
-  DmSAT: TDtmSAT;
+procedure TPedidoController.GetNFCeXML(ANumero, ASerie: integer);
 begin
   ContentType := TMVCMediaType.APPLICATION_XML;
-
-  case ConfigServer.Tipo of
-    tpNFCe:
-      begin
-        DmNFCe := TdtmNFCe.Create(nil);
-        try
-          Render(DmNFCe.GerarXML(ANumero, ASerie));
-        finally
-          DmNFCe.Free;
-        end;
-      end;
-
-    tpSAT:
-      begin
-        DmSAT := TDtmSAT.Create(nil);
-        try
-          Render(DmSAT.GerarXML(ANumero, ASerie));
-        finally
-          DmSAT.Free;
-        end;
-      end;
-  end;
+  Render(Datamodule.GerarXML(ANumero, ASerie));
 end;
 
-procedure TNFCeController.GetNFCePDF(ANumero, ASerie: integer);
+procedure TPedidoController.GetNFCePDF(ANumero, ASerie: integer);
 var
-  DmNFCe: TdtmNFCe;
-  DmSAT: TDtmSAT;
   PathPDF: string;
   StreamPDF: TMemoryStream;
 begin
   ContentType := TMVCMediaType.APPLICATION_PDF;
 
-  case ConfigServer.Tipo of
-    tpNFCe:
-      begin
-        DmNFCe := TdtmNFCe.Create(nil);
-        try
-          PathPDF := DmNFCe.GerarPDF(ANumero, ASerie);
+  PathPDF := Datamodule.GerarPDF(ANumero, ASerie);
 
-          StreamPDF := TMemoryStream.Create;
-          try
-            StreamPDF.LoadFromFile(PathPDF);
-            Render(StreamPDF);
-          except
-            on E: Exception do
-            begin
-              if Assigned(StreamPDF) then
-                StreamPDF.Free;
-            end;
-          end;
-        finally
-          DmNFCe.Free;
-        end;
-      end;
-
-    tpSAT:
-      begin
-        DmSAT := TDtmSAT.Create(nil);
-        try
-          PathPDF := DmSAT.GerarPDF(ANumero, ASerie);
-
-          StreamPDF := TMemoryStream.Create;
-          try
-            StreamPDF.LoadFromFile(PathPDF);
-            Render(StreamPDF);
-          except
-            on E: Exception do
-            begin
-              if Assigned(StreamPDF) then
-                StreamPDF.Free;
-            end;
-          end;
-        finally
-          DmSAT.Free;
-        end;
-      end;
+  StreamPDF := TMemoryStream.Create;
+  try
+    StreamPDF.LoadFromFile(PathPDF);
+    Render(StreamPDF);
+  except
+    on E: Exception do
+    begin
+      StreamPDF.Free;
+    end;
   end;
 end;
 
-procedure TNFCeController.GetNFCeEscPOS(ANumero, ASerie: integer);
+procedure TPedidoController.GetNFCeEscPOS(ANumero, ASerie: integer);
 var
-  DmNFCe: TdtmNFCe;
-  DmSAT: TDtmSAT;
   PathArqEscPOS: string;
   StreamArqEscPOS: TMemoryStream;
 begin
   ContentType := TMVCMediaType.TEXT_PLAIN;
 
-  case ConfigServer.Tipo of
-    tpNFCe:
-      begin
-        DmNFCe := TdtmNFCe.Create(nil);
-        try
-          PathArqEscPOS := DmNFCe.GerarEscPOS(ANumero, ASerie);
+  PathArqEscPOS := Datamodule.GerarEscPOS(ANumero, ASerie);
 
-          StreamArqEscPOS := TMemoryStream.Create;
-          try
-            StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
-            Render(StreamArqEscPOS);
-          except
-            on E: Exception do
-            begin
-              if Assigned(StreamArqEscPOS) then
-                StreamArqEscPOS.Free;
-            end;
-          end;
-        finally
-          DmNFCe.Free;
-        end;
-      end;
-
-    tpSAT:
-      begin
-        DmSAT := TDtmSAT.Create(nil);
-        try
-          PathArqEscPOS := DmSAT.GerarEscPOS(ANumero, ASerie);
-
-          StreamArqEscPOS := TMemoryStream.Create;
-          try
-            StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
-            Render(StreamArqEscPOS);
-          except
-            on E: Exception do
-            begin
-              if Assigned(StreamArqEscPOS) then
-                StreamArqEscPOS.Free;
-            end;
-          end;
-        finally
-          DmSAT.Free;
-        end;
-      end;
+  StreamArqEscPOS := TMemoryStream.Create;
+  try
+    StreamArqEscPOS.LoadFromFile(PathArqEscPOS);
+    Render(StreamArqEscPOS);
+  except
+    on E: Exception do
+    begin
+      if Assigned(StreamArqEscPOS) then
+        StreamArqEscPOS.Free;
+    end;
   end;
 end;
 
-procedure TNFCeController.CreateNFCe;
+procedure TPedidoController.CreateNFCe;
 var
   oNFCe: TNFCe;
-  DmNFCe: TdtmNFCe;
-  DmSAT: TDtmSAT;
   StrRetorno: string;
 begin
   try
@@ -324,35 +234,12 @@ begin
       if oNFCe.Itens.Count <= 0 then
         raise Exception.Create('Nenhum item foi informado!');
 
-      case ConfigServer.Tipo of
-        tpNFCe:
-          begin
-            DmNFCe := TdtmNFCe.Create(nil);
-            try
-              DmNFCe.PreencherNFCe(oNFCe);
-              StrRetorno := DmNFCe.Enviar;
+      Datamodule.PreencherNFCe(oNFCe);
+      StrRetorno := Datamodule.Enviar;
 
-              Render(StrRetorno);
-            finally
-              DmNFCe.Free;
-            end;
-          end;
-
-        tpSAT:
-          begin
-            DmSAT := TDtmSAT.Create(nil);
-            try
-              DmSAT.PreencherNFCe(oNFCe);
-              StrRetorno := DmSAT.Enviar;
-
-              Render(HTTP_STATUS.Created, StrRetorno);
-            finally
-              DmSAT.Free;
-            end;
-          end;
-      end;
+      Render(StrRetorno);
     finally
-      oNFCe.Free;
+      oNFCe.DisposeOf;
     end;
   except
     on E: Exception do
@@ -362,7 +249,7 @@ begin
   end;
 end;
 
-procedure TNFCeController.GerarNFCeExemplo;
+procedure TPedidoController.GerarNFCeExemplo;
 var
   I: Integer;
   oNFCe: TNFCe;

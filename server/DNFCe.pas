@@ -3,7 +3,7 @@ unit DNFCe;
 interface
 
 uses
-  UNFCeClass,
+  UNFCeClass, UDatamoduleInterface,
 
   System.IOUtils,
 
@@ -12,7 +12,7 @@ uses
   ACBrPosPrinter, ACBrNFeDANFeESCPOS;
 
 type
-  TdtmNFCe = class(TDataModule)
+  TdtmNFCe = class(TDataModule, IDatamodule)
     ACBrNFe1: TACBrNFe;
     ACBrNFeDANFCeFortes1: TACBrNFeDANFCeFortes;
     ACBrNFeDANFeESCPOS1: TACBrNFeDANFeESCPOS;

@@ -1,4 +1,4 @@
-unit UNFCeWebModulle;
+unit UServerWebModulle;
 
 interface
 
@@ -30,7 +30,7 @@ implementation
 {$R *.dfm}
 
 uses
-  UNFCeController,
+  UPedidoController,
   System.IOUtils,
 
   MVCFramework.Commons,
@@ -53,7 +53,7 @@ begin
       Config[TMVCConfigKey.MaxRequestSize]           := IntToStr(TMVCConstants.DEFAULT_MAX_REQUEST_SIZE);
     end);
 
-  FMVC.AddController(TNFCeController);
+  FMVC.AddController(TPedidoController);
 
   // To enable compression (deflate, gzip) just add this middleware as the last one
   FMVC.AddMiddleware(TMVCCompressionMiddleware.Create);

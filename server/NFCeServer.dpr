@@ -11,8 +11,8 @@ uses
   Web.WebReq,
   Web.WebBroker,
   IdHTTPWebBrokerBridge,
-  UNFCeController in 'UNFCeController.pas',
-  UNFCeWebModulle in 'UNFCeWebModulle.pas' {NFCEWebModule: TWebModule},
+  UPedidoController in 'UPedidoController.pas',
+  UServerWebModulle in 'UServerWebModulle.pas' {NFCEWebModule: TWebModule},
   UConfigClass in 'UConfigClass.pas',
   UNFCeClass in '..\comum\UNFCeClass.pas',
   DNFCe in 'DNFCe.pas' {DtmNFCe: TDataModule},
@@ -20,7 +20,8 @@ uses
   AuthHandlerU in 'AuthHandlerU.pas',
   UPoolConnection in 'UPoolConnection.pas',
   DSAT in 'DSAT.pas' {DtmSAT: TDataModule},
-  dfe.service in 'dfe.service.pas';
+  dfe.service in 'dfe.service.pas',
+  UDatamoduleInterface in 'UDatamoduleInterface.pas';
 
 {$R *.res}
 

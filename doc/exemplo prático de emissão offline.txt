@@ -1,0 +1,18 @@
+10 erro
+11 clone da 10
+12 erro
+13 clone da 12
+14 erro
+15 clone da 14
+16 erro
+17 clone da 16
+18 erro
+19 clone da 18
+20 emitida normalmente
+
+notas 11, 13, 15, 17, 19 emitidas offline enviar
+
+notas 10, 12, 14, 16, 18 com erro, consultar uma a uma e validar situação conforme fluxos.
+
+10, 12, 14 foi autorizada, cancela
+16, 18 não foi autorizada, inutiliza a numeração 
