@@ -1,0 +1,16 @@
+https://sourceforge.net/projects/acbr/
+https://tortoisesvn.net/downloads.html
+https://sourceforge.net/p/acbr/code/HEAD/tree/trunk2/
+https://pt.wikipedia.org/wiki/REST
+https://www.json.org/json-en.html
+https://github.com/danieleteti/delphimvcframework
+https://tortoisegit.org/download/
+https://github.com/danieleteti/delphimvcframework#getting-started-5-minutes-guide
+https://www.youtube.com/watch?v=r8jqKELVbR4
+https://www.embarcadero.com/br/products/delphi/product-editions
+https://github.com/regyssilveira/WKACBrMobile
+https://www.youtube.com/watch?v=hCOQhfeDwdE&list=PLlk2WKOSL6ZEQ-ZDHpmhIiFQ0IjqlGIBw
+https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status
+https://github.com/danieleteti/delphiredisclient
+https://github.com/MicrosoftArchive/redis/releases?fbclid=IwAR3CxeBKyZeLyD9AFPohorJjizZUOFy3Mhg-Jevvbu3DJl9PrLMIx6On3xE
+https://www.nginx.com/
