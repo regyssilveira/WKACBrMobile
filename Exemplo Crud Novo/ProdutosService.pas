@@ -26,6 +26,7 @@ type
     function GetProdutos(const ALikeDescricao: string): TObjectList<TProduto>;
     function GetProdutosDataset(const ALikeDescricao: string): TDataset;
     function GetProduto(const ACodProduto: Integer): TProduto;
+
     procedure Post(const AProduto: TProduto);
     procedure Update(const AId: Integer; const AProduto: TProduto);
     procedure Delete(const ACodProduto: Integer);
@@ -114,7 +115,6 @@ var
   TmpDataset: TDataSet;
 begin
   Result := TProduto.Create;
-
   try
     FDConexao.ExecSQL(
       'select * from produtos where ID=' + ACodProduto.ToString,

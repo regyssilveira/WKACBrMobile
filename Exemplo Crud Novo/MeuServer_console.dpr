@@ -107,7 +107,7 @@ begin
     if WebRequestHandler <> nil then
       WebRequestHandler.WebModuleClass := WebModuleClass;
     WebRequestHandlerProc.MaxConnections := 1024;
-    RunServer(8080);
+    RunServer(8081);
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

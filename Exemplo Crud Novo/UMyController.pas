@@ -7,6 +7,10 @@ uses
   Redis.NetLib.indy,
 
   ProdutosService,
+  Data.DB,
+  ProdutosClass,
+
+  Generics.Collections,
 
   MVCFramework,
   MVCFramework.Logger,
@@ -18,6 +22,8 @@ type
   TMyController = class(TMVCCacheController)
   private
     FProdutoService: TProdutoService;
+    function GetProdutosDataset(const Alike: string): TDataset;
+    function GetProdutosLista(const Alike: string): TObjectList<TProduto>;
   protected
     procedure OnBeforeAction(Context: TWebContext; const AActionName: string; var Handled: Boolean); override;
     procedure OnAfterAction(Context: TWebContext; const AActionName: string); override;
@@ -45,20 +51,12 @@ type
     [MVCPath('/produtos/($id)')]
     [MVCHTTPMethod([httpDELETE])]
     procedure DeleteProduto(id: Integer);
-
-
-    [MVCPath('/produtosdts')]
-    [MVCHTTPMethod([httpGET])]
-    procedure GetProdutosDataset;
   end;
 
 implementation
 
 uses
-  System.SysUtils,
-  Data.DB,
-
-  ProdutosClass;
+  System.SysUtils;
 
 procedure TMyController.GetMyRootPage;
 begin
@@ -84,11 +82,16 @@ end;
 procedure TMyController.Getprodutos;
 var
   StrQuery: string;
+  StrTipo: string;
 begin
   StrQuery := Context.Request.QueryStringParam('like');
 
+  StrTipo := Context.Request.QueryStringParam('tipo');
+  if StrTipo.Trim.IsEmpty then
+    StrTipo := 'lista';
+
   // seta a chave e verifica se existe cache
-  SetCacheKey('#cache::produto::' + StrQuery);
+  SetCacheKey('#cache::produto::' + StrTipo + '::' + StrQuery);
   if CacheAvailable then
   begin
     Log.Info('>>>>>>>> usou o cache.', '');
@@ -96,23 +99,26 @@ begin
   end;
 
   Log.Info('>>>>>>>>> não usou o cache.', '');
-  Render<TProduto>(FProdutoService.GetProdutos(StrQuery));
+  if StrTipo.Equals('dataset') then
+    Render(GetProdutosDataset(StrQuery))
+  else
+  if StrTipo.Equals('lista') then
+    Render<TProduto>(GetProdutosLista(StrQuery))
+  else
+    raise Exception.Create('Tipo desconhecido');
 
   // seta o tempo de vida do cache
-  SetCache(10);
+  SetCache(8);
 end;
 
-procedure TMyController.GetProdutosDataset;
-var
-  TmpDataset: TDataset;
+function TMyController.GetProdutosDataset(const Alike: string): TDataset;
 begin
-  TmpDataset :=
-    FProdutoService.GetProdutosDataset(
-      Context.Request.QueryStringParam('like')
-    );
+  Result := FProdutoService.GetProdutosDataset(Alike);
+end;
 
-  // fazer sem cache como exemplo e usando dataset
-  Render(TmpDataset);
+function TMyController.GetProdutosLista(const Alike: string): TObjectList<TProduto>;
+begin
+  Result := FProdutoService.GetProdutos(Alike);
 end;
 
 procedure TMyController.Getproduto(id: Integer);
