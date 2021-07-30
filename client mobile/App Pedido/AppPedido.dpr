@@ -9,7 +9,7 @@ uses
   UFrameAtualizar in 'UFrameAtualizar.pas' {FrameAtualizar: TFrame},
   DPrincipal in 'DPrincipal.pas' {DtmPrincipal: TDataModule},
   UFramePedido in 'UFramePedido.pas' {FramePedido: TFrame},
-  UNFCeClass in '..\..\comum\UNFCeClass.pas';
+  UPedidoClass in '..\..\comum\UPedidoClass.pas';
 
 {$R *.res}
 

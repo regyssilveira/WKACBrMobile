@@ -53,7 +53,7 @@ type
     FResp: IRESTResponse;
     function GetCli: TRESTClient;
   public
-    procedure GetPDFFromNFCe(const ANumero, ASerie: integer);
+    procedure GetPDFFromPedido(const ANumero, ASerie: integer);
 
     property Cli: TRESTClient read GetCli;
     property Resp: IRESTResponse read FResp write FResp;
@@ -105,18 +105,18 @@ procedure TDtmPrincipal.tmpClientesAfterOpen(DataSet: TDataSet);
 var
   FutResponse: IFuture<string>;
 begin
-  //consumo assincrono (FORMA PREFERENCIAL)
   FutResponse := TTask.Future<string>(
     function: string
     var
       Response: IRESTResponse;
     begin
-      Response := Cli.doGET('/nfce/clientes', []);
+      Response := Cli.doGET('/api/clientes', []);
       if Response.HasError then
-        raise Exception.Create(FResp.ResponseText);
+        raise Exception.Create(Response.ResponseText);
 
       Result := Response.BodyAsString;
-    end);
+    end
+  );
 
   DataSet.DisableControls;
   try
@@ -136,12 +136,13 @@ begin
     var
       Response: IRESTResponse;
     begin
-      Response := Cli.doGET('/nfce/produtos', []);
+      Response := Cli.doGET('/api/produtos', []);
       if Response.HasError then
         raise Exception.Create(FResp.ResponseText);
 
       Result := Response.BodyAsString;
-    end);
+    end
+  );
 
   DataSet.DisableControls;
   try
@@ -202,7 +203,7 @@ begin
     TPath.Combine(TPath.GetDocumentsPath, 'AppPedidos.sqlite');
 end;
 
-procedure TDtmPrincipal.GetPDFFromNFCe(const ANumero, ASerie: integer);
+procedure TDtmPrincipal.GetPDFFromPedido(const ANumero, ASerie: integer);
 var
   PDFStream: TMemoryStream;
   PathFilePDF: string;
@@ -213,11 +214,11 @@ var
   Response: IRESTResponse;
 begin
   //caminho do arquivo baixado
-  PathFilePDF := TPath.Combine(TPath.GetSharedDownloadsPath, 'notafiscal.pdf');
+  PathFilePDF := TPath.Combine(TPath.GetDownloadsPath, 'notafiscal.pdf');
   if TFile.Exists(PathFilePDF) then
     TFile.Delete(PathFilePDF);
 
-  Response := Cli.doGET('/nfce/pedido', [ANumero.ToString, ASerie.ToString, 'PDF']);
+  Response := Cli.doGET('/api/pedido', [ANumero.ToString, ASerie.ToString, 'PDF']);
   if Response.HasError then
     raise Exception.Create(FResp.ResponseText);
 
@@ -235,8 +236,6 @@ begin
   // abrir pdf no editor padrão
   if TFile.Exists(PathFilePDF) then
   begin
-    ShowMessage(PathFilePDF);
-
     {$IFDEF ANDROID}
     // visualizar pdf
     LFile := TJFile.JavaClass.init(StringToJString(PathFilePDF));

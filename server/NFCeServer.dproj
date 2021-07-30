@@ -149,7 +149,7 @@
             <DesignClass>TWebModule</DesignClass>
         </DCCReference>
         <DCCReference Include="UConfigClass.pas"/>
-        <DCCReference Include="..\comum\UNFCeClass.pas"/>
+        <DCCReference Include="..\comum\UPedidoClass.pas"/>
         <DCCReference Include="DNFCe.pas">
             <Form>DtmNFCe</Form>
             <FormType>dfm</FormType>

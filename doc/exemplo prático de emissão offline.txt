@@ -1,16 +1,16 @@
 10 erro
-11 clone da 10
+11 clone da 10 offline
 12 erro
-13 clone da 12
+13 clone da 12 offline
 14 erro
-15 clone da 14
+15 clone da 14 offline
 16 erro
-17 clone da 16
+17 clone da 16 offline
 18 erro
-19 clone da 18
+19 clone da 18 offline
 20 emitida normalmente
 
-notas 11, 13, 15, 17, 19 emitidas offline enviar
+notas 11, 13, 15, 17, 19 emitidas offline enviar regravar o XML
 
 notas 10, 12, 14, 16, 18 com erro, consultar uma a uma e validar situação conforme fluxos.
 

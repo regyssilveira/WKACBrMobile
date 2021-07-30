@@ -1,4 +1,4 @@
-unit UNFCeClass;
+unit UPedidoClass;
 
 interface
 
@@ -11,7 +11,7 @@ uses
 
 type
   [MVCNameCaseAttribute(ncLowerCase)]
-  TNFCeItem = class
+  TPedidoItem = class
   private
     FValor: double;
     FDescricao: string;
@@ -25,9 +25,9 @@ type
   end;
 
   [MVCNameCaseAttribute(ncLowerCase)]
-  TNFCe = class
+  TPedido = class
   private
-    FItens: TObjectList<TNFCeItem>;
+    FItens: TObjectList<TPedidoItem>;
     Fcpf: string;
     FNome: string;
     FNumero: integer;
@@ -42,7 +42,7 @@ type
     property Serie: Integer read FSerie write FSerie;
     property cpf: string read Fcpf write Fcpf;
     property Nome: string read FNome write FNome;
-    property Itens: TObjectList<TNFCeItem> read FItens write FItens;
+    property Itens: TObjectList<TPedidoItem> read FItens write FItens;
   end;
 
 implementation
@@ -52,9 +52,9 @@ uses
   MVCFramework.Serializer.JsonDataObjects,
   JsonDataObjects;
 
-{ TNFCe }
+{ TPedido }
 
-function TNFCe.AsJsonString: String;
+function TPedido.AsJsonString: String;
 var
   Serializar: TMVCJsonDataObjectsSerializer;
   JsonObj: TJSONObject;
@@ -70,15 +70,15 @@ begin
   end;
 end;
 
-constructor TNFCe.Create;
+constructor TPedido.Create;
 begin
   inherited create;
-  FItens := TObjectList<TNFCeItem>.Create;
+  FItens := TObjectList<TPedidoItem>.Create;
 end;
 
-destructor TNFCe.Destroy;
+destructor TPedido.Destroy;
 begin
-  FItens.Free;
+  FItens.DisposeOf;
   inherited;
 end;
 

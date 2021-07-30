@@ -3,12 +3,12 @@ unit UPedidoInterface;
 interface
 
 uses
-  UNFCeClass;
+  UPedidoClass;
 
 type
   IPedido = interface
   ['{56935591-EC7B-47D4-8BAB-BF320B234750}']
-    procedure PreencherNFCe(ANFCe: TNFCe);
+    procedure PreencherNFCe(ANFCe: TPedido);
     function Enviar: string;
 
     function GerarPDF(numero, serie: integer): string;

@@ -352,7 +352,7 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\..\comum\UNFCeClass.pas"/>
+        <DCCReference Include="..\..\comum\UPedidoClass.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -687,14 +687,14 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Configuration="Release" Class="Android_SplashImage426">
-                    <Platform Name="Android64">
-                        <RemoteName>splash_image.png</RemoteName>
+                <DeployFile LocalName="Android\Release\AndroidManifest.xml" Configuration="Release" Class="ProjectAndroidManifest">
+                    <Platform Name="Android">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Android\Release\AndroidManifest.xml" Configuration="Release" Class="ProjectAndroidManifest">
-                    <Platform Name="Android">
+                <DeployFile LocalName="$(BDS)\lib\android\debug\armeabi-v7a\libnative-activity.so" Configuration="Release" Class="AndroidLibnativeArmeabiv7aFile">
+                    <Platform Name="Android64">
+                        <RemoteName>libAppPedido.so</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -704,9 +704,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\lib\android\debug\armeabi-v7a\libnative-activity.so" Configuration="Release" Class="AndroidLibnativeArmeabiv7aFile">
+                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Configuration="Release" Class="Android_SplashImage426">
                     <Platform Name="Android64">
-                        <RemoteName>libAppPedido.so</RemoteName>
+                        <RemoteName>splash_image.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

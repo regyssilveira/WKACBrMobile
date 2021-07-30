@@ -17,9 +17,7 @@ type
   TFramePedido = class(TFrame)
     Layout1: TLayout;
     Layout2: TLayout;
-    Label1: TLabel;
     EdtClienteNome: TEdit;
-    Edit2: TEdit;
     EdtClienteCPF: TLabel;
     Label3: TLabel;
     Layout3: TLayout;
@@ -54,7 +52,7 @@ implementation
 
 {$R *.fmx}
 
-uses DPrincipal, UNFCeClass;
+uses DPrincipal, UPedidoClass;
 
 { TFramePedido }
 
@@ -97,7 +95,7 @@ begin
   TmpItensPedido.InsertRecord([
     DtmPrincipal.qryProdutosID.AsInteger,
     DtmPrincipal.qryProdutosDESCRICAO.AsString,
-    StrToInt(EdtQuantidade.Text),
+    EdtQuantidade.Text.ToInteger,
     DtmPrincipal.qryProdutosVL_VENDA.AsFloat
   ]);
   {
@@ -114,33 +112,38 @@ end;
 
 procedure TFramePedido.EnviarPedido;
 var
-  oPedido: TNFCe;
-  oItemPedido: TNFCeItem;
+  oPedido: TPedido;
+  oItemPedido: TPedidoItem;
 begin
   if TmpItensPedido.IsEmpty then
     raise Exception.Create('Nenhum item foi adicionado, impossível continuar!');
 
-  oPedido := TNFCe.Create;
+  oPedido := TPedido.Create;
   try
     oPedido.cpf  := EdtClienteCPF.Text.Trim;
     oPedido.Nome := EdtClienteNome.Text.Trim;
 
-    TmpItensPedido.First;
-    while not TmpItensPedido.Eof do
-    begin
-      oItemPedido := TNFCeItem.Create;
-      oItemPedido.Id         := TmpItensPedidoId.AsInteger;
-      oItemPedido.Descricao  := TmpItensPedidoDescricao.AsString;
-      oItemPedido.Valor      := TmpItensPedidoValorVenda.AsFloat;
-      oItemPedido.Quantidade := TmpItensPedidoQuantidade.AsInteger;
+    TmpItensPedido.DisableControls;
+    try
+      TmpItensPedido.First;
+      while not TmpItensPedido.Eof do
+      begin
+        oItemPedido := TPedidoItem.Create;
+        oItemPedido.Id         := TmpItensPedidoId.AsInteger;
+        oItemPedido.Descricao  := TmpItensPedidoDescricao.AsString;
+        oItemPedido.Valor      := TmpItensPedidoValorVenda.AsFloat;
+        oItemPedido.Quantidade := TmpItensPedidoQuantidade.AsInteger;
 
-      oPedido.Itens.Add(oItemPedido);
-      TmpItensPedido.Next;
+        oPedido.Itens.Add(oItemPedido);
+        TmpItensPedido.Next;
+      end;
+    finally
+      TmpItensPedido.EnableControls;
     end;
 
     DtmPrincipal.Resp := DtmPrincipal.Cli
-                           .Resource('/nfce/pedido')
-                           .doPOST<TNFCe>(oPedido, False);
+                           .Resource('/api/pedido')
+                           .doPOST<TPedido>(oPedido, False);
 
     if DtmPrincipal.Resp.HasError then
       raise Exception.Create(DtmPrincipal.Resp.ResponseText);
@@ -148,7 +151,7 @@ begin
     ShowMessage('Pedido Enviado!');
     Self.Limpar;
 
-    DtmPrincipal.GetPDFFromNFCe(1, 1);
+    DtmPrincipal.GetPDFFromPedido(1, 1);
   finally
     oPedido.DisposeOf;
   end;

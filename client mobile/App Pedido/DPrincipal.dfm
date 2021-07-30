@@ -1,7 +1,7 @@
 object DtmPrincipal: TDtmPrincipal
   OldCreateOrder = False
-  Height = 363
-  Width = 551
+  Height = 302
+  Width = 528
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Database=C:\Users\regys\Documents\AppPedidos.sqlite'
@@ -57,7 +57,7 @@ object DtmPrincipal: TDtmPrincipal
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
     Left = 147
-    Top = 156
+    Top = 154
     object tmpClientesid: TIntegerField
       FieldName = 'id'
     end

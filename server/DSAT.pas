@@ -3,7 +3,7 @@ unit DSAT;
 interface
 
 uses
-  UNFCeClass, UDatamoduleInterface,
+  UPedidoClass, UDatamoduleInterface,
 
   System.SysUtils, System.Classes, ACBrPosPrinter, ACBrSATExtratoReportClass,
   ACBrSATExtratoFortesFr, ACBrDFeReport, ACBrSATExtratoClass,
@@ -21,7 +21,7 @@ type
     procedure ConfigurarSAT;
     function PathNotaFiscalExemplo: string;
   public
-    procedure PreencherNFCe(ANFCe: TNFCe);
+    procedure PreencherDFe(APedido: TPedido);
     function Enviar: string;
 
     function GerarPDF(numero, serie: integer): string;
@@ -113,9 +113,6 @@ begin
   ACBrSAT1.Extrato.Site                  := 'https://regys.com.br';
   ACBrSAT1.Extrato.Email                 := 'regys.silveira@gmail.com';
 
-  // configurações para gerar pdf
-  ACBrSATExtratoFortes1.PathPDF := PathPDF;
-
   // configurar margens do danfe
 //    ACBrSAT1.Extrato.MargemSuperior := ;
 //    ACBrSAT1.Extrato.MargemInferior := ;
@@ -123,13 +120,13 @@ begin
 //    ACBrSAT1.Extrato.MargemEsquerda := ;
 end;
 
-procedure TDtmSAT.PreencherNFCe(ANFCe: TNFCe);
+procedure TDtmSAT.PreencherDFe(APedido: TPedido);
 var
   NumItem: Integer;
   vOK: Boolean;
   CodigoGTIN: String;
   MsgErroGTIN: String;
-  Item: TNFCeItem;
+  Item: TPedidoItem;
   ValorTotal: Double;
   OItem: TDetCollectionItem;
 begin
@@ -140,11 +137,9 @@ begin
   // Montando uma Venda //
   with ACBrSAT1.CFe do
   begin
-    ide.numeroCaixa := ACBrSAT1.Config.ide_numeroCaixa;
-
     // dados do cliente
-    Dest.CNPJCPF := ANFCe.cpf;
-    Dest.xNome   := ANFCe.Nome;
+    Dest.CNPJCPF := APedido.cpf;
+    Dest.xNome   := APedido.Nome;
 
     // endereço de entrega
     Entrega.xLgr    := '';
@@ -157,7 +152,7 @@ begin
     // itens da venda
     NumItem := 0;
     ValorTotal := 0;
-    for Item in ANFCe.Itens do
+    for Item in APedido.Itens do
     begin
       NumItem := NumItem + 1;
 
@@ -193,8 +188,8 @@ begin
           CST       := TpcnCstPis.pis49;
           vBC       := 0;
           pPIS      := 0;
-          qBCProd   := 0;
-          vAliqProd := 0;
+          //qBCProd   := 0;
+          //vAliqProd := 0;
         end;
 
         // COFINS ******************************************************
@@ -203,8 +198,8 @@ begin
           CST       := TpcnCstCofins.cof49;
           vBC       := 0;
           pCOFINS   := 0;
-          qBCProd   := 0;
-          vAliqProd := 0;
+          //qBCProd   := 0;
+          //vAliqProd := 0;
         end;
 
         // imposto aproximado
@@ -218,8 +213,9 @@ begin
     //PAGAMENTOS apenas para NFC-e
     with Pagto.New do
     begin
-      vMP := ValorTotal;
-      cMP := TpcnCodigoMP.mpDinheiro;
+      vMP   := ValorTotal;
+      cMP   := TpcnCodigoMP.mpDinheiro;
+      //cAdmC := ''; somente quando é cartão
     end;
   end;
 end;
@@ -254,7 +250,7 @@ begin
     ACBrSAT1.CFe.SaveToFile(PathNotaFiscalExemplo);
   end
   else
-    raise Exception.CreateFmt('%d - %s', [ACBrSAT1.Resposta.codigoDeErro, ACBrSAT1.Resposta.mensagemRetorno]);
+    raise Exception.CreateFmt('%d - %s', [ACBrSAT1.Resposta.codigoDeRetorno, ACBrSAT1.Resposta.mensagemRetorno]);
 end;
 
 function TDtmSAT.GerarPDF(numero, serie: integer): string;

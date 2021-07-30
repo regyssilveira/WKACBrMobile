@@ -82,7 +82,7 @@ var
 implementation
 
 uses
-  MVCFramework.DataSet.Utils, UNFCeClass;
+  MVCFramework.DataSet.Utils, UPedidoClass;
 
 {$R *.dfm}
 
@@ -105,7 +105,7 @@ begin
   if Assigned(FRestClient) then
     FRestClient.Free;
 
-  FRestClient := TRESTClient.Create('localhost', 8080);
+  FRestClient := TRESTClient.Create('localhost', 8081);
   //RestClient.URL := 'localhost:8080';
   FRestClient.Username := 'admin';
   FRestClient.Password := 'adminpass';
@@ -116,10 +116,13 @@ end;
 
 procedure TFrmPrincipal.BtnBuscaClienteClick(Sender: TObject);
 begin
+  // busca com
+  // localhost:8081/api/clientes/1
+
   if Trim(EdtCodCliente.Text).IsEmpty then
-    FResponse := RESTClient.doGET('/nfce/clientes', [])
+    FResponse := RESTClient.doGET('/api/clientes', [])
   else
-    FResponse := RESTClient.doGET('/nfce/clientes', [EdtCodCliente.Text]);
+    FResponse := RESTClient.doGET('/api/clientes', [EdtCodCliente.Text]);
 
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
@@ -129,14 +132,17 @@ end;
 
 procedure TFrmPrincipal.BtnBuscaPagAnteriorClick(Sender: TObject);
 begin
+  // busca com paginacao
+  // localhost:8081/api/produtos/1/10
+
   if Trim(EdtQuantRegistros.Text).IsEmpty then
     raise Exception.Create('Informe a quantidade de registros');
 
   FAtual := FAtual - StrToInt(EdtQuantRegistros.Text);
-  if FAtual <= 0 then
+  if FAtual < 0 then
     FAtual := 0;
 
-  FResponse := RESTClient.doGET('/nfce/produtos', [FAtual.ToString , EdtQuantRegistros.Text]);
+  FResponse := RESTClient.doGET('/api/produtos', [FAtual.ToString , EdtQuantRegistros.Text]);
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
@@ -145,12 +151,15 @@ end;
 
 procedure TFrmPrincipal.BtnBuscaPagProximoClick(Sender: TObject);
 begin
+  // busca com paginacao
+  // localhost:8081/api/produtos/1/10
+
   if Trim(EdtQuantRegistros.Text).IsEmpty then
     raise Exception.Create('Informe a quantidade de registros');
 
   FAtual := FAtual + StrToInt(EdtQuantRegistros.Text);
 
-  FResponse := RESTClient.doGET('/nfce/produtos', [FAtual.ToString, EdtQuantRegistros.Text]);
+  FResponse := RESTClient.doGET('/api/produtos', [FAtual.ToString, EdtQuantRegistros.Text]);
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
 
@@ -159,10 +168,16 @@ end;
 
 procedure TFrmPrincipal.BtnBuscaProdutoClick(Sender: TObject);
 begin
+  // busca com codigo como seria no servidor
+  // localhost:8081/api/produtos/18
+
+  // busca sem codigo como seria no servidor
+  // localhost:8081/api/produtos
+
   if Trim(EdtCodProduto.Text).IsEmpty then
-    FResponse := RESTClient.doGET('/nfce/produtos', [])
+    FResponse := RESTClient.doGET('/api/produtos', [])
   else
-    FResponse := RESTClient.doGET('/nfce/produtos', [EdtCodProduto.Text]);
+    FResponse := RESTClient.doGET('/api/produtos', [EdtCodProduto.Text]);
 
   if FResponse.HasError then
     raise Exception.Create(FResponse.ResponseText);
@@ -172,8 +187,9 @@ end;
 
 procedure TFrmPrincipal.BtnBuscaProdutoLikeClick(Sender: TObject);
 begin
+  // localhost:8081/api/produtos?like=descricao
   FResponse := RESTClient.doGET(
-    '/nfce/produtos',         // recurso
+    '/api/produtos',         // recurso
     [],                       // parametros de url
     ['like'],                 // parametros de query (quando usa '?')
     [EdtProdutoDescr.Text]    // valores dos parametros de query, na sequencia dos parametros acima
@@ -186,18 +202,18 @@ end;
 
 procedure TFrmPrincipal.BtnEnviarPedidoObjetoClick(Sender: TObject);
 var
-  OPedido: TNFCe;
-  OPedidoItem: TNFCeItem;
+  OPedido: TPedido;
+  OPedidoItem: TPedidoItem;
   I: Integer;
 begin
-  OPedido := TNFCe.Create;
+  OPedido := TPedido.Create;
   try
     OPedido.cpf  := '';
     OPedido.Nome := '';
 
     for I := 1 to 5 do
     begin
-      OPedidoItem := TNFCeItem.Create;
+      OPedidoItem := TPedidoItem.Create;
       OPedidoItem.Id         := I;
       OPedidoItem.Descricao  := 'Descricao do item ' + I.ToString;
       OPedidoItem.Valor      := I;
@@ -207,8 +223,8 @@ begin
     end;
 
     FResponse := RESTClient
-                  .Resource('/nfce/pedido')
-                  .doPOST<TNFCe>(OPedido, False);
+                  .Resource('/api/pedido')
+                  .doPOST<TPedido>(OPedido, False);
 
     if FResponse.HasError then
       raise Exception.Create(FResponse.ResponseText);
@@ -221,18 +237,18 @@ end;
 
 procedure TFrmPrincipal.BtnEnviarPedidoStringClick(Sender: TObject);
 var
-  OPedido: TNFCe;
-  OPedidoItem: TNFCeItem;
+  OPedido: TPedido;
+  OPedidoItem: TPedidoItem;
   I: Integer;
 begin
-  OPedido := TNFCe.Create;
+  OPedido := TPedido.Create;
   try
     OPedido.cpf  := '';
     OPedido.Nome := '';
 
     for I := 1 to 5 do
     begin
-      OPedidoItem := TNFCeItem.Create;
+      OPedidoItem := TPedidoItem.Create;
       OPedidoItem.Id         := I;
       OPedidoItem.Descricao  := 'Descricao do item ' + I.ToString;
       OPedidoItem.Valor      := I;
@@ -241,7 +257,7 @@ begin
       OPedido.Itens.Add(OPedidoItem);
     end;
 
-    FResponse := RESTClient.doPOST('/nfce/pedido', [], OPedido.AsJsonString);
+    FResponse := RESTClient.doPOST('/api/pedido', [], OPedido.AsJsonString);
     if FResponse.HasError then
       raise Exception.Create(FResponse.ResponseText);
 
@@ -290,7 +306,7 @@ begin
 
   if SaveDialog1.Execute then
   begin
-    FResponse := RESTClient.doGET('/nfce/pedido', ['1', '1', Tipo]);
+    FResponse := RESTClient.doGET('/api/pedido', ['1', '1', Tipo]);
     if FResponse.HasError then
       raise Exception.Create(FResponse.ResponseText);
 

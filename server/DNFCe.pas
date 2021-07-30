@@ -3,7 +3,7 @@ unit DNFCe;
 interface
 
 uses
-  UNFCeClass, UDatamoduleInterface,
+  UPedidoClass, UDatamoduleInterface,
 
   System.IOUtils,
 
@@ -21,7 +21,7 @@ type
     procedure ConfigurarNFe;
     function PathNotaFiscalExemplo: string;
   public
-    procedure PreencherNFCe(ANFCe: TNFCe);
+    procedure PreencherDFe(APedido: TPedido);
     function Enviar: string;
 
     function GerarPDF(numero, serie: integer): string;
@@ -220,7 +220,7 @@ begin
 //  begin
 //    StatusNFCe := ACBrNFe1.WebServices.Enviar.cStat;
 //
-//    //if ACBrNFe1.NotasFiscais[0].Confirmada then  ou
+//    if ACBrNFe1.NotasFiscais[0].Confirmada then  ou
 //    if ACBrNFe1.CstatConfirmada(StatusNFCe) then
 //    begin
 //      Result := ACBrNFe1.WebServices.Enviar.cStat.ToString + ' - ' +
@@ -254,12 +254,12 @@ begin
 
 end;
 
-procedure TdtmNFCe.PreencherNFCe(ANFCe: TNFCe);
+procedure TdtmNFCe.PreencherDFe(APedido: TPedido);
 var
   ONFe: TNFe;
   OPagto: TpagCollectionItem;
   OItemNota: TDetCollectionItem;
-  NFCeItem: TNFCeItem;
+  NFCeItem: TPedidoItem;
   I: Integer;
   ValorTotalNF: double;
 begin
@@ -270,8 +270,8 @@ begin
   ONFe := ACBrNFe1.NotasFiscais.Add.NFe;
 
   // numeração da nota, cada software deve fazer conforme seu controle
-  ANFCe.Numero := 1;
-  ANFCe.Serie  := 1;
+  APedido.Numero := 1;
+  APedido.Serie  := 1;
 
   // Ambiente
   ONFe.Ide.tpAmb     := ACBrNFe1.Configuracoes.WebServices.Ambiente;
@@ -283,8 +283,8 @@ begin
   ONFe.Ide.tpNF      := tnSaida;
   ONFe.Ide.finNFe    := fnNormal;
   ONFe.Ide.indFinal  := cfConsumidorFinal;
-  ONFe.Ide.nNF       := ANFCe.Numero;
-  ONFe.Ide.serie     := ANFCe.Serie;
+  ONFe.Ide.nNF       := APedido.Numero;
+  ONFe.Ide.serie     := APedido.Serie;
   ONFe.Ide.natOp     := 'VENDA A CONSUMIDOR FINAL';
   ONFe.Ide.dEmi      := NOW;
   ONFe.Ide.dSaiEnt   := ONFe.Ide.dEmi;
@@ -320,8 +320,8 @@ begin
   ONFe.Emit.CRT               := crtSimplesNacional;
 
   // informações do destinatário da nota fiscal
-  ONFe.Dest.CNPJCPF := ANFCe.cpf;
-  ONFe.Dest.xNome   := ANFCe.Nome;
+  ONFe.Dest.CNPJCPF := APedido.cpf;
+  ONFe.Dest.xNome   := APedido.Nome;
 
   ONFe.Dest.EnderDest.fone    := '';
   ONFe.Dest.EnderDest.xLgr    := 'ENDERECO TESTE';
@@ -337,7 +337,7 @@ begin
 
   ValorTotalNF := 0.00;
   I := 0;
-  for NFCeItem in ANFCe.Itens do
+  for NFCeItem in APedido.Itens do
   begin
     Inc(I);
 
@@ -392,11 +392,19 @@ begin
     OItemNota.Imposto.COFINS.vAliqProd := 0;
   end;
 
+  // somente se tiver troco
+  ONFe.pag.vTroco := 0.00;
+
   // pagamento
   OPagto := ONFe.pag.New;
   OPagto.tPag      := TpcnFormaPagamento.fpDinheiro;
   OPagto.vPag      := ValorTotalNF;
   OPagto.tpIntegra := tiPagNaoIntegrado;
+
+  // somente quando é cartão
+//  OPagto.CNPJ
+//  OPagto.tBand
+//  OPagto.cAut
 
   // totais da nota fiscal
   ONFe.Total.ICMSTot.vBC      := 0.00;

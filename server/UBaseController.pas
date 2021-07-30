@@ -35,7 +35,7 @@ begin
   FService := TDFService.Create;
 
   case ConfigServer.Tipo of
-    tpNFCe : FDatamodule := TdtmNFCe.Create(nil);
+    tpNFCe : FDatamodule := TDtmNFCe.Create(nil);
     tpSAT  : FDatamodule := TDtmSAT.Create(nil);
     tpMFe  : FDatamodule := TDtmSAT.Create(nil);
   end;

@@ -3,7 +3,7 @@ program DemoConsumoAPI;
 uses
   Vcl.Forms,
   UPrincipal in 'UPrincipal.pas' {FrmPrincipal},
-  UNFCeClass in '..\comum\UNFCeClass.pas';
+  UPedidoClass in '..\comum\UPedidoClass.pas';
 
 {$R *.res}
 

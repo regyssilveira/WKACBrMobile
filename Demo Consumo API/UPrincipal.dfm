@@ -291,7 +291,7 @@ object FrmPrincipal: TFrmPrincipal
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 497
+    Left = 492
     Top = 226
     object tmpClientesid: TIntegerField
       FieldName = 'id'

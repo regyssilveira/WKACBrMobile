@@ -14,7 +14,7 @@ uses
   UPedidoController in 'UPedidoController.pas',
   UServerWebModulle in 'UServerWebModulle.pas' {NFCEWebModule: TWebModule},
   UConfigClass in 'UConfigClass.pas',
-  UNFCeClass in '..\comum\UNFCeClass.pas',
+  UPedidoClass in '..\comum\UPedidoClass.pas',
   DNFCe in 'DNFCe.pas' {DtmNFCe: TDataModule},
   UBaseController in 'UBaseController.pas',
   AuthHandlerU in 'AuthHandlerU.pas',
@@ -116,7 +116,7 @@ begin
     if WebRequestHandler <> nil then
       WebRequestHandler.WebModuleClass := WebModuleClass;
     WebRequestHandlerProc.MaxConnections := 1024;
-    RunServer(8080);
+    RunServer(8081);
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

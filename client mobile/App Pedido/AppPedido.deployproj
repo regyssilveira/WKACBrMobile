@@ -5,7 +5,7 @@
     </ProjectExtensions>
     <PropertyGroup>
         <DeviceId Condition="'$(Platform)'=='Android'">5401061907002988</DeviceId>
-        <DeviceId Condition="'$(Platform)'=='Android64'">RQ8N102B9MK</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='Android64'">5401061907002988</DeviceId>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSSimulator'">iPhone5</DeviceId>
     </PropertyGroup>
@@ -716,19 +716,19 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Release'">
-            <RemoteDir>AppPedido\res\drawable-small\</RemoteDir>
-            <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage426</DeployClass>
+        <DeployFile Include="$(BDS)\lib\android\debug\armeabi-v7a\libnative-activity.so" Condition="'$(Config)'=='Release'">
+            <RemoteDir>AppPedido\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>libAppPedido.so</RemoteName>
+            <DeployClass>AndroidLibnativeArmeabiv7aFile</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\lib\android\debug\armeabi-v7a\libnative-activity.so" Condition="'$(Config)'=='Release'">
-            <RemoteDir>AppPedido\library\lib\armeabi-v7a\</RemoteDir>
-            <RemoteName>libAppPedido.so</RemoteName>
-            <DeployClass>AndroidLibnativeArmeabiv7aFile</DeployClass>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>AppPedido\res\drawable-small\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage426</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>

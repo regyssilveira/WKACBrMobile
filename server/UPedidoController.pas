@@ -45,15 +45,15 @@ type
 
     [MVCPath('/pedido')]
     [MVCHTTPMethod([httpGET])]
-    procedure GerarNFCeExemplo;
+    procedure GerarPedidoExemplo;
 
     [MVCPath('/pedido')]
     [MVCHTTPMethod([httpPOST])]
-    procedure CreateNFCe;
+    procedure CreatePedido;
 
     [MVCPath('/pedido/($ANumero)/($ASerie)/($ATipo)')]
     [MVCHTTPMethod([httpGET])]
-    procedure GetNFCe(ANumero: integer; ASerie: integer; ATipo: string);
+    procedure GetDFe(ANumero: integer; ASerie: integer; ATipo: string);
   end;
 
 
@@ -72,7 +72,7 @@ uses
 
   UDatamoduleInterface,
   MVCFramework.Logger,
-  UNFCeClass,
+  UPedidoClass,
 
   dfe.service;
 
@@ -160,7 +160,7 @@ begin
     Render(TmpDataset);
 end;
 
-procedure TPedidoController.GetNFCe(ANumero, ASerie: integer; ATipo: string);
+procedure TPedidoController.GetDFe(ANumero, ASerie: integer; ATipo: string);
 begin
   if ATipo.ToUpper = 'XML' then
     Self.GetNFCeXML(Anumero, ASerie)
@@ -196,7 +196,8 @@ begin
   except
     on E: Exception do
     begin
-      StreamPDF.Free;
+      if Assigned(StreamPDF) then
+        StreamPDF.DisposeOf;
     end;
   end;
 end;
@@ -223,23 +224,23 @@ begin
   end;
 end;
 
-procedure TPedidoController.CreateNFCe;
+procedure TPedidoController.CreatePedido;
 var
-  oNFCe: TNFCe;
+  oPedido: TPedido;
   StrRetorno: string;
 begin
   try
-    oNFCe := Context.Request.BodyAs<TNFCe>;
+    oPedido := Context.Request.BodyAs<TPedido>;
     try
-      if oNFCe.Itens.Count <= 0 then
+      if oPedido.Itens.Count <= 0 then
         raise Exception.Create('Nenhum item foi informado!');
 
-      Datamodule.PreencherNFCe(oNFCe);
+      Datamodule.PreencherDFe(oPedido);
       StrRetorno := Datamodule.Enviar;
 
       Render(StrRetorno);
     finally
-      oNFCe.DisposeOf;
+      oPedido.DisposeOf;
     end;
   except
     on E: Exception do
@@ -249,29 +250,29 @@ begin
   end;
 end;
 
-procedure TPedidoController.GerarNFCeExemplo;
+procedure TPedidoController.GerarPedidoExemplo;
 var
   I: Integer;
-  oNFCe: TNFCe;
-  oNFCeItem: TNFCeItem;
+  oPedido: TPedido;
+  oPedidoItem: TPedidoItem;
 begin
-  oNFCe := TNFCe.Create;
+  oPedido := TPedido.Create;
 
-  oNFCe.cpf  := '';
-  oNFCe.Nome := '';
+  oPedido.cpf  := '';
+  oPedido.Nome := '';
 
   for I := 1 to 5 do
   begin
-    oNFCeItem := TNFCeItem.Create;
-    oNFCeItem.Id         := I;
-    oNFCeItem.Descricao  := 'Descricao teste ' + I.ToString;
-    oNFCeItem.Valor      := I * 10;
-    oNFCeItem.Quantidade := I;
+    oPedidoItem := TPedidoItem.Create;
+    oPedidoItem.Id         := I;
+    oPedidoItem.Descricao  := 'Descricao teste ' + I.ToString;
+    oPedidoItem.Valor      := I * 10;
+    oPedidoItem.Quantidade := I;
 
-    oNFCe.Itens.Add(oNFCeItem);
+    oPedido.Itens.Add(oPedidoItem);
   end;
 
-  Render(oNFCe);
+  Render(oPedido);
 end;
 
 

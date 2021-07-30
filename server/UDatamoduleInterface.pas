@@ -3,12 +3,12 @@ unit UDatamoduleInterface;
 interface
 
 uses
-  UNFCeClass;
+  UPedidoClass;
 
 type
   IDatamodule = interface
   ['{6C42599C-E8F8-4ABB-AB56-6AABFD771CC8}']
-    procedure PreencherNFCe(ANFCe: TNFCe);
+    procedure PreencherDFe(APedido: TPedido);
     function Enviar: string;
 
     function GerarPDF(numero, serie: integer): string;

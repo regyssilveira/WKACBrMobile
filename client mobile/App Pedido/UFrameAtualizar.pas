@@ -34,10 +34,12 @@ var
   I: Integer;
   TempoInicio: TDateTime;
 begin
+  DtmPrincipal.tmpProdutos.Open;
+  DtmPrincipal.tmpClientes.Open;
+
   QryExecute := TFDQuery.Create(Self);
   try
-    DtmPrincipal.tmpProdutos.Open;
-    DtmPrincipal.tmpClientes.Open;
+    QryExecute.Connection := DtmPrincipal.FDConnection1;
 
     ShowMessage('Começarei a atualizar agora...');
 
@@ -48,14 +50,12 @@ begin
       DtmPrincipal.tmpProdutos.RecordCount +
       DtmPrincipal.tmpClientes.RecordCount;
 
-    QryExecute.Connection := DtmPrincipal.FDConnection1;
-
     // produtos
     QryExecute.SQL.Text :=
-      'INSERT OR REPLACE INTO PRODUTOS                        ' + sLineBreak +
-      '  (ID, GTIN, DESCRICAO, VL_VENDA, DT_CRIACAO, UN)      ' + sLineBreak +
-      'VALUES                                                 ' + sLineBreak +
-      '  (:ID, :GTIN, :DESCRICAO, :VL_VENDA, :DT_CRIACAO, :UN)';
+      'INSERT OR REPLACE INTO PRODUTOS                         ' + sLineBreak +
+      '  (ID, GTIN, DESCRICAO, VL_VENDA, DT_CRIACAO, UN)       ' + sLineBreak +
+      'VALUES                                                  ' + sLineBreak +
+      '  (:ID, :GTIN, :DESCRICAO, :VL_VENDA, :DT_CRIACAO, :UN) ';
 
     I := 0;
     QryExecute.Params.ArraySize := DtmPrincipal.tmpProdutos.RecordCount;
